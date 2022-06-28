@@ -42,6 +42,11 @@ export default {
                 mail: getUserInformation.mail,
                 grant: getUserInformation.grant
             })
+            // 자동 로그아웃 기능.
+            if(Date.now() > JSON.parse(localStorage.getItem('userInformation')).expire){
+                localStorage.removeItem('userInformation');
+                location.reload();
+            }
         }
     },
     methods: {
@@ -50,6 +55,11 @@ export default {
                 top: 0,
                 behavior: 'smooth'
             })
+        },
+        autoLogout(){
+            alert('로그아웃 되었습니다.');
+            localStorage.removeItem('userInformation');
+            location.reload();
         },
         cookie(){
             // 지금부터 하루 후 까지 쿠키 유지.

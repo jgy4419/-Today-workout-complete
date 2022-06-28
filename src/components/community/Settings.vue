@@ -128,6 +128,7 @@ export default {
             const changeImage = document.querySelector('.changeImage');
             // '../../../repeatFunc/loadImage' 파일의 deleteImg 함수
             changeImage.src = deleteImg();
+            console.log('changeImage', changeImage.src);
             // console.log(this.changeImg);
             // console.log(changeImage.src)
         },

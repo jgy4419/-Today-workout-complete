@@ -12,6 +12,9 @@
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
                         <div :style="{backgroundImage:`url('${post.img[i]}')`}" class="titleImg"
                         @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])"/>
+                        <ul class="side">
+                            <li class="icon" v-for="icon in sideMenu" :key="icon">{{icon}}</li>
+                        </ul>
                         <div @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])">
                             <div class="bottom">
                                 <!-- <p>{{this.post.post_id[i]}}</p> -->
@@ -35,6 +38,7 @@
 <script>
 import axios from 'axios'; 
 import {mapState} from 'vuex';
+import dayjs from 'dayjs';
 export default {
     // 데이터가 추가적으로 저장이 되면 
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
@@ -50,6 +54,7 @@ export default {
                 postWrite: [],
                 count: 9
             },
+            sideMenu: ['🤓 : 500', '🖤 : 20', '💬 : 5'],
             searchRes: this.$store.state.Search.searchValue,
             // postCount: 9,
             category: ['all', 'category1', 'category2', 'category3'],
@@ -140,6 +145,8 @@ export default {
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             this.post.title = []; this.post.id = []; this.post.img = [];
             this.post.date = []; this.post.board_id = []; this.post_id = [];
+
+            // const dayjs = dayjs("");
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
@@ -150,7 +157,7 @@ export default {
                         this.post.board_id.push(res.data[i].board_id);
                         this.post.title.push(res.data[i].title);
                         this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(res.data[i].creation_datetime);
+                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
                         this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
                         this.post.postCount = res.data.length;
                     }
@@ -166,7 +173,7 @@ export default {
                         this.post.board_id.push(res.data[i].board_id);
                         this.post.title.push(res.data[i].title);
                         this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(res.data[i].creation_datetime);
+                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
                         this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
                     }
                 })
@@ -185,7 +192,7 @@ export default {
                 this.post.board_id.push(res.data[i].board_id);
                 this.post.title.push(res.data[i].title);
                 this.post.user_id.push(res.data[i].nickname);
-                this.post.date.push(res.data[i].creation_datetime);
+                this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
                 this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
             }
             console.log(res);
@@ -212,7 +219,7 @@ export default {
                         this.post.board_id.push(res.data[i].board_id);
                         this.post.title.push(res.data[i].title);
                         this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(res.data[i].creation_datetime);
+                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
                         this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
                     }
                     this.post.count = this.post.count + 9;
@@ -230,7 +237,7 @@ export default {
                         this.post.board_id.push(res.data[i].board_id);
                         this.post.title.push(res.data[i].title);
                         this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(res.data[i].creation_datetime);
+                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
                         this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
                     }
                     this.post.count = this.post.count + 9;
@@ -284,23 +291,32 @@ export default {
                 margin-right: 20px;
                 margin-top: 50px;
                 border-radius: 10px;
+                overflow: hidden;
                 cursor: pointer;
                 .postUrl{
                     .titleImg{
                         border-radius: 5px;
                         background-position: center;
                         background-repeat: no-repeat;
+                        filter:brightness(100%);
                         background-size: 100%;
                         width: 100%;
-                        height: 50%;
+                        height: 80%;
                         background-color: rgb(184, 184, 184);
                         transition: .3s;
                     }
-                    .titleImg:hover{
-                        background-size: 120%;
+                    .side{
+                        position: relative;
+                        left: 280px;
+                        top: -19vh;
                         transition: .3s;
+                        font-size: 18px;
+                        font-weight: 700;
                     }
                     .bottom{
+                        position: relative;
+                        bottom: 75px;
+                        transition: .3s;
                         width: 90%;
                         margin: auto;
                         .title{
@@ -311,6 +327,20 @@ export default {
                     }
                 }
             // }
+            }
+            .postUrl:hover{
+                .titleImg{
+                    background-size: 120%;
+                    height: 50%;
+                    transition: .3s;
+                    filter:brightness(90%);
+                }
+                .side{
+                    left: 180px;
+                }
+                .bottom{
+                    bottom: 60px;
+                }
             }
 
         .btnBox{
@@ -367,6 +397,11 @@ export default {
         .inner{
             .post{
                 width: 100%;
+                .postUrl:hover{
+                    .side{
+                        left: 280px;
+                    }
+                }
             }
         }
     }

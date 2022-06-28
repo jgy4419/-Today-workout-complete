@@ -42,11 +42,11 @@ export default {
         }
     },
     methods: {
-        login(){
+        async login(){
             // /api/login으로 값을 아이디, 비밀번호를 보냄 -> 백엔드는 DB에서 아이디, 비밀번호가 일치한게 있으면 가져와서 보내줌.(토큰) => 둥일한게 없으면 boolean 값이 false인 것을 넣어줌.
             axios.post('/api/login', {mail: this.logins.mail, password: this.logins.password})
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 if(res.data.result.length === 0){
                     alert('아이디나 비밀번호가 잘 못 되었습니다.');
                     // 결과로 받아온 result 배열의 길이가 0이 아니면 로그인 성공.
@@ -67,7 +67,13 @@ export default {
                         profile_img_path: `http://localhost:3000/img/userProfile/${res.data.result[0].profile_img_path}`,
                     }
                     
-                    localStorage.setItem('userInformation', JSON.stringify(userInformation));
+                    const user = {
+                        value: userInformation,
+                        // 하루는 86,400,000초
+                        expire: Date.now() + 86400000
+                    }
+
+                    localStorage.setItem('userInformation', JSON.stringify(user));
                     location.replace('/');
                 }
             })
