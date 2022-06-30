@@ -1,6 +1,7 @@
 <template>
   <div class="contain">
     <div class="inner" v-for="a, i in this.chart.chartId.length" :key="i">
+      
       <p class="exerciseName">{{chart.data.exerciseName}}</p>
       <div class="chartStyle">
         <p>{{emgDatas[i]}}</p>

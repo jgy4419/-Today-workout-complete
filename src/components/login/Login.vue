@@ -67,13 +67,11 @@ export default {
                         profile_img_path: `http://localhost:3000/img/userProfile/${res.data.result[0].profile_img_path}`,
                     }
                     
-                    const user = {
-                        value: userInformation,
-                        // 하루는 86,400,000초
-                        expire: Date.now() + 86400000
-                    }
+                    const user = userInformation;
+                    const expire = Date.now() + 86400000;
 
                     localStorage.setItem('userInformation', JSON.stringify(user));
+                    localStorage.setItem('expire', JSON.stringify(expire));
                     location.replace('/');
                 }
             })

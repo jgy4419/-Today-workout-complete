@@ -42,8 +42,8 @@ export default {
                 mail: getUserInformation.mail,
                 grant: getUserInformation.grant
             })
-            // 자동 로그아웃 기능.
-            if(Date.now() > JSON.parse(localStorage.getItem('userInformation')).expire){
+            // 자동 로그아웃 기능. 
+            if(Date.now() > JSON.parse(localStorage.getItem('expire'))){
                 localStorage.removeItem('userInformation');
                 location.reload();
             }

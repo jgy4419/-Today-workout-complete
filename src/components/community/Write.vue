@@ -15,7 +15,8 @@
             <img class="writeImage" style="display:none" src='https://mblogthumb-phinf.pstatic.net/MjAxODAzMDNfMTc5/MDAxNTIwMDQxNzQwODYx.qQDg_PbRHclce0n3s-2DRePFQggeU6_0bEnxV8OY1yQg.4EZpKfKEOyW_PXOVvy7wloTrIUzb71HP8N2y-YFsBJcg.PNG.osy2201/1_%2835%ED%8D%BC%EC%84%BC%ED%8A%B8_%ED%9A%8C%EC%83%89%29_%ED%9A%8C%EC%83%89_%EB%8B%A8%EC%83%89_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_180303.png?type=w800' alt="프로필">
             <label class="photographic_path" for="photographic_path">대표 이미지를 선택해주세요.</label><input class="hidden" id="photographic_path" type="file"/>
             <button class="photographic_path" @click="deleteImg()">배경사진 초기화</button>
-            <label class="sensor_btn" v-if="postDetail.postCount === 3" for="sensor_btn">센서 데이터 추가</label><input class="hidden" id="sensor_btn" type="file"/>
+            <label class="sensor_btn" v-if="postDetail.postCount === 3" for="sensor_btn">센서 데이터 추가</label>
+            <button @click="watchChart()" class="hidden" id="sensor_btn"/>
             <hr class="line">
             <div class="editor-page">
                 <div :v-model="postDetail.writing" id="summernote">오늘 운동한 내용을 말해주세요~!</div>
@@ -27,13 +28,23 @@
                 </button>
             </div>
         </div>
+        <div v-if="sensorWatch === true" @click="watchChart()" class="watchChart">
+            <div class="inner">
+                <Chart/>
+            </div>
+        </div>
+        <span v-if="closeState === true" @click="closeChart()" class="close">X</span>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import DOMPurify from 'dompurify';
+import Chart from '../Chart.vue';
 export default {
+    components:{
+        Chart
+    },
     data(){
         return{
             btn: {
@@ -48,11 +59,12 @@ export default {
                 title: '',
                 writing: '',
                 postCount: 1,
-            }
+            },
+            sensorWatch: false,
+            closeState: false,
         }
     },
     async mounted() {
-
         // 라우트 변수들
         let route = {
             nickname: this.$route.params.id,
@@ -216,7 +228,6 @@ export default {
                 this.postDetail.postCount = 1;
             }
         },
-        // input에 style을 enter 누르면 원래대로 되돌리기..
         // text 두께
         thickness(){
             let content = document.getElementById('content');
@@ -227,10 +238,6 @@ export default {
             content.appendChild(addSpan);
         },
         uploadImg(input){
-            // 내일 시간날 때 수정시켜주기.
-            // const changeImage = document.querySelector('.writeImage');
-            // uploadImg(input, changeImage, this.changeImg);
-
             if(input.files && input.files[0]){
                 const reader = new FileReader();
                 reader.onload = e => {
@@ -248,6 +255,16 @@ export default {
             const changeImage = document.querySelector('.writeImage');
             changeImage.src = '';
             changeImage.style.display = "none";
+        },
+        // 차트를 불러울 수 있는 함수.
+        watchChart(){
+            // 차트 불러오는 modal 띄워주기.
+            this.sensorWatch = true;
+            this.closeState = true;
+        },
+        closeChart(){
+            this.sensorWatch = false;
+            this.closeState = false;
         }
     }
 }
@@ -379,6 +396,29 @@ input, textarea{
                 border: 0;
             }
         }
+    }
+    .watchChart{
+        // display: none;
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        overflow-y: scroll;
+        .inner{
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-sizing: content-box;
+        }
+    }
+    .close{
+        position: absolute;
+        z-index: 100;
+        // color: #fff;
+        top: 6%;
+        right: 15%;
     }
 }
 @media screen and (max-width: 900px){
