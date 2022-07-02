@@ -30,7 +30,7 @@
         </div>
         <div v-if="sensorWatch === true" @click="watchChart()" class="watchChart">
             <div class="inner">
-                <Chart/>
+                <Chart :readOrWrite = 1 />
             </div>
         </div>
         <span v-if="closeState === true" @click="closeChart()" class="close">X</span>
@@ -62,6 +62,8 @@ export default {
             },
             sensorWatch: false,
             closeState: false,
+            // write페이지면 1 MyPage에서 보면 0
+            writeOrRead: 0
         }
     },
     async mounted() {

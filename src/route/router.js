@@ -17,6 +17,8 @@ import Settings from '../components/community/Settings';
 
 // about 페이지
 import About from '../components/about/About';
+// 센서판매 페이지
+import SensorStore from '../components/sensorStore/StoreMain';
 
 
 const routes = [
@@ -89,6 +91,12 @@ const routes = [
       path: "/about",
       name: "About",
       component: About
+    },
+    // 센서 판매 스토어
+    {
+      path: "/store",
+      name: "SensorStore",
+      component: SensorStore
     }
   ];
   

@@ -48,8 +48,8 @@
 export default {
   data(){
     return{
-      url: ['/about', '/community'],
-      login: ['오운완?', 'community'],
+      url: ['/about', '/community', '/store'],
+      login: ['오운완?', 'community', 'store'],
       mobile: {
         url: ['/about', '/community'],
         login: ['오운완?', 'community']
@@ -85,11 +85,11 @@ export default {
       this.myBtnImg = `${userInformation.profile_img_path}`;
 
       // 로그인 유무에 따라 header 메뉴 구성 변경.
-      this.login.push('오운완?', 'community');
-      this.url.push('/about', '/community');
+      this.login.push('오운완?', 'community', 'store');
+      this.url.push('/about', '/community', '/store');
 
-      this.mobile.url.push('/mypage', '/settings', '/');
-      this.mobile.login.push('MyPage', 'settings', 'logout')
+      this.mobile.url.push('/mypage', '/settings', '/store', '/');
+      this.mobile.login.push('MyPage', 'settings', 'store', 'logout')
       // 로그인 이후 menu[4]번째 즉, logout 버튼을 누르면 웹에서 쿠키 제
 
       // let mobileMenuList = document.querySelectorAll('.mobileMenuList');
@@ -117,11 +117,11 @@ export default {
       myBtn.style.display = 'none';
       document.querySelector('.webMenu').style.bottom = '-7px';
       // 로그인 유무에 따라 header 메뉴 구성 변경.
-      this.login.push('오운완?', 'community', 'login', 'join');
-      this.url.push('/about', '/community', '/login', '/login/join');
+      this.login.push('오운완?', 'community', 'store', 'login', 'join');
+      this.url.push('/about', '/community', '/store', '/login', '/login/join');
 
-      this.mobile.url.push('/about', '/community', '/login', '/join');
-      this.mobile.login.push('오운완', 'community', 'login', 'join');
+      this.mobile.url.push('/about', '/community', '/store', '/login', '/join');
+      this.mobile.login.push('오운완', 'community', 'store', 'login', 'join');
     }
   },
   methods: {
