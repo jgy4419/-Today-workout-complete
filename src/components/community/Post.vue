@@ -254,9 +254,7 @@ export default {
 <style lang="scss" scoped>
 .contain{
     position: relative;
-    // width: 100vw;
-    // width: 25vw;
-    height: 300px;
+    height: 100vh;
     .containHead{
         position: relative;
         bottom: 50px;
@@ -277,11 +275,10 @@ export default {
     .inner{
         position: absolute;
         top: 0;
-        // align-items: center;
-        justify-content: space-between;
         width: 70vw;
         height: 100%;
         display: flex;
+        gap: 20px;
         flex-wrap: wrap;
             .post{
                 width: 300px;

@@ -6,7 +6,7 @@
                 <div class="information">
                     <h1 class="title">근육 측정기</h1>
                     <hr/>
-                    <h3 class="select" v-for="productSelect, i in productSelect" :key="i"><span>{{productSelect}}</span> : {{price[i]}} 원</h3>
+                    <h3 class="select" v-for="productSelect, i in productSelect" :key="i"><span>{{productSelect}}</span> : {{changePrice[i]}} 원</h3>
                     <div class="sale">
                         <div class="sale-section">
                             <h3>근육 측정기</h3>
@@ -28,9 +28,16 @@ export default {
         return{
             storeImg: 'https://thumbnail6.coupangcdn.com/thumbnails/remote/492x492ex/image/rs_quotation_api/jev6tng0/b74a98afb6b64ee69c8e783cad9ceabb.jpg',
             productSelect: ['소비자가', '판매가'],
-            price: [35000, 30000],
+            price: ['35000', '30000'],
+            changePrice: [],
             count: 0
         }
+    },
+    mounted(){
+        // 정규표현식으로 숫자를 뒤에서 3자리마다 , 찍어주기.
+        this.price.forEach(e => {
+            this.changePrice.push(e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        })
     },
     methods: {
         addCount(){
@@ -87,6 +94,7 @@ export default {
                     width: 30vw;
                     height: 200px;
                     background-color: rgb(248, 244, 244);
+                    border-radius: 20px;
                     .sale-section{
                         position: relative;
                         padding: 20px;

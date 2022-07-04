@@ -2,7 +2,7 @@
     <div class="moreInformationContain">
         <div class="inner">
             <ul class="menuSelects">
-                <li v-for="menuSelect in menuSelect" :key="menuSelect" class="menuSelect">{{menuSelect}}</li>
+                <li @click="textColor(i)" v-for="menuSelect, i in menuSelect" :key="i" class="menuSelect">{{menuSelect}}</li>
             </ul>
             <div class="saleInformation">
                 <p>상품 준비중입니다!</p>
@@ -16,6 +16,16 @@ export default {
     data(){
         return{
             menuSelect: ['상세정보', '배송/교환/환불', '상품조회', '상품문의'],
+        }
+    },
+    methods: {
+        // 클릭한 부분만 색 변하게 만들어주기.
+        textColor(e){
+            const menuSelect = document.querySelectorAll('.menuSelect');
+            for(let i = 0; i < menuSelect.length; i++){
+                menuSelect[i].style.color = 'lightgray';
+                menuSelect[e].style.color = '#333'
+            }
         }
     }
 }
@@ -37,6 +47,10 @@ export default {
                 font-size: 20px;
                 font-weight: 600;
                 cursor: pointer;
+                color: lightgray;
+            }
+            .menuSelect:nth-child(1){
+                color: #333;
             }
         }
         .saleInformation{
