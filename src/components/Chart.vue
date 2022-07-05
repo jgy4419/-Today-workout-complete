@@ -1,7 +1,6 @@
 <template>
   <div class="contain">
     <div class="inner" v-for="a, i in this.chart.chartId.length" :key="i">
-
       <p class="exerciseName">{{chart.data.exerciseName}}</p>
       <div class="chartStyle">
         <p>{{emgDatas[i]}}</p>
@@ -56,9 +55,12 @@ export default {
     .then(res => {
       // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
         for(let i = 0; i < res.data.length; i++){
-          this.emgDatas.push(res.data[i].emg_data_path)
+          this.emgDatas.push(res.data[i].emg_data_path);
         }
         dataLength = res.data.length;
+        if(dataLength === 0){
+          alert('데이터가 없습니다.');
+        }
     })
     .catch(err => console.log(err))
     for(let i = 0; i < dataLength; i++){
