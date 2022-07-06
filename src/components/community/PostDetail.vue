@@ -19,7 +19,7 @@
         </div>   
         <div class="inner">
             <p id="preview-click"></p>
-            <Chart v-if="chartState === 1" class="chart"/>
+            <!-- <Chart v-if="chartState === 1" class="chart"/> -->
             <hr>
             <div class="commentList">
                 <div class="comments" v-for="data, i in comment.commentDetail.length" :key="i">
@@ -51,10 +51,10 @@
 
 <script>
 import axios from 'axios'
-import Chart from '../Chart.vue';
+// import Chart from '../Chart.vue';
 export default {
     components: {
-        Chart,
+        // Chart,
     },
     data(){
         return{

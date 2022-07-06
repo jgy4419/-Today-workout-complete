@@ -12,7 +12,7 @@
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
                         <div :style="{backgroundImage:`url('${post.img[i]}')`}" class="titleImg"
                         @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])"/>
-                        <ul class="side">
+                        <ul class="side" @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])">
                             <li class="icon" v-for="icon in sideMenu" :key="icon">{{icon}}</li>
                         </ul>
                         <div @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])">
@@ -102,7 +102,6 @@ export default {
                     this.getPost();
                 }else{
                     for(let i = 0; i < res.data.length; i++){
-                        console.log('결과로 나온 제목', res.data[i].title);
                         this.post.board_id.push(res.data[i].board_id);
                         this.post.post_id.push(res.data[i].post_id);
                         this.post.title.push(res.data[i].title);

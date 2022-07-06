@@ -128,6 +128,7 @@ export default {
         }
         .moreBtn{
             position: absolute;
+            z-index: 10;
             cursor: pointer;
             font-weight: 700;
             right: 10%;
