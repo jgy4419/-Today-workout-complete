@@ -14,7 +14,9 @@
                                 <button @click="minusCount()">-</button><p>{{count}}</p><button @click="addCount()">+</button>
                             </div>
                         </div>
-                        <button class="buyBtn">Buy now!</button>
+                        <router-link :to="order">
+                            <button class="buyBtn" @click="loginAuth()">Buy now!</button>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -30,7 +32,8 @@ export default {
             productSelect: ['소비자가', '판매가'],
             price: ['35000', '30000'],
             changePrice: [],
-            count: 0
+            count: 0,
+            order: '/store/order'
         }
     },
     mounted(){
@@ -52,6 +55,12 @@ export default {
                 this.count = 1;
             }
             this.count--;
+        },
+        loginAuth(){
+            if(!localStorage.getItem('userInformation')){
+                alert('로그인 후 구매 가능합니다.');
+                this.order = '/login';
+            }
         }
     }
 }
