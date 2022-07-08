@@ -20,6 +20,9 @@
             </div>
             <div class="payment">
                 <h4>결제수단</h4>
+                <div class="paymentCheck" v-for="checkboxs, i in checkbox.length" :key="i">
+                    <span>{{checkbox[i]}}</span><input type="checkbox" name="checkedValue" />
+                </div>
             </div>
             <div class="finalPayment">
                 <span>최종 결제 금액</span> <span>32,000원</span>
@@ -40,7 +43,7 @@ export default {
                 tel: '',
             },
             changeState: 0,
-            // btnState: 1,
+            checkbox: ['네이버', '신용/체크카드', '무통장 입급', '휴대폰 결제']
         }
     },
     mounted(){
