@@ -81,22 +81,22 @@ export default {
         width: 50vw;
         margin: auto;
         .addressInput{
-            // position: absolute;
-            // left: 0;
-            // right: 0;
-            // text-align: center;
-            // margin: auto;
             display: flex;
             // justify-content: center;
             flex-wrap: wrap;
             // gap: 20px;
             input{
-                margin: 10px;
+                margin: 10px 0px;
                 padding: 10px;
                 width: 250px;
                 height: 40px;
                 border-radius: 10px;
-                border: 0;
+                border: solid 1px rgb(209, 209, 209);
+            }
+            input:nth-child(2),
+            input:nth-child(5),
+            input:nth-child(9){
+                margin-left: 10px;
             }
         }
     }

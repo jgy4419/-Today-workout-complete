@@ -30,8 +30,21 @@
             <hr/>
             <div class="payment">
                 <h4>결제수단</h4>
-                <div class="paymentCheck" v-for="checkboxs, i in checkbox.length" :key="i">
-                    <span class="paymentText">{{checkbox[i]}}</span><input type="checkbox" name="checkedValue" />
+                <br/>
+                <div class="paymentBtns">
+                    <button @click="changePayments(i)" class="paymentBtn" v-for="btn, i in paymentBtn" :key="i">{{paymentBtn[i]}}</button>
+                </div>
+                <div v-if="paymentState === 0">
+                    <div class="paymentCheck">
+                        <span class="paymentText">{{cashPayment}}</span>
+                        <input type="checkbox" name="checkedValue" />
+                    </div>
+                </div>
+                <div v-if="paymentState === 1">
+                    <div class="paymentCheck" v-for="checkboxs, i in cardPayment.length" :key="i">
+                        <span class="paymentText">{{cardPayment[i]}}</span>
+                        <input @click="clickCheck(i)" class="checkbox" type="checkbox" name="checkedValue" />
+                    </div>
                 </div>
             </div>
             <hr/>
@@ -55,9 +68,12 @@ export default {
                 tel: '',
             },
             changeState: 0,
-            checkbox: ['네이버', '신용/체크카드', '무통장 입급', '휴대폰 결제'],
+            cardPayment: ['네이버', '신용/체크카드'],
+            cashPayment: '무통장 입급',
+            paymentState: 0,
             resPayment: this.$store.state.Order.resPayment,
             changePayment: '',
+            paymentBtn: ['현금결제', '간편결제'],
             productImg,
         }
     },
@@ -81,6 +97,19 @@ export default {
         changeComplete(){
             this.changeState = 0;
             console.log();
+        },
+        changePayments(i){
+            this.paymentState = i;
+        },
+        clickCheck(click){
+            let checkBox = document.querySelectorAll('.checkbox');
+            for(let i = 0; i < checkBox.length; i++){
+                if(i === click){
+                    checkBox[i].checked = true;
+                }else{
+                    checkBox[i].checked = false;
+                }
+            }
         }
     }
 }
@@ -107,6 +136,7 @@ input{
         // text-align: center;
         .title{
             text-align: left;
+            font-weight: 700;
         }
         .userBox{
             width: 100%;
@@ -138,6 +168,18 @@ input{
         .payment{
             position: relative;
             width: 400px;
+            .paymentBtns{
+                .paymentBtn{
+                    width: 150px;
+                    height: 40px;
+                    font-weight: 600;
+                    border-radius: 10px;
+                    margin-right: 10px;
+                    border: 1px solid rgb(144, 144, 144);
+                    color: #333;
+                    background-color: transparent;
+                }
+            }
             .paymentCheck{
                 display: flex;
                 justify-content: space-between;
