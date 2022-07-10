@@ -87,7 +87,7 @@ export default {
             // text-align: center;
             // margin: auto;
             display: flex;
-            justify-content: center;
+            // justify-content: center;
             flex-wrap: wrap;
             // gap: 20px;
             input{

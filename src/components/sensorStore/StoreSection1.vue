@@ -6,14 +6,20 @@
                 <div class="information">
                     <h1 class="title">근육 측정기</h1>
                     <hr/>
-                    <h3 class="select" v-for="productSelect, i in productSelect" :key="i"><span>{{productSelect}}</span> : {{changePrice[i]}} 원</h3>
+                    <h3 class="select" v-for="productSelect, i in productSelect" :key="i"><span>{{productSelect}}</span> : {{changePrice[1]}} 원</h3>
                     <div class="sale">
                         <div class="sale-section">
-                            <h3>근육 측정기</h3>
-                            <div class="count">
-                                <button @click="minusCount()">-</button><p>{{count}}</p><button @click="addCount()">+</button>
+                            <div class="sale-flex">
+                                <div class="sale-left">
+                                    <h3>근육 측정기</h3>
+                                    <div class="count">
+                                        <button @click="minusCount()">-</button><p>{{count}}</p><button @click="addCount()">+</button>
+                                    </div>
+                                </div>
+                                <p class="resPrice">{{price[1] * count}}원</p>
                             </div>
                         </div>
+                            <button class="cartBtn">장바구니에 담기</button>
                         <router-link :to="order">
                             <button class="buyBtn" @click="loginAuth()">Buy now!</button>
                         </router-link>
@@ -33,6 +39,7 @@ export default {
             price: ['35000', '30000'],
             changePrice: [],
             count: 0,
+            // resPrice : this.price[1] * this.count,
             order: '/store/order'
         }
     },
@@ -61,6 +68,10 @@ export default {
                 alert('로그인 후 구매 가능합니다.');
                 this.order = '/login';
             }
+            this.$store.dispatch('Order/paymentAction', {
+                payment: this.price[1] * this.count
+            })
+            
         }
     }
 }
@@ -79,6 +90,7 @@ export default {
             justify-content: space-around;
             .productImg{
                 width: 400px;
+                height: 400px;
             }
             .information{
                 color: #333;
@@ -101,12 +113,22 @@ export default {
                     position: relative;
                     align-items: center;
                     width: 30vw;
-                    height: 200px;
+                    height: 250px;
                     background-color: rgb(248, 244, 244);
                     border-radius: 20px;
                     .sale-section{
                         position: relative;
                         padding: 20px;
+                        .sale-flex{
+                            display: flex;
+                            .resPrice{
+                                position: absolute;
+                                right: 30px;
+                                top: 50px;
+                                font-size: 30px;
+                                font-weight: 600;
+                            }
+                        }
                         h3{
                             margin-top: -5px;
                             font-weight: 700;
@@ -132,8 +154,9 @@ export default {
                             }
                         }
                     }
-                    .buyBtn{
-                        position: absolute;
+                    .cartBtn, .buyBtn{
+                        // position: absolute;
+                        margin-top: 10px;
                         box-sizing: cover;
                         width: 100%;
                         height: 50px;
@@ -142,6 +165,10 @@ export default {
                         border-radius: 20px;
                         background-color: #C9CCD5;
                         font-weight: 700;
+                        color: #fff;
+                    }
+                    .cartBtn{
+                        background-color: rgb(209, 208, 208);
                         color: #fff;
                     }
                     .buyBtn:active{
