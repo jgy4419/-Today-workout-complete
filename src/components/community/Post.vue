@@ -7,21 +7,21 @@
             </select>
         </div>
         <div class="inner">
-                <div class="post" v-for="data, i in post.title.length" :key="i">
+            <div class="post" v-for="data, i in postCount" :key="i">
                     <!-- 시간날 때 수정하기 urlChange 1번 만 쓰기 -->
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
-                        <div :style="{backgroundImage:`url('${post.img[i]}')`}" class="titleImg"
-                        @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])"/>
-                        <ul class="side" @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])">
+                        <div :style="{backgroundImage:`url('http://localhost:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"
+                        @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)"/>
+                        <ul class="side" @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <li class="icon" v-for="icon in sideMenu" :key="icon">{{icon}}</li>
                         </ul>
-                        <div @click="urlChange(post.user_id[i], post.board_id[i], post.post_id[i])">
+                        <div @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <div class="bottom">
                                 <!-- <p>{{this.post.post_id[i]}}</p> -->
-                                <p style="display: none">글 ID: {{post.post_id[i]}}</p>
-                                <h3 class="title"><strong>글 제목 : {{post.title[i]}}</strong></h3>
-                                <p>닉네임 / 아이디 : {{post.user_id[i]}}</p>
-                                <p>날짜: {{post.date[i]}}</p>
+                                <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
+                                <h3 class="title"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
+                                <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
+                                <p>날짜: {{getData.data[i].create_datetime}}</p>
                                 {{searchRes}}
                                 <p>{{$store.state.Search.searchValue}}</p>
                             </div>
@@ -38,31 +38,23 @@
 <script>
 import axios from 'axios'; 
 import {mapState} from 'vuex';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 export default {
     // 데이터가 추가적으로 저장이 되면 
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
     data(){
         return{
-            post: {
-                img: [],
-                title: [],
-                user_id: [],
-                post_id: [],
-                board_id: [],
-                date: [],
-                postWrite: [],
-                count: 9
-            },
             sideMenu: ['🤓 : 500', '🖤 : 20', '💬 : 5'],
             searchRes: this.$store.state.Search.searchValue,
-            // postCount: 9,
             category: ['all', 'category1', 'category2', 'category3'],
             postUrl: '/login',
             option: {
                 value: ['최신순', '오래된순'],
-                class: ['up', 'up'],
-            }
+                class: ['up', 'up'],    
+            },
+
+            getData: [],
+            postCount: 0,
         }
     },
     computed: {
@@ -88,12 +80,13 @@ export default {
         propsRes(result){
             // search 값이 변경되면, 데이터 들을 불러와서 post img, title, id 등에 각각 넣어주기.
             console.log(result);
-            this.post.title = [];
-            this.post.img = [];
-            this.post.date = [];
-            this.post.board_id = [];
-            this.post.user_id = [];
-            this.post.post_id = [];
+            
+            // this.post.title = [];
+            // this.post.img = [];
+            // this.post.date = [];
+            // this.post.board_id = [];
+            // this.post.user_id = [];
+            // this.post.post_id = [];
             axios.get('/api/searchtitle', {
                 params: {title: result}}, 
                 {withCredentials: true})
@@ -101,19 +94,14 @@ export default {
                 if(result === ''){
                     this.getPost();
                 }else{
-                    for(let i = 0; i < res.data.length; i++){
-                        this.post.board_id.push(res.data[i].board_id);
-                        this.post.post_id.push(res.data[i].post_id);
-                        this.post.title.push(res.data[i].title);
-                        this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(res.data[i].creation_datetime);
-                        this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-                    }
+                    this.getData = [];
+                    this.getData = res;
                 }
             }).catch(err => console.log(err));
         },
     },
     mounted(){
+        console.log(this.propsRes);
         this.postCount = 0;
         this.urlChange();
         this.changePost();
@@ -127,14 +115,7 @@ export default {
             if(sort.value === '오래된순'){
                 axios.get('/api/showPostAsc', {params: {board_id: 1, limit: 0}})
                 .then(res => {
-                this.post.title = []; this.post.id = []; this.post.img = []; this.post.date = [];
-                this.post.board_id = []; this.post_id = [];
-                for(let i = 0; i < res.data.length; i++){
-                    console.log(res);
-                    this.post.post_id.push(res.data[i].post_id); this.post.board_id.push(res.data[i].board_id);
-                    this.post.title.push(res.data[i].title); this.post.user_id.push(res.data[i].nickname); this.post.postCount = res.data.length;
-                    this.post.date.push(res.data[i].creation_datetime); this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-                }
+                this.getData = res;
             }).catch(err => console.log(err));
             }else if(sort.value === '최신순'){
                 this.getPost();
@@ -142,59 +123,32 @@ export default {
         },
         getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            this.post.title = []; this.post.id = []; this.post.img = [];
-            this.post.date = []; this.post.board_id = []; this.post_id = [];
+            // this.post.title = []; this.post.id = []; this.post.img = [];
+            // this.post.date = []; this.post.board_id = []; this.post_id = [];
 
             // const dayjs = dayjs("");
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
                 .then(res => {
-                    for(let i = 0; i < res.data.length; i++){
-                        console.log(res);
-                        this.post.post_id.push(res.data[i].post_id);
-                        this.post.board_id.push(res.data[i].board_id);
-                        this.post.title.push(res.data[i].title);
-                        this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
-                        this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-                        this.post.postCount = res.data.length;
-                    }
+                    this.getData = res;
                 }).catch(err => console.log(err));
             }else{
-                console.log('커뮤니티');
+                // console.log('커뮤니티');
                 axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
                 .then(res => {
-                    console.log(res);
-                    this.postCount = res.data.length;
-                    for(let i = 0; i < res.data.length; i++){
-                        this.post.post_id.push(res.data[i].post_id);
-                        this.post.board_id.push(res.data[i].board_id);
-                        this.post.title.push(res.data[i].title);
-                        this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
-                        this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-                    }
+                    this.getData = res;
+                    this.postCount = this.getData.data.length;
                 })
                 .catch(err => console.log(err));
             }
         },
         // 카테고리가 변경되면 나타나는 게시물들
         changePost(boardID){
-            this.post.title = []; this.post.id = []; this.post.img = [];
-            this.post.date = []; this.post.board_id = []; this.post.post_id = []; this.post_id = [];
             axios.get('/api/showAnotherBoard', {params: {board_id: boardID}})
             .then(res => {
-            for(let i = 0; i < res.data.length; i++){
-                console.log(res.data[i].post_id);
-                this.post.post_id.push(res.data[i].post_id);
-                this.post.board_id.push(res.data[i].board_id);
-                this.post.title.push(res.data[i].title);
-                this.post.user_id.push(res.data[i].nickname);
-                this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
-                this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-            }
-            console.log(res);
+                this.getData = res;
+                this.postCount = this.getData.data.length;
             }).catch(err => {console.log(err)});
         },
         urlChange(userId, boardId, postId){
@@ -211,37 +165,26 @@ export default {
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 console.log(this.post.count);
-                axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: this.post.count}})
+                axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: this.postCount}})
                 .then(res => {
-                    for(let i = 0; i < 9; i++){
-                        this.post.post_id.push(res.data[i].post_id);
-                        this.post.board_id.push(res.data[i].board_id);
-                        this.post.title.push(res.data[i].title);
-                        this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
-                        this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-                    }
-                    this.post.count = this.post.count + 9;
+                    let array = [];
+                    array.push(...this.getData.data, ...res.data)
+                    this.getData.data = array;
+                    this.postCount += 9;
                 }).catch(err => {
-                    this.post.count = this.post.post_id;
+                    // this.postCount = this.post.post_id;
                     console.log(err)
                 });
             }else{
-                console.log(this.post.count);
-                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.post.count}})
+                // console.log(this.post.count);
+                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
                 .then(res => {
-                    console.log(res);
-                    for(let i = 0; i < 9; i++){
-                        this.post.post_id.push(res.data[i].post_id);
-                        this.post.board_id.push(res.data[i].board_id);
-                        this.post.title.push(res.data[i].title);
-                        this.post.user_id.push(res.data[i].nickname);
-                        this.post.date.push(dayjs(res.data[i].creation_datetime).format("YYYY년 MM월 DD일"));
-                        this.post.img.push(`http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`);
-                    }
-                    this.post.count = this.post.count + 9;
+                    let array = [];
+                    array.push(...this.getData.data, ...res.data)
+                    this.getData.data = array;
+                    this.postCount += 9;
                 }).catch(err => {
-                    this.post.count = this.post.post_id;
+                    // this.postCount = this.post.post_id;
                     console.log(err)
                 })
             }
