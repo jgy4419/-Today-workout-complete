@@ -17,7 +17,7 @@
                         </ul>
                         <div @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <div class="bottom">
-                                <!-- <p>{{this.post.post_id[i]}}</p> -->
+                                <p>{{getData.data[i].post_id}}</p>
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                                 <h3 class="title"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                                 <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
@@ -80,28 +80,22 @@ export default {
         propsRes(result){
             // search 값이 변경되면, 데이터 들을 불러와서 post img, title, id 등에 각각 넣어주기.
             console.log(result);
-            
-            // this.post.title = [];
-            // this.post.img = [];
-            // this.post.date = [];
-            // this.post.board_id = [];
-            // this.post.user_id = [];
-            // this.post.post_id = [];
             axios.get('/api/searchtitle', {
                 params: {title: result}}, 
                 {withCredentials: true})
             .then(res => {
                 if(result === ''){
                     this.getPost();
+                    console.log(this.getData);
                 }else{
-                    this.getData = [];
-                    this.getData = res;
+                    this.postCount = res.data.length;
+                    this.getData.data = res.data;
+                    console.log(this.getData);
                 }
             }).catch(err => console.log(err));
         },
     },
     mounted(){
-        console.log(this.propsRes);
         this.postCount = 0;
         this.urlChange();
         this.changePost();
@@ -116,6 +110,7 @@ export default {
                 axios.get('/api/showPostAsc', {params: {board_id: 1, limit: 0}})
                 .then(res => {
                 this.getData = res;
+                this.postCount = this.getData.data.length;
             }).catch(err => console.log(err));
             }else if(sort.value === '최신순'){
                 this.getPost();
@@ -123,15 +118,15 @@ export default {
         },
         getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            // this.post.title = []; this.post.id = []; this.post.img = [];
-            // this.post.date = []; this.post.board_id = []; this.post_id = [];
 
             // const dayjs = dayjs("");
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
                 .then(res => {
+                    this.getData = [];
                     this.getData = res;
+                    this.postCount = this.getData.data.length;
                 }).catch(err => console.log(err));
             }else{
                 // console.log('커뮤니티');
@@ -139,6 +134,7 @@ export default {
                 .then(res => {
                     this.getData = res;
                     this.postCount = this.getData.data.length;
+                    console.log(this.getData);
                 })
                 .catch(err => console.log(err));
             }
@@ -177,12 +173,15 @@ export default {
                 });
             }else{
                 // console.log(this.post.count);
+                // this.postCount += 9;
                 axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
                 .then(res => {
                     let array = [];
                     array.push(...this.getData.data, ...res.data)
                     this.getData.data = array;
-                    this.postCount += 9;
+                    this.postCount += 9 ;
+                    console.log(this.postCount);
+                    console.log(res.data);
                 }).catch(err => {
                     // this.postCount = this.post.post_id;
                     console.log(err)
