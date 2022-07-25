@@ -17,7 +17,7 @@
                         </ul>
                         <div @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <div class="bottom">
-                                <p>{{getData.data[i].post_id}}</p>
+                                <!-- <p>{{getData.data[i].post_id}}</p> -->
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                                 <h3 class="title"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                                 <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>

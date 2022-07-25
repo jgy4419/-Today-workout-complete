@@ -5,7 +5,8 @@ export const Community = {
         categoryState: 0,
         setPostState: 0, // 글 수정 버튼 누르면 1로 변경.
         changeCategory: 1,
-        categorys: ['전체', '자유게시판', '운동게시판']
+        categorys: ['전체', '자유게시판', '운동게시판'],
+        writeCategorys: ['자유게시판', '운동게시판']
     }),
     mutations: {
         categoryNameChange(state, {categoryValue, count}){

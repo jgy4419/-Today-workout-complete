@@ -2,13 +2,13 @@
     <div class="searchAddress">
         <div class="inner">
             <div class="addressInput">
-                <input type="text" id="sample4_postcode" placeholder="우편번호">
-                <input type="button" @click="getApi()" value="우편번호 찾기"><br>
-                <input type="text" id="sample4_roadAddress" placeholder="도로명주소">
-                <input type="text" id="sample4_jibunAddress" placeholder="지번주소">
-                <span id="guide" style="color:#999;display:none"></span><br/>
-                <input type="text" id="sample4_detailAddress" placeholder="상세주소">
-                <input type="text" id="sample4_extraAddress" placeholder="참고항목">
+                <input v-for="type, i in input.type.length" :key="i" 
+                @click="getApi()"
+                :value="input.values[i]"
+                :type="input.type[i]"
+                :id="input.id[i]"
+                :placeholder="input.placeholder[i]"
+                :v-model="input.model[i]">
             </div>
         </div>
     </div>
@@ -16,6 +16,24 @@
 
 <script>
 export default {
+    data(){
+        return{
+            input: {
+                type: ['text', 'button', 'text', 'text', 'text', 'text'],
+                id: ['sample4_postcode', 'sample4_roadAddress', 'sample4_jibunAddress', 'sample4_detailAddress', 'sample4_extraAddress'],
+                placeholder: ['우편번호', '', '도로명주소', '지번주소', '상세주소', '참고항목'],
+                values: ['', '우편번호 찾기', '', '', '', ''],
+                methods: ['', 'getApi()', '', '', '', '', ''],
+                model: ['zibCode', '', 'streetNameAddress', 'lotNumber', 'detailAddress', 'references']
+            }
+        }
+    },
+    mounted(){
+        console.log(document.querySelectorAll('.addressInput input'));
+    },
+    watch: {
+
+    },
     methods: {
         getApi(){
             new window.daum.Postcode({
@@ -82,16 +100,19 @@ export default {
         margin: auto;
         .addressInput{
             display: flex;
-            // justify-content: center;
+            justify-content: left;
             flex-wrap: wrap;
             // gap: 20px;
             input{
-                margin: 10px 0px;
+                margin: 10px 10px;
                 padding: 10px;
                 width: 250px;
                 height: 40px;
                 border-radius: 10px;
                 border: solid 1px rgb(209, 209, 209);
+            }
+            input:nth-child(2n + 1){
+                margin: 10px 10px;
             }
             input:nth-child(2),
             input:nth-child(5),

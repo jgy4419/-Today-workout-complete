@@ -2,9 +2,9 @@
     <div class="myContainer">
         <div class="inner">
             <div class="introduction">
-                <div class="profileImg" :style="{backgroundImage: `url(${information.img})`}"/> 
+                <div class="profileImg" :style="{backgroundImage: `url(${information.profile_img_path})`}"/> 
                 <div class="profileBox">
-                    <p class="name">{{information.name}}</p>
+                    <p class="name">{{information.nickname}}</p>
                     <p class="myIntroduction">{{information.introduction}}</p>
                 </div>
             </div>
@@ -31,11 +31,7 @@ export default {
     },
     data(){
         return{
-            information: {
-                img: '',
-                name: '',
-                introduction: ''
-            },
+            information: {},
             modalState: 0,
             modal: ['게시글', '센서']
         }
@@ -45,12 +41,9 @@ export default {
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
 
         if(localStorage.userInformation){
-            this.information.img = userInformation.profile_img_path;
-            this.information.name = userInformation.nickname;
-            this.information.introduction = userInformation.introduction;
+            this.information = userInformation;
         }
-        console.log(this.modalState);
-
+        
         if(this.modalState === 1){
             this.getSensor();
         }

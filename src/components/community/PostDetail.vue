@@ -2,13 +2,13 @@
     <div class="contain">
         <div class="detail">
             <div class="postHeader">
-                <div class="postImg" :style="{backgroundImage:`url('${post.titleImg}')`}"/>
+                <div class="postImg" :style="{backgroundImage:`url('http://localhost:3000/img/postPhoto/${getPostDetailData.photographic_path}')`}"/>
                 <div class="user">
-                    <p class="title">{{post.title}}</p>
+                    <p class="title">{{getPostDetailData.title}}</p>
                     <br/>
                     <div class="information">
-                        <p class="id">{{post.userId}}</p>
-                        <p class="date">{{post.date}}}</p>
+                        <p class="id">{{getPostDetailData.nickname}}</p>
+                        <p class="date">{{getPostDetailData.creation_datetime}}</p>
                     </div>
                     <div class="setPost">
                         <p @click="setPost()">수정</p>
@@ -22,13 +22,13 @@
             <!-- <Chart v-if="chartState === 1" class="chart"/> -->
             <hr>
             <div class="commentList">
-                <div class="comments" v-for="data, i in comment.commentDetail.length" :key="i">
+                <div class="comments" v-for="data, i in getCommentData.length" :key="i">
                     <div v-if="commentState === 1" class="commentSetBox">
                         <p @click="commentEdit(i)">수정</p>
                         <p @click="commentDelete(i)">삭제</p>
                     </div>
-                    <p class="commentUserId">{{comment.userId[i]}}</p>
-                    <p v-if="commentState === 1" class="commentTitle">{{comment.commentDetail[i]}}</p>
+                    <p class="commentUserId">{{getCommentData[i].nickname}}</p>
+                    <p v-if="commentState === 1" class="commentTitle">{{getCommentData[i].content}}</p>
                     <div class="inputSetCommentBox">
                         <textArea type="text" minlength="10" maxlength="100" size="10" class="inputSetComment"/>
                         <button @click="setCommentComplete(i)" class="setBtn setcomplete">수정완료</button>
@@ -58,19 +58,8 @@ export default {
     },
     data(){
         return{
-            post: {
-                board_id: 0,
-                title: '',
-                titleImg: '',
-                userId: '',
-                date: '',
-                postDetail: ''
-            },
-            comment: {
-                userId: [],
-                commentDetail: [],
-                comments_id: [],
-            },
+            getPostDetailData: [],
+            getCommentData: [],
             commentInput: '',
             // 사용자가 차트 데이터를 올렸는지 안 올렸는지 상태. (일단 임시로 1 적용.)
             chartState: 0,
@@ -104,12 +93,11 @@ export default {
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
         .then(res => {
             for(let i = 0; i < res.data.length; i++){
-                if(this.$route.params.id === res.data[i].nickname && this.$route.params.board == res.data[i].board_id && this.$route.params.post == res.data[i].post_id){
-                    this.post.title = res.data[i].title;
-                    this.post.userId = res.data[i].nickname;
-                    $('#preview-click').html(decode(res.data[i].comment));
-                    this.post.date = res.data[i].creation_datetime;
-                    this.post.titleImg = `http://localhost:3000/img/postPhoto/${res.data[i].photographic_path}`;
+                if(this.$route.params.id === res.data[i].nickname 
+                && this.$route.params.board == res.data[i].board_id 
+                && this.$route.params.post == res.data[i].post_id){
+                    this.getPostDetailData = res.data[0];
+                    $('#preview-click').html(decode(this.getPostDetailData.comment));
                 }
             }
         })
@@ -117,11 +105,8 @@ export default {
         await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
         .then(res => {
             console.log(res);
-            for(let i = 0; i < res.data.length; i++){
-                this.comment.commentDetail.push(res.data[i].content);
-                this.comment.userId.push(res.data[i].nickname);
-                this.comment.comments_id.push(res.data[i].Comments_id);
-            }
+            this.getCommentData = res.data;
+            console.log('가져온 데이터', this.getCommentData);
         }).catch(err => {console.log(err)});
         console.log('~~');
     },
@@ -133,14 +118,6 @@ export default {
         commentUpdate(){
             // 닉네임
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            // userInformation.nickname; 유저 닉네임
-            console.log('유저 이름', userInformation.nickname);
-            console.log('댓글 내용', this.commentInput);
-
-            console.log(this.$route.params.post);
-            console.log(userInformation.nickname);
-            // this.commentInput 값을 넣어주기. (유저아이디, 게시글 제목)
-            // req.body.post_id, req.body.nickname, parent_comments_id, req.ip, req.body.content
             axios.post('/api/comments', {
                 post_id: this.$route.params.post,
                 nickname: userInformation.nickname,
@@ -164,7 +141,6 @@ export default {
                 axios.delete('/api/deletePost', {params: {post_id: this.$route.params.post}})
                 .catch(err => console.log(err));
                 this.$router.go(-1);
-                // location.replace('/community');
             }
         },
         commentEdit(i){
@@ -193,7 +169,7 @@ export default {
                 content: inputSetComment[i].value,
                 nickname: userInformation.nickname,
                 post_id: Number(post_id),
-                comments_id: this.comment.comments_id[i]
+                comments_id: this.getCommentData[i].Comments_id
             }).then(res => {
                 console.log(res);
                 location.reload();
@@ -210,7 +186,7 @@ export default {
             console.log(post_id);
             if(confirm('댓글을 지우시겠습니까?')){
                 axios.delete('/api/deleteComment', {params: {
-                    comments_id: this.comment.comments_id[i],
+                    comments_id: this.getCommentData[i].Comments_id,
                     post_id: Number(post_id),
                 }}).then(res => console.log(res))
                 .catch(err => console.log(err));
