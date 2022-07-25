@@ -7,8 +7,10 @@
                 :value="input.values[i]"
                 :type="input.type[i]"
                 :id="input.id[i]"
-                :placeholder="input.placeholder[i]"
-                :v-model="input.model[i]">
+                :placeholder="input.placeholder[i]">
+                <span id="guide" style="color:#999;display:none"></span><br/>
+                <input type="text" id="sample4_detailAddress" placeholder="상세주소">
+                <input type="text" id="sample4_extraAddress" placeholder="참고항목">
             </div>
         </div>
     </div>
@@ -19,20 +21,12 @@ export default {
     data(){
         return{
             input: {
-                type: ['text', 'button', 'text', 'text', 'text', 'text'],
-                id: ['sample4_postcode', 'sample4_roadAddress', 'sample4_jibunAddress', 'sample4_detailAddress', 'sample4_extraAddress'],
-                placeholder: ['우편번호', '', '도로명주소', '지번주소', '상세주소', '참고항목'],
-                values: ['', '우편번호 찾기', '', '', '', ''],
-                methods: ['', 'getApi()', '', '', '', '', ''],
-                model: ['zibCode', '', 'streetNameAddress', 'lotNumber', 'detailAddress', 'references']
+                type: ['text', 'button', 'text', 'text'],
+                id: ['sample4_postcode', '', 'sample4_roadAddress', 'sample4_jibunAddress'],
+                placeholder: ['우편번호', '', '도로명주소', '지번주소'],
+                values: ['', '우편번호 찾기', '', ''],
             }
         }
-    },
-    mounted(){
-        console.log(document.querySelectorAll('.addressInput input'));
-    },
-    watch: {
-
     },
     methods: {
         getApi(){

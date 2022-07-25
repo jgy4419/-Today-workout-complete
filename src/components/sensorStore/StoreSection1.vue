@@ -19,7 +19,7 @@
                                 <p class="resPrice">{{price[1] * count}}원</p>
                             </div>
                         </div>
-                            <button class="cartBtn">장바구니에 담기</button>
+                            <button class="cartBtn" @click="cartIn()">장바구니에 담기</button>
                         <router-link :to="order">
                             <button class="buyBtn" @click="loginAuth()">Buy now!</button>
                         </router-link>
@@ -68,10 +68,19 @@ export default {
                 alert('로그인 후 구매 가능합니다.');
                 this.order = '/login';
             }
+            if(this.count === 0){
+                alert('구매개수 최소 1개 이상 선택해주세요.');
+            }
             this.$store.dispatch('Order/paymentAction', {
                 payment: this.price[1] * this.count
             })
-            
+        },
+        cartIn(){
+            if(localStorage.getItem('userInformation') && this.count !== 0){
+                alert('장바구니에 저장되었습니다!');
+            }else {
+                alert('개수 1개 이상 선택하거나, 로그인 후 이용 가능합니다.');
+            }
         }
     }
 }
