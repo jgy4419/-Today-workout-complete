@@ -114,14 +114,15 @@ export default {
                         }
                     },
                     toolbar: [
-                    ['operation', ['undo', 'redo']],
-                    ['style', ['bold', 'italic', 'underline']],
-                    ['color', ['color']],       
-                    ['font', ['strikethrough', 'superscript', 'subscript', 'clear']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link','picture', 'hr']],
-                    ['view', ['codeview']],
-                    ]
+                        ['operation', ['undo', 'redo']],
+                        ['fontsize', ['fontsize']],
+                        ['style', ['bold', 'italic', 'underline']],
+                        ['color', ['color']],       
+                        ['font', ['strikethrough', 'superscript', 'subscript', 'clear']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link','picture', 'hr']],
+                        ['view', ['codeview']],
+                    ],
                 });
             });
         }, 300)
@@ -300,6 +301,7 @@ input, textarea{
             border: 0;
         }
         .photographic_path, .sensor_btn{
+            font-size: 14px;
             margin-top: 20px;
             display: flex;
             align-items: center;

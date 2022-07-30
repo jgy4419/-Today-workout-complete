@@ -25,17 +25,8 @@
                     </div>
                 </div>
             </header>
-            <br><hr><br>
+            <!-- <br><hr><br> -->
             <section>
-                <div class="listBox">
-                    <button class="list" v-for="categorys, i in categorys" :key="i"
-                        @click="$store.dispatch('Community/categoryChange', {
-                            categoryValue: categorys,
-                            count: i
-                        })">
-                        {{categorys}}
-                    </button>
-                </div>
                 <div class="section">
                     <aside class="category">
                         <ul>
@@ -71,10 +62,9 @@
 import Post from './Post.vue';
 import {mapState, mapActions} from 'vuex';
 import axios from 'axios';
-// import axios from 'axios';
 export default {
     components: {
-        Post,
+        Post
     },
     computed:{
         ...mapState('Community', ['categoryName', 'categoryState', 'categorys']),
@@ -105,7 +95,8 @@ export default {
             manager: false,
             managerInput: ['카테고리 추가', 'code', 'availability'],
             categoryVal: ['', '', ''], 
-            backImg: ['', '']
+            backImg: ['', ''],
+            spinnerState: 1,
         }
     },
     mounted(){
@@ -296,7 +287,7 @@ export default {
             }
             .section{
                 position: absolute;
-                // left: -5%;
+                top: 80px;
                 display: flex;
                 left: 0;
                 .setCategory{

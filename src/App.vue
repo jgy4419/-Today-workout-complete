@@ -1,5 +1,7 @@
 <template>
-  <Header/>
+  <div>
+      <Header/>
+  </div>
 </template>
 
 <script>
@@ -33,8 +35,11 @@ export default {
 </script>
 
 <style lang="scss">
-.importantText{
-  font-weight: 700;
-  color: #93B5C6;
+// .importantText{
+//   font-weight: 700;
+//   color: #93B5C6;
+// }
+a{
+  text-decoration: none;
 }
 </style>

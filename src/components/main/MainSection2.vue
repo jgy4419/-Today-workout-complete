@@ -35,6 +35,8 @@
 import img1 from '../../image/mainImg/main.jpeg'
 import img2 from '../../image/mainImg/main2.jpeg'
 import img3 from '../../image/mainImg/main3.jpeg'
+
+import _ from 'lodash';
 export default {
     data(){
         return{
@@ -57,13 +59,12 @@ export default {
         scrollEvent(){
             // 메인 페이지 전체 height 크기
             let screenHeight = document.documentElement.scrollHeight;
-            console.log('메인 페이지 전체 height는', screenHeight);
-
-
             let img = document.querySelector('.img');
             let title = document.querySelectorAll('.title');
             let textInner = document.querySelectorAll('.textInner');
-            document.addEventListener('scroll', function(){
+
+            // lodash로 스크롤 최적화 시켜주기.
+            document.addEventListener('scroll', _.throttle(() => {
                 let currentScrollValue = document.documentElement.scrollTop;
                 for(let i = 0; i < title.length; i++){
                     // 1700, 2200 // 3 2
@@ -78,11 +79,10 @@ export default {
                         textInner[2].classList.add('event');
                     }else{
                         img.style.backgroundImage = `url(${img1})`;
-                        // title[i].classList.remove('event');
-                        // textInner[i].classList.remove('event');
                     }
                 }
-            });
+                // 0.3초에 한 번씩 함수 실행.
+            }, 300));
         }
     },
     computed: {

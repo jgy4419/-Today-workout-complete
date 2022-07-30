@@ -1,19 +1,21 @@
 <template>
-  <!-- <router-view> -->
+  <div>
     <header class="header">
-      <nav class="web">
-        <router-link to="/">
-          <p class="logo">오 운 완</p>
-        </router-link>
-        <div class="webMenu">
-          <router-link v-for="url, i in url" :key="i" :to="url">
-              <button class="menuBtn">
-                {{login[i]}}
-              </button>
+      <div class="header_inner">
+        <nav class="web">
+          <router-link to="/">
+            <p class="logo">오 운 완</p>
           </router-link>
-          <button :style="{backgroundImage:`url('${myBtnImg}')`}" @click="myModal()" class="myBtn"/>
-        </div>
-      </nav>
+          <div class="webMenu">
+            <router-link v-for="url, i in url" :key="i" :to="url">
+                <button class="menuBtn">
+                  {{login[i]}}
+                </button>
+            </router-link>
+            <button :style="{backgroundImage:`url('${myBtnImg}')`}" @click="myModal()" class="myBtn"/>
+          </div>
+        </nav>
+      </div>
       <div class="myInformationBox">  
         <ul>
           <li class="myBoxli" v-for="menu, i in menuList.text" :key="i">
@@ -37,7 +39,8 @@
           </ul>
       </nav>
     </header>
-  <router-view/>
+    <router-view/>
+  </div>
 </template>
 
 <script>
@@ -90,20 +93,6 @@ export default {
 
       this.mobile.url.push('/mypage', '/settings', '/store', '/');
       this.mobile.login.push('MyPage', 'settings', 'store', 'logout')
-      // 로그인 이후 menu[4]번째 즉, logout 버튼을 누르면 웹에서 쿠키 제
-
-      // let mobileMenuList = document.querySelectorAll('.mobileMenuList');
-
-      // let logoutBtn = [myBoxli[2], mobileMenuList[3]];
-      // for(let i = 0; i < logoutBtn.length; i++){
-      //   logoutBtn[i].addEventListener('click', function(){
-      //     console.log('logout!');
-      //     localStorage.removeItem('userInformation');
-      //     // 쿠키를 전 시간으로 돌려서 로그아웃 시켜줌.
-      //     document.cookie = 'user=; expires=Thu, 18 Dec 2013 12:00:00 GMT'
-      //     location.replace('/');
-      //   })
-      // }
       myBoxli[2].addEventListener('click', function(){
         console.log('logout!');
         localStorage.removeItem('userInformation');
@@ -153,68 +142,79 @@ export default {
 }
 .header{
   position: relative;
-  background-color: #fff;
-  z-index: 100;
   width: 100vw;
-  nav{
-    padding-top: 10px;
-    display: flex;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 80vw;
-    color: rgb(165, 165, 165);
-    justify-content: space-between;
-    .logo{
-      font-family: 'RixYeoljeongdo_Regular';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/RixYeoljeongdo_Regular.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-      font-size: 25px;
-      color: #333;
-    }
-    .logo:hover{
-      color: #333;
-    }
-    .webMenu{
-      position: relative;
-      .menuBtn{
-        position: relative;
-        bottom: 10px;
-        width: 100px;
-        font-size: 14px;
-        font-weight: 700;
+  height: 60px;
+  top: 0;
+  z-index: 100;
+  // .routerView{
+  //     position: relative;
+  //     height: 60px;
+  //   }
+  .header_inner{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #fff;
+    nav{
+      padding-top: 10px;
+      display: flex;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 80vw;
+      color: rgb(165, 165, 165);
+      justify-content: space-between;
+      .logo{
+        font-family: 'RixYeoljeongdo_Regular';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/RixYeoljeongdo_Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        font-size: 25px;
+        color: #333;
       }
-      .myBtn{
-        position: relative;
-        background-size: cover;
-        left: 10px;
-        // top: 10px;
-        width: 35px;
-        height: 35px;
-        background-color: rgb(233, 233, 233);
+      .logo:hover{
+        color: #333;
       }
-    }
-    button{
-      width: 80px;
-      height: 40px;
-      background-color: transparent;
-      color: rgb(89, 89, 89);
-      border-radius: 30px;
-      // border: 1px solid #333;
-      border: 0;
-      margin-left: 10px;
-      transition: .2s;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover{
-      border: 1px solid #fff;
-      background-color: #C9CCD5;
-      color: #fff;
-    }
-    .logo{
-      cursor: pointer;
+      .webMenu{
+        position: relative;
+        .menuBtn{
+          position: relative;
+          bottom: 10px;
+          width: 100px;
+          font-size: 14px;
+          font-weight: 700;
+        }
+        .myBtn{
+          position: relative;
+          background-size: cover;
+          left: 10px;
+          // top: 10px;
+          width: 35px;
+          height: 35px;
+          background-color: rgb(233, 233, 233);
+        }
+      }
+      button{
+        width: 80px;
+        height: 40px;
+        background-color: transparent;
+        color: rgb(89, 89, 89);
+        border-radius: 30px;
+        // border: 1px solid #333;
+        border: 0;
+        margin-left: 10px;
+        transition: .2s;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      button:hover{
+        border: 1px solid #fff;
+        background-color: #C9CCD5;
+        color: #fff;
+      }
+      .logo{
+        cursor: pointer;
+      }
     }
   }
   .myInformationBox.event{
@@ -223,7 +223,7 @@ export default {
   .myInformationBox{
     display: none;
     position: absolute;
-    margin-top: 10px;
+    margin-top: 60px;
     right: 8%;
     width: 90px;
     height: 100px;
@@ -306,16 +306,17 @@ export default {
   }
   .mobileMenu{
     position: fixed;
-    margin-top: -55px;
+    height: 100vh;
+    width: 100%;
     display: none;
     transform: translateX(700px);
+    overflow-y: scroll;
     transition: .5s;
     ul{
       margin-top: 5%;
       .mobileMenuList{
         font-size: 25px;
         font-weight: 700;
-        // width: 200px;
         color: #fff;
         text-align: right;
         padding: 4% 20%;
@@ -340,24 +341,28 @@ export default {
       }
     }
   }
-   @media screen and (max-width: 768px){
-     background-color: transparent;
-    nav{
-      .webMenu{
-          display: none;
-          width: 75px;
-          height: 40px;
-          font-size: 15px;
+}
+@media screen and (max-width: 768px){
+  .header {
+    .header_inner{
+      background-color: transparent;
+      nav{
+        .webMenu{
+            display: none;
+            width: 75px;
+            height: 40px;
+            font-size: 15px;
+        }
+      }
+      .myBtn{
+        display: none;
       }
     }
-    .myBtn{
-      display: none;
-    }
     .menuListIcon{
-      display: block;
-      transform: translateX(0px);
-      opacity: 1;
-    }
+        display: block;
+        transform: translateX(0px);
+        opacity: 1;
+      }
     .mobileMenu{
       display: block;
     }

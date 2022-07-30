@@ -7,6 +7,7 @@
             </select>
         </div>
         <div class="inner">
+            <Spinner class="spinner" v-if="spinnerState === 1"/>
             <div class="post" v-for="data, i in postCount" :key="i">
                     <!-- 시간날 때 수정하기 urlChange 1번 만 쓰기 -->
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
@@ -19,9 +20,9 @@
                             <div class="bottom">
                                 <!-- <p>{{getData.data[i].post_id}}</p> -->
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
-                                <h3 class="title"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
+                                <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                                 <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
-                                <p>날짜: {{getData.data[i].create_datetime}}</p>
+                                <p>날짜: {{getData.data[i].creation_datetime}}</p>
                                 {{searchRes}}
                                 <p>{{$store.state.Search.searchValue}}</p>
                             </div>
@@ -38,8 +39,12 @@
 <script>
 import axios from 'axios'; 
 import {mapState} from 'vuex';
+import Spinner from '../Spinner.vue';
 // import dayjs from 'dayjs';
 export default {
+    components: {
+        Spinner,
+    },
     // 데이터가 추가적으로 저장이 되면 
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
     data(){
@@ -52,9 +57,11 @@ export default {
                 value: ['최신순', '오래된순'],
                 class: ['up', 'up'],    
             },
-
             getData: [],
             postCount: 0,
+            spinnerState: 1,
+            // dateData: [],
+            // changeDate: [dayjs(this.dateData).format("YYYY-MM-DD")],
         }
     },
     computed: {
@@ -118,23 +125,25 @@ export default {
         },
         getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-
             // const dayjs = dayjs("");
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
                 .then(res => {
+                    console.log(res);
+                    this.spinnerState = 0;
                     this.getData = [];
                     this.getData = res;
                     this.postCount = this.getData.data.length;
+                    this.dateData.push(res.data.creation_datetime);
+                    console.log(this.dateData)
                 }).catch(err => console.log(err));
             }else{
-                // console.log('커뮤니티');
                 axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
                 .then(res => {
+                    this.spinnerState = 0;
                     this.getData = res;
                     this.postCount = this.getData.data.length;
-                    console.log(this.getData);
                 })
                 .catch(err => console.log(err));
             }
@@ -154,6 +163,7 @@ export default {
         },
         // 데이터 더 보기 버튼 기능.
         moreData(){
+            this.spinnerState = 1;
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             console.log('더 보기', this.postCount);
             // ex) 9개 post를 추가적으로 더 가져오기.
@@ -163,6 +173,7 @@ export default {
                 console.log(this.post.count);
                 axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: this.postCount}})
                 .then(res => {
+                    this.spinnerState = 0;
                     let array = [];
                     array.push(...this.getData.data, ...res.data)
                     this.getData.data = array;
@@ -176,6 +187,7 @@ export default {
                 // this.postCount += 9;
                 axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
                 .then(res => {
+                    this.spinnerState = 0;
                     let array = [];
                     array.push(...this.getData.data, ...res.data)
                     this.getData.data = array;
@@ -204,6 +216,8 @@ export default {
         display: flex; 
         justify-content: space-between;
         .sort{
+            font-size: 15px;
+            font-weight: 500;
             border: 0;
             margin-right: 30px;
         }
@@ -221,65 +235,79 @@ export default {
         display: flex;
         gap: 20px;
         flex-wrap: wrap;
-            .post{
-                width: 300px;
-                height: 300px;
-                box-sizing: border-box;
-                box-shadow: 4px 12px 30px 6px rgb(231, 231, 231);
-                margin-right: 20px;
-                margin-top: 50px;
-                border-radius: 10px;
-                overflow: hidden;
-                cursor: pointer;
-                .postUrl{
-                    .titleImg{
-                        border-radius: 5px;
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        filter:brightness(100%);
-                        background-size: 100%;
-                        width: 100%;
-                        height: 80%;
-                        background-color: rgb(184, 184, 184);
-                        transition: .3s;
-                    }
-                    .side{
-                        position: relative;
-                        left: 280px;
-                        top: -19vh;
-                        transition: .3s;
-                        font-size: 18px;
-                        font-weight: 700;
-                    }
-                    .bottom{
-                        position: relative;
-                        bottom: 75px;
-                        transition: .3s;
-                        width: 90%;
-                        margin: auto;
-                        .title{
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-                    }
-                }
-            // }
-            }
-            .postUrl:hover{
+        .spinner{
+            position: fixed;
+            z-index: 101;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+        .post{
+            width: 300px;
+            height: 300px;
+            box-sizing: border-box;
+            box-shadow: 4px 12px 30px 6px rgb(231, 231, 231);
+            margin-right: 20px;
+            margin-top: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            .postUrl{
                 .titleImg{
-                    background-size: 120%;
-                    height: 50%;
+                    border-radius: 5px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    filter:brightness(100%);
+                    background-size: 100%;
+                    width: 100%;
+                    height: 80%;
+                    background-color: rgb(184, 184, 184);
                     transition: .3s;
-                    filter:brightness(90%);
                 }
                 .side{
-                    left: 180px;
+                    position: relative;
+                    left: 280px;
+                    top: -19vh;
+                    transition: .3s;
+                    font-size: 18px;
+                    font-weight: 700;
                 }
                 .bottom{
-                    bottom: 60px;
+                    position: relative;
+                    bottom: 75px;
+                    transition: .3s;
+                    width: 90%;
+                    margin: auto;
+                    .postTitle{
+                        font-size: 20px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        margin-bottom: 20px;
+                    }
+                    p{
+                        font-size: 14px;
+                    }
                 }
             }
+        // }
+        }
+        .postUrl:hover{
+            .titleImg{
+                background-size: 120%;
+                height: 50%;
+                transition: .3s;
+                filter:brightness(90%);
+            }
+            .side{
+                left: 180px;
+            }
+            .bottom{
+                bottom: 60px;
+            }
+        }
 
         .btnBox{
             display: flex;
@@ -320,7 +348,7 @@ export default {
             .postUrl{
                 // display: block;
                 .post{
-                    .title{
+                    .postTitle{
                         font-size: 20px;
                     }
                     p{

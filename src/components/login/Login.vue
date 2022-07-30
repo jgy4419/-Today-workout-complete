@@ -82,6 +82,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a{
+    text-decoration: none;
+}
+a:hover{
+    transition: .3s;
+    color: grey;
+}
 .contain{
     position: absolute;
     margin: auto;
@@ -112,6 +119,7 @@ export default {
                 padding-left: 10px;
             }
             .loginBtn{
+                font-size: 16px;
                 margin-top: 20px;
                 width: 300px;
                 height: 50px;
@@ -133,6 +141,7 @@ export default {
         }
         .loginList{
             margin: auto;
+            font-size: 14px;
             margin-top: 30px;
             display: flex;
             justify-content: space-between;

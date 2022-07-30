@@ -51,6 +51,7 @@ background: linear-gradient(to right top, #861657, #ffa69e);
     position: relative;
     margin-top: 1.5%;
     height: 100vh;
+    // margin-top: 100px;
     .inner{
         position: relative;
         top: 10%;

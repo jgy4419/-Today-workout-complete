@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="myPageModal">
-                <button v-for="modals, i in modal.length" :key="i" @click="modalState = i" class="btn">{{modal[i]}}</button>
+                <button v-for="modals, i in modal.length" :key="i" @click="modalState = i" class="selectBtn">{{modal[i]}}</button>
             </div>
             <hr>
             <br>
@@ -85,19 +85,20 @@ export default {
         }
         .myPageModal{
             padding-bottom: 5%;
-            .btn{
+            .selectBtn{
                 width: 100px;
                 height: 40px;
                 font-size: 16px;
+                border: 0;
                 font-weight: 700;
                 border-radius: 10px;
                 transition: .3s;
             }
-            .btn:hover{
+            .selectBtn:hover{
                 background-color: #C9CCD5;
                 color: #fff;
             }
-            .btn:nth-child(2){
+            .selectBtn:nth-child(2){
                 margin: 20px;
             }
         }
@@ -106,7 +107,7 @@ export default {
         .inner{
             width: 80vw;
             .myPageModal{
-                .btn{
+                .selectBtn{
                     width: 80px;
                     font-size: 15px;
                 }
