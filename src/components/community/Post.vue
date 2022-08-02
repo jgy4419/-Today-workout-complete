@@ -8,6 +8,9 @@
         </div>
         <div class="inner">
             <Spinner class="spinner" v-if="spinnerState === 1"/>
+            <div class="inner" v-if="spinnerState === 1">
+                <Skeleton class="post" v-for="i in 9" :key="i"/>
+            </div>
             <div class="post" v-for="data, i in postCount" :key="i">
                     <!-- 시간날 때 수정하기 urlChange 1번 만 쓰기 -->
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
@@ -22,7 +25,8 @@
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                                 <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                                 <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
-                                <p>날짜: {{getData.data[i].creation_datetime}}</p>
+                                <!-- 게시날짜 표시 (년 - 월 - 일) -->
+                                <p>날짜: {{dayJS(getData.data[i].creation_datetime).format("YYYY-MM-DD")}}</p>
                                 {{searchRes}}
                                 <p>{{$store.state.Search.searchValue}}</p>
                             </div>
@@ -39,11 +43,13 @@
 <script>
 import axios from 'axios'; 
 import {mapState} from 'vuex';
+import Skeleton from '../Skeleton.vue';
 import Spinner from '../Spinner.vue';
-// import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 export default {
     components: {
         Spinner,
+        Skeleton
     },
     // 데이터가 추가적으로 저장이 되면 
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
@@ -60,8 +66,8 @@ export default {
             getData: [],
             postCount: 0,
             spinnerState: 1,
-            // dateData: [],
-            // changeDate: [dayjs(this.dateData).format("YYYY-MM-DD")],
+            // dayjs 적용할 변수
+            dayJS: dayjs,
         }
     },
     computed: {
@@ -183,8 +189,6 @@ export default {
                     console.log(err)
                 });
             }else{
-                // console.log(this.post.count);
-                // this.postCount += 9;
                 axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
                 .then(res => {
                     this.spinnerState = 0;

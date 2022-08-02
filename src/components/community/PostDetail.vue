@@ -8,7 +8,7 @@
                     <br/>
                     <div class="information">
                         <p class="id">{{getPostDetailData.nickname}}</p>
-                        <p class="date">{{getPostDetailData.creation_datetime}}</p>
+                        <p class="date">{{dayJS(getPostDetailData.creation_datetime).format("YYYY-MM-DD")}}</p>
                     </div>
                     <div class="setPost">
                         <p @click="setPost()">수정</p>
@@ -51,7 +51,7 @@
 
 <script>
 import axios from 'axios'
-// import Chart from '../Chart.vue';
+import dayjs from 'dayjs';
 export default {
     components: {
         // Chart,
@@ -64,6 +64,7 @@ export default {
             // 사용자가 차트 데이터를 올렸는지 안 올렸는지 상태. (일단 임시로 1 적용.)
             chartState: 0,
             commentState: 1,
+            dayJS: dayjs,
         }
     },
     async mounted(){

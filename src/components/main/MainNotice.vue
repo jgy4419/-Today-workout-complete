@@ -11,13 +11,13 @@
             </div>
             <div class="noticeSectionBox">
                 <div class="noticeSection"
-                v-for="itemList, i in noticeItem.title.length" :key="i">
+                v-for="a, i in noticeData.length" :key="i">
                     <p class="itemTitle">
-                        {{noticeItem.title[i]}}
+                        {{noticeData[i].title}}
                     </p>
                     <hr>
                     <p class="itemContent">
-                        {{noticeItem.content[i]}}
+                        {{noticeData[i].comment}}
                     </p>
                 </div>
             </div>
@@ -29,29 +29,69 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data(){
         return{
-            noticeList: ['전체', '공지', '운동'],
+            noticeList: ['전체', '자유', '운동'],
             noticeItem: {
                 title: ['놓칠 수 없는 첫 회원 이벤트', '같이 운동 하자!', '운동량 측정 해볼래?'],
                 content: ['첫 회원가입 시 추첨을 통해 선물 지급!', '사람들과 소통하면서 운동 방법을 공유할 수 있는 커뮤니티 생성!', '실제 자신이 운동한 운동량을 측정하고, 사람들한테 공유해보세요.']
-            }
+            },
+            noticeState: '전체',
+            noticeData: []
         }
     },
     mounted(){
         // 처음에 공지 부분에 전체 부분에 파란색 띄워놓기.
         document.querySelectorAll('.noticeItem')[0].classList.add('active');
+        this.getNoticeData();
     },
     methods: {
         activate({target}){
-            console.log(target);
+            this.noticeState = target.innerHTML;
+            console.log(this.noticeState);
             let noticeItem = document.querySelector('.noticeList');
             [...noticeItem.children].forEach(info => {
                 info.classList.toggle('active', info === target);
-                
             })
-
+        },
+        getNoticeData(){
+            // 전체 게시글 개수만큼 불러오고, notice에 보여주는건 3개로 제한해주기.
+            if(this.noticeState === '전체'){
+                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: 0}})
+                .then(res => {
+                    this.noticeData = [];
+                    for(let i = 0; i < 3; i++){
+                        this.noticeData.push(res.data[i]);
+                    }
+                    console.log(this.noticeData);
+                }).catch(err => console.log(err));
+            }else if(this.noticeState === '자유'){
+                this.noticeData = [];
+                axios.get('/api/showAnotherBoard', {params: {board_id: 2}})
+                .then(res => {
+                    this.noticeData = [];
+                    console.log(this.noticeData);
+                    for(let i = 0; i < 3; i++){
+                        this.noticeData.push(res.data[i]);
+                    }
+                }).catch(err => {console.log(err)});
+            }else{
+                axios.get('/api/showAnotherBoard', {params: {board_id: 3}})
+                .then(res => {
+                    this.noticeData = [];
+                    console.log(this.noticeData)
+                    for(let i = 0; i < 3; i++){
+                        this.noticeData.push(res.data[i]);
+                    }
+                }).catch(err => {console.log(err)});
+            }
+        },
+    },
+    watch: {
+        noticeState: function(state){
+            this.getNoticeData(state);
         }
     }
 }
