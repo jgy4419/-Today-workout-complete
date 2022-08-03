@@ -52,6 +52,7 @@
 <script>
 import axios from 'axios'
 import dayjs from 'dayjs';
+// import {decode} from '../../../repeatFunc/textChangeStyle';
 export default {
     components: {
         // Chart,
@@ -86,11 +87,6 @@ export default {
             setPost.style.display = 'none';
         }
         
-
-        function decode(text) {
-            // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
-            return $("<textarea/>").html(text).text();
-        }
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
         .then(res => {
             for(let i = 0; i < res.data.length; i++){
@@ -103,19 +99,22 @@ export default {
             }
         })
         .catch(err => console.log(err));
-        await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
-        .then(res => {
-            console.log(res);
-            this.getCommentData = res.data;
-            console.log('가져온 데이터', this.getCommentData);
-        }).catch(err => {console.log(err)});
-        console.log('~~');
+        function decode(text) {
+            console.log(text);
+            // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
+            return $("<textarea/>").html(text).text();
+        }
+        // decode(text);
+
+        // await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
+        // .then(res => {
+        //     console.log(res);
+        //     this.getCommentData = res.data;
+        //     console.log('가져온 데이터', this.getCommentData);
+        // }).catch(err => {console.log(err)});
+        // console.log('~~');
     },
     methods: {
-        getComment(){
-            console.log("getComment")
-
-        },
         commentUpdate(){
             // 닉네임
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));

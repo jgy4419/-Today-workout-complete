@@ -108,7 +108,7 @@ export default {
             }).catch(err => console.log(err));
         },
     },
-    mounted(){
+    async mounted(){
         this.postCount = 0;
         this.urlChange();
         this.changePost();
@@ -131,7 +131,6 @@ export default {
         },
         getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            // const dayjs = dayjs("");
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
