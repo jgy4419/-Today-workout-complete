@@ -10,16 +10,19 @@
                     v-for="noticeList in noticeList" :key="noticeList">{{noticeList}}</li>
                 </ul>
             </div>
-            <div class="noticeSectionBox">
-                <div class="noticeSection"
-                v-for="a, i in noticeData.length" :key="i">
-                    <p class="itemTitle">
-                        {{noticeData[i].title}}
-                    </p>
-                    <hr>
-                    <p v-bind:id="'preview-click'+i">{{i}}</p>
+                <div class="noticeSectionBox">
+                    <router-link :to="`/${noticeData[i].nickname}/${noticeData[i].board_id}/${noticeData[i].post_id}`" 
+                    v-for="a, i in noticeData.length" :key="i">
+                        <div class="noticeSection">
+                            <p class="itemTitle">
+                                {{noticeData[i].title}}
+                            </p>
+                            <p class="itemTitle">{{noticeData[i].post_id}}</p>
+                            <hr>
+                            <p v-bind:id="'preview-click'+i"/>
+                        </div>
+                    </router-link>
                 </div>
-            </div>
             <router-link to="/community">
                 <p class="moreBtn">더 보기</p>
             </router-link>
@@ -43,48 +46,19 @@ export default {
             },
             notice: '전체',
             noticeData: [],
-            spinnerState: 1,
             noticeState: 0,
+            spinnerState: 1,
         }
     },
     async mounted(){
         // 처음에 공지 부분에 전체 부분에 파란색 띄워놓기.
         document.querySelectorAll('.noticeItem')[0].classList.add('active');
         this.getNoticeData();
-        this.watchText();
+        this.watchData();
     },
     methods: {
-        async watchText(state){
-            console.log(state)
-            await axios.get('/api/showAnotherBoard', {params: {board_id: 3}})
-            .then(res => {
-                for(let i = 0; i < res.data.length; i++){
-                    console.log(this.noticeData[i].comment);
-                    $(`#preview-click${i}`).html(decode(this.noticeData[i].comment));
-                }
-            })
-            .catch(err => console.log(err));
-            function decode(text) {
-                console.log(text);
-                // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
-                return $("<textarea/>").html(text).text();
-            }
-            // else if(state === 1){
-            //     axios.get('/api/showAnotherBoard', {params: {board_id: 1}})
-            //     .then(() => {
-            //         this.noticeData = [];
-            //         console.log(this.noticeData);
-            //         for(let i = 0; i < 3; i++){
-            //             $(`#preview-click${i}`).html(this.decode(this.noticeData[i].comment));
-            //         }
-            //     }).catch(err => {console.log(err)});
-                // this.deconde(text);
-                // function decode(text) {
-                //     console.log(text);
-                //     // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
-                //     return $("<textarea/>").html(text).text();
-                // }
-            // }
+        async watchData(){
+            this.getNoticeData();
         },
         decode(text){
             // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
@@ -100,48 +74,41 @@ export default {
         },
         getNoticeData(){
             // 전체 게시글 개수만큼 불러오고, notice에 보여주는건 3개로 제한해주기.
-            if(this.notice === '전체'){
-                this.noticeState = 0;
+            if(this.noticeState === '전체' || this.noticeState === 0){
                 axios.get('/api/showPostDesc', {params: {board_id: 1, limit: 0}})
                 .then(res => {
+                    console.log(res);
                     this.spinnerState = 0;
                     this.noticeData = [];
                     for(let i = 0; i < 3; i++){
                         this.noticeData.push(res.data[i]);
+                        $(`#preview-click${i}`).html(this.decode(res.data[i].comment));
                     }
-                    console.log(this.noticeData);
-                            this.watcgText(this.noticeState);
                 }).catch(err => console.log(err));
-            }else if(this.notice === '자유'){
-                this.noticeState = 1;
-                this.noticeData = [];
+            }else if(this.noticeState === '자유'){
                 axios.get('/api/showAnotherBoard', {params: {board_id: 2}})
                 .then(res => {
                     this.noticeData = [];
-                    console.log(this.noticeData);
                     for(let i = 0; i < 3; i++){
                         this.noticeData.push(res.data[i]);
+                        $(`#preview-click${i}`).html(this.decode(res.data[i].comment));
                     }
-                                this.watcgText();
                 }).catch(err => {console.log(err)});
             }else{
-                this.noticeState = 2;
                 axios.get('/api/showAnotherBoard', {params: {board_id: 3}})
                 .then(res => {
                     this.noticeData = [];
-                    console.log(this.noticeData)
                     for(let i = 0; i < 3; i++){
                         this.noticeData.push(res.data[i]);
+                        $(`#preview-click${i}`).html(this.decode(res.data[i].comment));
                     }
-                                this.watcgText();
                 }).catch(err => {console.log(err)});
             }
         },
     },
     watch: {
-        noticeState: function(state){
-            this.getNoticeData(state);
-            this.watcgText(this.noticeState);
+        noticeState: function(){
+            this.getNoticeData();
         }
     }
 }

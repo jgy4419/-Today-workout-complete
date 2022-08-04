@@ -27,7 +27,7 @@ import Sensors from './Sensors.vue';
 export default {
     components: {
         Post,
-        Sensors
+        Sensors,
     },
     data(){
         return{
