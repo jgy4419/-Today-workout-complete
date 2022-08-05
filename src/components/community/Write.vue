@@ -22,7 +22,7 @@
             <div class="editor-page">
                 <div :v-model="postDetail.writing" id="summernote">오늘 운동한 내용을 말해주세요~!</div>
             </div>
-            <DragFile/>
+            <DragFile @getImgData="getImgData($event)"/>
             <div class="btnBox">
                 <button :class="btn.class[i]" v-for="btns, i in btn.btnName" :key="i">
                     <i :class="btn.iClass[i]" ></i>
@@ -45,6 +45,11 @@ import DOMPurify from 'dompurify';
 import Chart from '../Chart.vue';
 import DragFile from './DragFile.vue';
 export default {
+    watch: {
+        fileData: function(){
+            this.getImgData();
+        }
+    },
     components:{
         Chart,
         DragFile,
@@ -67,10 +72,11 @@ export default {
             sensorWatch: false,
             closeState: false,
             // write페이지면 1 MyPage에서 보면 0
-            writeOrRead: 0
+            writeOrRead: 0,
+            getImgFileData: [],
         }
     },
-    async mounted() {
+    mounted() {
         // 라우트 변수들
         let route = {
             nickname: this.$route.params.id,
@@ -78,7 +84,6 @@ export default {
             board_id: this.$route.params.board
         };
         let writeState = this.$route.params.edit;
-        console.log(this.$route.params);
         // 만약 url에서 edit 설정 부분이 1이면 
         if(writeState == 1){
             let writing = document.getElementById('summernote');
@@ -139,9 +144,10 @@ export default {
             history.go(-1);
             location.href = '/community';
         });
-
+        let dragBackImg = this.getImgFileData;
         // board = this.postDetail.postCount;
         document.querySelector('.submit').addEventListener('click', function(){
+            console.log(dragBackImg);
             let board = 1; // 기본 카테고리 번호 (전체 게시물)
             let categoryChoice = document.querySelector('.categoryChoice');
 
@@ -153,8 +159,10 @@ export default {
             let nickName = userInformation.nickname;
             // 글 제목
             let title = document.querySelector('.title');
-            let photographic_path = document.getElementById('photographic_path');
-            console.log(photographic_path.files[0]);
+            // let photographic_path = document.getElementById('photographic_path');
+            // let backImg = [...this.getImgFileData];
+            // alert(backImg[0]);
+            // alert(photographic_path.files[0]);
 
             // let summernoteContent = $('#summernote').summernote('code'); // 썸머노트 내용
             function decode(text) {
@@ -183,14 +191,13 @@ export default {
             let frm = new FormData();
             var userEntry = getSanitizedText();
             let comment = '';
-
             comment = decode(userEntry);
             frm.append('title', title.value);
-            frm.append('photographic_path', photographic_path.files[0]);
+            // frm.append('photographic_path', photographic_path.files[0]);
+            frm.append('photographic_path', dragBackImg[0]);
             frm.append('availabilty_comments', 1);
             frm.append('board_id', board);
             if(writeState == 1){ // writeState가 1일 때 수정
-                console.log(photographic_path.files[0]);
                 // frm.append('nickname', route.nickname);
                 frm.append('post_id', parseInt(route.post_id));
                 frm.append('comment', comment);
@@ -201,7 +208,7 @@ export default {
                     }
                 }).then(res => {
                     console.log(res);
-                    location.href = '/community';
+                    // location.href = '/community';
                 }).catch(err => {
                     console.log(err);
                 })
@@ -214,19 +221,19 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
                 }).then(res => {
-                    console.log(res);
                     location.href = '/community';
                 })
                 .catch(err => console.log(err))
             }
         });
-
-        const backImg = document.getElementById('photographic_path');
-        backImg.addEventListener('change', e => {
-            this.uploadImg(e.target);
-        })
     },
     methods:{
+        getImgData(fileData){
+            this.uploadImg(fileData[0]);
+            this.getImgFileData = fileData[0];
+            console.log(fileData[0]);
+            console.log(this.getImgFileData);
+        },
         categoryChange(val){
             console.log(val.target.value);
             if(val.target.value === '운동게시판'){
@@ -245,18 +252,17 @@ export default {
             content.appendChild(addSpan);
         },
         uploadImg(input){
-            if(input.files && input.files[0]){
+            this.getImgFileData.push(input);
+            // if(input.files && input.files[0]){
                 const reader = new FileReader();
                 reader.onload = e => {
                     const changeImage = document.querySelector('.writeImage');
                     changeImage.style.display = "block";
                     changeImage.src = e.target.result;
-                    console.log(changeImage.files[0]);
-                    this.changeImg = changeImage.files[0];
-                    console.log(this.changeImg);
                 }
-                reader.readAsDataURL(input.files[0]);
-            }
+                reader.readAsDataURL(input);
+                // reader.readAsDataURL(input.files[0]);
+            // }
         },
         deleteImg(){
             const changeImage = document.querySelector('.writeImage');

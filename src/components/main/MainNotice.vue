@@ -11,13 +11,12 @@
                 </ul>
             </div>
                 <div class="noticeSectionBox">
-                    <router-link :to="`/${noticeData[i].nickname}/${noticeData[i].board_id}/${noticeData[i].post_id}`" 
+                    <router-link class="link" :to="`/${noticeData[i].nickname}/${noticeData[i].board_id}/${noticeData[i].post_id}`" 
                     v-for="a, i in noticeData.length" :key="i">
                         <div class="noticeSection">
                             <p class="itemTitle">
                                 {{noticeData[i].title}}
                             </p>
-                            <p class="itemTitle">{{noticeData[i].post_id}}</p>
                             <hr>
                             <p v-bind:id="'preview-click'+i"/>
                         </div>
@@ -116,6 +115,11 @@ export default {
 
 
 <style lang="scss" scoped>
+// router-link 스타일 없애주기.
+.link{
+    text-decoration: none;
+    color: #333;
+}
 .contain{
     width: 100vw;
     // background-color: #333;

@@ -85,14 +85,14 @@ export default {
         }else if(userInformation.nickname !== this.$route.params.id){
             setPost.style.display = 'none';
         }
-        
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
         .then(res => {
             for(let i = 0; i < res.data.length; i++){
                 if(this.$route.params.id === res.data[i].nickname 
                 && this.$route.params.board == res.data[i].board_id 
                 && this.$route.params.post == res.data[i].post_id){
-                    this.getPostDetailData = res.data[0];
+                    // console.log(res.data);
+                    this.getPostDetailData = res.data[i];
                     $('#preview-click').html(decode(this.getPostDetailData.comment));
                 }
             }

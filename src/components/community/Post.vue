@@ -272,7 +272,7 @@ export default {
                 .side{
                     position: relative;
                     left: 280px;
-                    top: -19vh;
+                    top: -15vh;
                     transition: .3s;
                     font-size: 18px;
                     font-weight: 700;
