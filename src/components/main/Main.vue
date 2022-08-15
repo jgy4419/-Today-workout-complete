@@ -14,7 +14,6 @@
 <script>
 import Section1 from './MainSection1.vue';
 import MainNotice from './MainNotice.vue';
-// import Slide from './Slide.vue';
 import Section2 from './MainSection2.vue';
 import Section3 from './MainSection3.vue';
 export default {
@@ -37,16 +36,21 @@ export default {
         })
 
         if(document.cookie){
-            let getUserInformation = JSON.parse(localStorage.getItem('userInformation'));
-            this.$store.dispatch('User/loginUserAction', {
-                mail: getUserInformation.mail,
-                grant: getUserInformation.grant
-            })
+            // let getUserInformation = JSON.parse(localStorage.getItem('userInformation'));
+            // this.$store.dispatch('User/loginUserAction', {
+            //     mail: getUserInformation.mail,
+            //     grant: getUserInformation.grant
+            // })
             // 자동 로그아웃 기능. 
             if(Date.now() > JSON.parse(localStorage.getItem('expire'))){
                 localStorage.removeItem('userInformation');
-                location.reload();
+                // location.reload();
             }
+        }else{
+            this.$store.dispatch('User/loginUserAction', {
+                mail: '',
+                grant: ''
+            })
         }
     },
     methods: {

@@ -91,7 +91,7 @@ export default {
                 if(this.$route.params.id === res.data[i].nickname 
                 && this.$route.params.board == res.data[i].board_id 
                 && this.$route.params.post == res.data[i].post_id){
-                    // console.log(res.data);
+                    console.log(res.data);
                     this.getPostDetailData = res.data[i];
                     $('#preview-click').html(decode(this.getPostDetailData.comment));
                 }
@@ -103,15 +103,13 @@ export default {
             // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
             return $("<textarea/>").html(text).text();
         }
-        // decode(text);
 
-        // await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
-        // .then(res => {
-        //     console.log(res);
-        //     this.getCommentData = res.data;
-        //     console.log('가져온 데이터', this.getCommentData);
-        // }).catch(err => {console.log(err)});
-        // console.log('~~');
+        await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
+        .then(res => {
+            console.log(res);
+            this.getCommentData = res.data;
+            console.log('가져온 데이터', this.getCommentData);
+        }).catch(err => {console.log(err)});
     },
     methods: {
         commentUpdate(){
@@ -124,9 +122,8 @@ export default {
                 parent_comments_id: 0,
                 // date: commentDate
             })
-            .then(res => {
-                location.reload();  
-                console.log(res);
+            .then(() => {
+                location.reload();
             })
             .catch(err => console.log(err));
         },

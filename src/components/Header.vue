@@ -222,7 +222,7 @@ export default {
   }
   .myInformationBox{
     display: none;
-    position: absolute;
+    position: fixed;
     margin-top: 60px;
     right: 8%;
     width: 90px;

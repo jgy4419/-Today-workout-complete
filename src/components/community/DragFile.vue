@@ -21,12 +21,9 @@ export default {
     emits: ["getImgData"],
     setup(_, {emit}){
         let imgData = ref([]);
-        // let test = ref('zz');
         function onDrop(accepFiles, rejectReasons){
             console.log(rejectReasons);
-            // imgData = accepFiles[0];
             imgData.value.push(...accepFiles);
-            // console.log(imgData._value[0]); // 이 파일을 emit? 로 넘겨주기. (내일하기..)
         }
         watch(imgData.value, () => {
             emit("getImgData", imgData.value);

@@ -12,10 +12,10 @@
                     </select>
                 </div>
             </div>
-            <img class="writeImage" style="display:none" src='https://mblogthumb-phinf.pstatic.net/MjAxODAzMDNfMTc5/MDAxNTIwMDQxNzQwODYx.qQDg_PbRHclce0n3s-2DRePFQggeU6_0bEnxV8OY1yQg.4EZpKfKEOyW_PXOVvy7wloTrIUzb71HP8N2y-YFsBJcg.PNG.osy2201/1_%2835%ED%8D%BC%EC%84%BC%ED%8A%B8_%ED%9A%8C%EC%83%89%29_%ED%9A%8C%EC%83%89_%EB%8B%A8%EC%83%89_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_180303.png?type=w800' alt="프로필">
-            <!-- <DragFile/> -->
-            <label class="photographic_path" for="photographic_path">대표 이미지를 선택해주세요.</label><input class="hidden" id="photographic_path" type="file"/>
-            <button class="photographic_path" @click="deleteImg()">배경사진 초기화</button>
+            <img class="writeImage" @click="deleteImg()"
+            style="display:none" src='https://mblogthumb-phinf.pstatic.net/MjAxODAzMDNfMTc5/MDAxNTIwMDQxNzQwODYx.qQDg_PbRHclce0n3s-2DRePFQggeU6_0bEnxV8OY1yQg.4EZpKfKEOyW_PXOVvy7wloTrIUzb71HP8N2y-YFsBJcg.PNG.osy2201/1_%2835%ED%8D%BC%EC%84%BC%ED%8A%B8_%ED%9A%8C%EC%83%89%29_%ED%9A%8C%EC%83%89_%EB%8B%A8%EC%83%89_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_180303.png?type=w800' alt="프로필">
+            <!-- <label class="photographic_path" for="photographic_path">대표 이미지를 선택해주세요.</label><input class="hidden" id="photographic_path" type="file"/>
+            <button class="photographic_path" @click="deleteImg()">배경사진 초기화</button> -->
             <label class="sensor_btn" v-if="postDetail.postCount === 2" for="sensor_btn">센서 데이터 추가</label>
             <button @click="watchChart()" class="hidden" id="sensor_btn"/>
             <hr class="line">
@@ -24,7 +24,7 @@
             </div>
             <DragFile @getImgData="getImgData($event)"/>
             <div class="btnBox">
-                <button :class="btn.class[i]" v-for="btns, i in btn.btnName" :key="i">
+                <button @click="i === 0 ? backBtn() : postUpload()" :class="btn.class[i]" v-for="btns, i in btn.btnName" :key="i">
                     <i :class="btn.iClass[i]" ></i>
                     {{btns}}
                 </button>
@@ -56,13 +56,13 @@ export default {
     },
     data(){
         return{
+            // testMultiEvent: [this.test1(), this.test2()],
             btn: {
                 class: ['btn back', 'btn submit'],
                 iClass: ['fa fa-arrow-left', 'button'],
                 btnName: ['', '올리기'],
                 btnType: ['button', 'button'],
             },
-            // category: ['카테고리1', '카테고리2', '카테고리3'],
             changeImg: '',
             postDetail: {
                 title: '',
@@ -74,15 +74,10 @@ export default {
             // write페이지면 1 MyPage에서 보면 0
             writeOrRead: 0,
             getImgFileData: [],
+            deleteImgState: 0, // 이미지 삭제 버튼 누르면 1로 변경시켜주기.
         }
     },
     mounted() {
-        // 라우트 변수들
-        let route = {
-            nickname: this.$route.params.id,
-            post_id: this.$route.params.post,
-            board_id: this.$route.params.board
-        };
         let writeState = this.$route.params.edit;
         // 만약 url에서 edit 설정 부분이 1이면 
         if(writeState == 1){
@@ -91,8 +86,6 @@ export default {
             this.btn.btnName[1] = '수정하기';
             // url의 id, post, board 부분의 동일한 값을 DB에서 가져와서 넣어줌.
             axios.get('/api/getPostAll', {params: {
-                // nickname: this.$route.params.id,
-                // post_id: this.$route.params.post,
                 limit: 0,
                 board_id: this.$route.params.board,
             }}).then(res => {
@@ -118,8 +111,8 @@ export default {
                     height: 200,
                     maximumImageFileSize: 1048576,
                     callbacks:{
-                        onImageUploadError: function uploadImageError(msg){
-                        alert(msg);
+                            onImageUploadError: function uploadImageError(msg){
+                            alert(msg);
                         }
                     },
                     toolbar: [
@@ -135,19 +128,18 @@ export default {
                 });
             });
         }, 300)
-
-        let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-        // 어떤 유저가 들어왔는지 확인.
-        let writeUser = this.$store.state.User.storeMail;
-        console.log(writeUser);
-        document.querySelector('.back').addEventListener('click', function(){
-            history.go(-1);
-            location.href = '/community';
-        });
-        let dragBackImg = this.getImgFileData;
-        // board = this.postDetail.postCount;
-        document.querySelector('.submit').addEventListener('click', function(){
-            console.log(dragBackImg);
+    },
+    methods: {
+        postUpload(){
+            let writeState = this.$route.params.edit;
+            // 라우트 변수들
+            let route = {
+                nickname: this.$route.params.id,
+                post_id: this.$route.params.post,
+                board_id: this.$route.params.board
+            };
+            let dragBackImg = this.getImgFileData;
+            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             let board = 1; // 기본 카테고리 번호 (전체 게시물)
             let categoryChoice = document.querySelector('.categoryChoice');
 
@@ -159,12 +151,6 @@ export default {
             let nickName = userInformation.nickname;
             // 글 제목
             let title = document.querySelector('.title');
-            // let photographic_path = document.getElementById('photographic_path');
-            // let backImg = [...this.getImgFileData];
-            // alert(backImg[0]);
-            // alert(photographic_path.files[0]);
-
-            // let summernoteContent = $('#summernote').summernote('code'); // 썸머노트 내용
             function decode(text) {
                 // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
                 return $("<textarea/>").html(text).text();
@@ -194,7 +180,7 @@ export default {
             comment = decode(userEntry);
             frm.append('title', title.value);
             // frm.append('photographic_path', photographic_path.files[0]);
-            frm.append('photographic_path', dragBackImg[0]);
+            frm.append('photographic_path', dragBackImg);
             frm.append('availabilty_comments', 1);
             frm.append('board_id', board);
             if(writeState == 1){ // writeState가 1일 때 수정
@@ -206,9 +192,8 @@ export default {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                }).then(res => {
-                    console.log(res);
-                    // location.href = '/community';
+                }).then(() => {
+                    location.href = '/community';
                 }).catch(err => {
                     console.log(err);
                 })
@@ -220,19 +205,31 @@ export default {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-                }).then(res => {
+                }).then(() => {
                     location.href = '/community';
                 })
                 .catch(err => console.log(err))
             }
-        });
-    },
-    methods:{
+        },
+        backBtn(){
+            document.querySelector('.back').addEventListener('click', function(){
+                history.go(-1);
+                location.href = '/community';
+            });
+        },
         getImgData(fileData){
-            this.uploadImg(fileData[0]);
-            this.getImgFileData = fileData[0];
-            console.log(fileData[0]);
+            this.uploadImg(fileData[this.deleteImgState]);
+            this.getImgFileData = fileData[this.deleteImgState];
+            console.log(fileData[this.deleteImgState]);
             console.log(this.getImgFileData);
+            this.deleteImgState = 0;
+        },
+        deleteImg(){
+            this.getImgFileData = [];
+            this.deleteImgState += 1;
+            const changeImage = document.querySelector('.writeImage');
+            changeImage.src = '';
+            changeImage.style.display = "none";
         },
         categoryChange(val){
             console.log(val.target.value);
@@ -242,7 +239,6 @@ export default {
                 this.postDetail.postCount = 1;
             }
         },
-        // text 두께
         thickness(){
             let content = document.getElementById('content');
             // content.classList.toggle('thickness');
@@ -261,13 +257,6 @@ export default {
                     changeImage.src = e.target.result;
                 }
                 reader.readAsDataURL(input);
-                // reader.readAsDataURL(input.files[0]);
-            // }
-        },
-        deleteImg(){
-            const changeImage = document.querySelector('.writeImage');
-            changeImage.src = '';
-            changeImage.style.display = "none";
         },
         // 차트를 불러울 수 있는 함수.
         watchChart(){
@@ -297,6 +286,7 @@ input, textarea{
         .writeImage{
             width: 300px;
             aspect-ratio: 16 / 9;
+            cursor: pointer;
         }
         .title, #content{
             width: 70%;
