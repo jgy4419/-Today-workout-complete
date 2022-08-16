@@ -16,8 +16,10 @@
                     </div>
                 </div>
             </div>
-        </div>   
+        </div>
+         
         <div class="inner">
+            <button @click="likeClick()" class="likeBtn">❤️</button>
             <p id="preview-click"></p>
             <hr>
             <div class="commentList">
@@ -65,6 +67,7 @@ export default {
             chartState: 0,
             commentState: 1,
             dayJS: dayjs,
+            likeState: 0,
         }
     },
     async mounted(){
@@ -72,8 +75,6 @@ export default {
             alert('로그인 후 상세보기가 가능합니다!');
             location.replace('/login');
         }
-
-        console.log(this.$route.params);
         if(this.$route.params.board == 3){
             this.chartState = 1;
         }
@@ -112,6 +113,23 @@ export default {
         }).catch(err => {console.log(err)});
     },
     methods: {
+        // 좋아요 기능
+        likeClick(){
+            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
+            console.log(userInformation.nickname); // 유저 닉네임
+            let routeJoin = [];
+            let getPostRoute;
+            for(getPostRoute in this.$route.params){
+                routeJoin.push(this.$route.params[getPostRoute]);
+            }
+            // 닉네임/카테고리번호/게시글번호
+            getPostRoute = routeJoin.join().replace(/,/gi, '');
+            // 해당 게시글에 좋아요 누른 닉네임 추가
+            // axios.post('/api/좋아요누른 닉네임 추가', {
+            //     postUrl: getPostRoute,
+            //     likeCount: 1
+            // })
+        },
         commentUpdate(){
             // 닉네임
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
@@ -214,7 +232,7 @@ export default {
             }
             .user{
                 position: absolute;
-                width: 80%;
+                width: 70%;
                 margin: auto;
                 left: 0;
                 right: 0;
@@ -246,10 +264,22 @@ export default {
         }
     }
     .inner{
-        width: 80vw;
+        width: 70vw;
         margin: auto;
+        .likeBtn{
+            margin-top: 20px;
+            font-size: 18px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 0;
+        }
+        .likeBtn:active{
+            background-color: lightgray;
+        }
         #preview-click{
-            padding: 20px;
+            margin-top: 20px;
+            font-size: 16px;
         }
         .chart{
             position: relative;
@@ -259,7 +289,7 @@ export default {
             margin-top: 50px;
             padding: 20px;
             border-radius: 10px;
-            width: 80vw;
+            width: 70vw;
             min-height: 80px;
             background-color: rgb(243, 243, 243);
             .comments{
@@ -315,7 +345,7 @@ export default {
             }
         }
         .comment{
-            width: 80vw;
+            width: 70vw;
             height: 30px;
             // display: flex;
             justify-content:space-between;
