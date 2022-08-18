@@ -99,7 +99,7 @@ export default {
             spinnerState: 1,
         }
     },
-    mounted(){
+    async mounted (){
         // 게시물 상세 페이지 들어갔다가 나왔을 때 동일 카테고리 변경 안 됐던 오류 수정.  
         this.$store.dispatch('Community/categoryChange', {
             categoryValue: '전체',

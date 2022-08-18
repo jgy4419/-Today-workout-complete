@@ -40,7 +40,7 @@
             </div>
             <hr/>
             <div class="comment">
-                <label for="commentInput">댓글 쓰기</label><br/><br/>
+                <label class="commentLabel" for="commentInput">댓글 쓰기</label><br/><br/>
                 <div class="commentBox">
                     <textarea type="text" v-model="commentInput" placeholder="댓글을 입력해주세요." id="commentInput"/> <br/><br/>
                     <button class="btn" @click="commentUpdate()">게시</button>
@@ -323,18 +323,23 @@ export default {
                 }
                 .commentSetBox{
                     position: absolute;
-                    right: 12%;
+                    right: 17%;
                     display: flex;
                     p{
+                        color: #93B5C6;
+                        font-size: 13px;
                         margin-left: 10px;
                         font-weight: 700;
                         cursor: pointer;
                     }
                 }
             }
-            .commentTitle{
+            .commentUserId{
                 font-size: 14px;
-                font-weight: 700;
+            }
+            .commentTitle{
+                font-size: 16px;
+                font-weight: 500;
             }
             .line{
                 margin-top: 10px;
@@ -351,17 +356,30 @@ export default {
             justify-content:space-between;
             margin-bottom: 120px;
             padding-bottom: 5%;
+            .commentLabel{
+                font-size: 14px;
+            }
             .commentBox{
                 #commentInput{
                     width: 100%;
                     height: 50px;
                     padding: 10px;
+                    font-size: 14px;
                     resize: none;
                 }
             }
             .btn{
                 position: absolute;
-                right: 10%;
+                right: 15%;
+                width: 50px;
+                background-color: rgb(230, 230, 230);
+                font-weight: 600;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            .btn:hover{
+                background-color: #93B5C6;
+                color: #fff;
             }
         }
     }

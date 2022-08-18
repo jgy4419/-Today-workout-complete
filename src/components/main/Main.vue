@@ -44,7 +44,8 @@ export default {
             // 자동 로그아웃 기능. 
             if(Date.now() > JSON.parse(localStorage.getItem('expire'))){
                 localStorage.removeItem('userInformation');
-                location.reload();
+                // location.reload();
+                // event.preventDefault();
             }
         }else{
             this.$store.dispatch('User/loginUserAction', {
@@ -64,6 +65,7 @@ export default {
             alert('로그아웃 되었습니다.');
             localStorage.removeItem('userInformation');
             location.reload();
+            // event.preventDefault();
         },
         cookie(){
             // 지금부터 하루 후 까지 쿠키 유지.

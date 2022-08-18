@@ -111,8 +111,8 @@ export default {
     async mounted(){
         this.postCount = 0;
         this.urlChange();
-        this.changePost();
         this.getPost();
+        // this.changePost();
     },
     methods: {
         sortPost(){
@@ -129,11 +129,11 @@ export default {
                 this.getPost();
             }
         },
-        getPost(){
+        async getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
-                axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
+                await axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
                 .then(res => {
                     console.log(res);
                     this.spinnerState = 0;
@@ -161,7 +161,7 @@ export default {
                 this.postCount = this.getData.data.length;
             }).catch(err => {console.log(err)});
         },
-        urlChange(userId, boardId, postId){
+        async urlChange(userId, boardId, postId){
             if(document.cookie){
                 this.postUrl = `/${userId}/${boardId}/${postId}`;
             }

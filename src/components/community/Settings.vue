@@ -69,8 +69,8 @@ export default {
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
 
         let changeImage = document.querySelector('.changeImage');
-        console.log(userInformation.profile_img_path)
         if(document.cookie){
+            console.log(document.cookie);
             changeImage.src = userInformation.profile_img_path;
             this.set.intro[0] = userInformation.nickname;
             this.set.intro[1] = userInformation.introduction;
@@ -88,11 +88,11 @@ export default {
 
             axios.post("/api/checkPassword", {password: passwordInput[0].value, mail: userInformation.mail})
             .then(res => {
-                console.log(res.data.checkid);
+                console.log(res.data.checkPassword);
 
-                if(res.data.checkid === true){
+                if(res.data.checkPassword === true){
                     alert('비밀번호가 일치합니다.')
-                    state = res.data.checkid;
+                    state = res.data.checkPassword;
                 }else{
                     alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
                 }
