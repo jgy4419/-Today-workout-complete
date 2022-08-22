@@ -19,7 +19,14 @@
         </div>
          
         <div class="inner">
-            <button @click="likeClick()" class="likeBtn">❤️</button>
+            <!-- <button @click="likeClick()" class="likeBtn">❤️</button> -->
+            <i  @click="likeClick()" class="fa fa-heart likeAndShareBtn"></i>
+            <i class="fa fa-share-square likeAndShareBtn" @click="shareState = 1"></i>
+            <div class="shares" v-if="shareState === 1">
+                <p class="close" @click="shareState = 0">x</p>
+                <p class="share" @click="fn_sendFB(`${btn.shares[i]}`)"
+                v-for="share, i in btn.shares.length" :key="i">{{btn.shares[i]}}</p>
+            </div>
             <p id="preview-click"></p>
             <hr>
             <div class="commentList">
@@ -68,6 +75,10 @@ export default {
             commentState: 1,
             dayJS: dayjs,
             likeState: 0,
+            btn: {
+                shares: ['kakao', 'instagram', 'facebook']
+            },
+            shareState: 0,
         }
     },
     async mounted(){
@@ -207,6 +218,22 @@ export default {
                 alert('삭제되었습니다.');
                 location.reload();
             }
+        },
+        fn_sendFB(sns){
+            let thisUrl = document.URL;
+            let snsTitle = '!!!';
+            if( sns == 'facebook' ) {
+                var url = "http://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(thisUrl);
+                window.open(url, "", "width=486, height=286");
+            }
+            else if( sns == 'twitter' ) {
+                var url2 = "http://twitter.com/share?url="+encodeURIComponent(thisUrl)+"&text="+encodeURIComponent(snsTitle);
+                window.open(url2, "tweetPop", "width=486, height=286,scrollbars=yes");
+            }
+            else if( sns == 'band' ) {
+                var url3 = "http://www.band.us/plugin/share?body="+encodeURIComponent(snsTitle)+"&route="+encodeURIComponent(thisUrl);
+                window.open(url3, "shareBand", "width=400, height=500, resizable=yes");
+            } 
         }
     }
 }
@@ -266,16 +293,41 @@ export default {
     .inner{
         width: 70vw;
         margin: auto;
-        .likeBtn{
-            margin-top: 20px;
-            font-size: 18px;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 0;
+        .shares{
+            margin-top: -30px;
+            margin-left: 15%;
+            .close{
+                color: #333;
+                margin-right: 85%;
+            }
+            .share{
+                width: 95px;
+                font-size: 18px;
+                font-weight: 600;
+                border-radius: 20px;
+                padding: 5px;
+                cursor: pointer;
+                color: #93B5C6;
+            }
+            .share:hover{
+                background-color: rgb(237, 237, 237);
+            }
         }
-        .likeBtn:active{
-            background-color: lightgray;
+        .likeAndShareBtn{
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 23px;
+            color: #C9CCD5;
+            background-color: rgb(238, 237, 237);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 20px;
+            padding: 9px;
+        }
+        .likeAndShareBtn:active{
+            background-color: rgb(226, 226, 226);
+            color: #93B5C6;
         }
         #preview-click{
             margin-top: 20px;

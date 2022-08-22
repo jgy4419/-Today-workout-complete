@@ -53,6 +53,7 @@ export default {
     let dataLength;
     await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
     .then(res => {
+      console.log(res);
       // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
         for(let i = 0; i < res.data.length; i++){
           this.emgDatas.push(res.data[i].emg_data_path);
@@ -72,7 +73,7 @@ export default {
       this.chartCount = datas.length;
       this.chart.chartId.push(`chart${length}`);
       console.log(this.chart.chartId);
-      import(`../../../Backend/public/emgData/${datas[length]}`)
+      import(`../../../TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
       .then(res => {
         let inChart = res;
         // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)

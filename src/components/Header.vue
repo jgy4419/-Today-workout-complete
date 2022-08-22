@@ -30,6 +30,7 @@
           <div class="line" v-for="a in 3" :key="a"></div>
       </div>
       <nav class="mobileMenu">
+        <div class="backColor"/>
           <ul v-for="list, i in mobile.login.length" :key="i">
             <router-link :to="mobile.url[i]">
               <li class="mobileMenuList">
@@ -66,11 +67,13 @@ export default {
     }
   },
   watch: {
-    // url 변경이 감지되면 myInformationBox 없애주기.
     '$route' (){
-      let myInformationBox = document.querySelector('.myInformationBox');
-      myInformationBox.classList.remove('event');
-      
+        let mobileMenu = document.querySelector('.mobileMenu');
+        let line = document.querySelectorAll('.line');
+        mobileMenu.classList.remove('event');
+        for(var i = 0; i < line.length; i++){
+          line[i].classList.remove('event');
+        }
     }
   },
   mounted(){
@@ -126,8 +129,8 @@ export default {
           line[i].classList.toggle('event');
       }
       // 햄버거 누르면 옆에 메뉴 생성해주기. + 배경 어둡게 해주기.
-      mobileMenu.classList.toggle('event');
-      body.classList.toggle('event');
+      mobileMenu.classList.add('event');
+      body.classList.add('event');
     },
   }
 }
@@ -258,10 +261,11 @@ export default {
       width: 30px;
       cursor: pointer;
       position: absolute;
+      transition: .5s;
       border-bottom: 5px solid #333;
     }
     .line:nth-child(2){
-        margin-top: 10px;
+      margin-top: 10px;
     }
     .line:nth-child(3){
         animation-name: hamburgetBottom;
@@ -269,13 +273,16 @@ export default {
     }
     .line.event:nth-child(1){
         animation-name: hamburgerTop;
+        border-bottom: 5px solid #fff;
         animation-duration: 1s;
         animation-fill-mode: forwards;
     }
     .line.event:nth-child(2){
+        border-bottom: 5px solid #fff;
         opacity: 0;
     }
     .line.event:nth-child(3){
+        border-bottom: 5px solid #fff;
         animation-name: hamburgerBottom;
         animation-fill-mode: forwards;
         animation-duration: 1s;
@@ -306,13 +313,24 @@ export default {
   }
   .mobileMenu{
     position: fixed;
-    height: 100vh;
     width: 100%;
+    height: 800px;
     display: none;
     transform: translateX(700px);
     overflow-y: scroll;
     transition: .5s;
+    .backColor {
+      background-color: #93B5C6;
+      position: fixed;
+      z-index: 1;
+      right: 0;
+      width: 50%;
+      height: 100vh;
+      max-height: 1500px;
+    }
     ul{
+      position: relative;
+      z-index: 2;
       margin-top: 5%;
       .mobileMenuList{
         font-size: 25px;
@@ -365,6 +383,12 @@ export default {
       }
     .mobileMenu{
       display: block;
+      ul{
+        top: 50px;
+        .mobileMenuList{
+          font-size: 20px;
+        }
+      }
     }
   }
 }

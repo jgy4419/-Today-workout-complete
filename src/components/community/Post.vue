@@ -21,7 +21,8 @@
                         </ul>
                         <div @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <div class="bottom">
-                                <!-- <p>{{getData.data[i].post_id}}</p> -->
+                                <!-- <p>{{getData.data[i].post_id}}</p>
+                                <p>댓글 개수 {{}}</p> -->
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                                 <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                                 <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
@@ -112,6 +113,7 @@ export default {
         this.postCount = 0;
         this.urlChange();
         this.getPost();
+        this.commentCount();
         // this.changePost();
     },
     methods: {
@@ -146,6 +148,7 @@ export default {
             }else{
                 axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
                 .then(res => {
+                    console.log(res);
                     this.spinnerState = 0;
                     this.getData = res;
                     this.postCount = this.getData.data.length;
@@ -162,7 +165,7 @@ export default {
             }).catch(err => {console.log(err)});
         },
         async urlChange(userId, boardId, postId){
-            if(document.cookie){
+            if(localStorage.userInformation){
                 this.postUrl = `/${userId}/${boardId}/${postId}`;
             }
         },

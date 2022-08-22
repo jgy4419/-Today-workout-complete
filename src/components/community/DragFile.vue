@@ -7,7 +7,7 @@
         </div>
         <div class="drag_inner" v-else style="opacity: .5s">
             <p>배경이미지로 지정할 파일을 드래그나 하거나 클릭해주세요!</p>
-                        {{imgData}}
+            {{imgData}}
         </div>
     </div>
 </template>

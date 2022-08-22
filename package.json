@@ -9,6 +9,8 @@
     "json-server": "json-server -- watch exerciseSensorData.json"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "6.1.2",
+    "@fortawesome/free-solid-svg-icons": "6.1.2",
     "@tiptap/starter-kit": "2.0.0-beta.183",
     "@tiptap/vue-3": "2.0.0-beta.90",
     "axios": "0.26.1",
