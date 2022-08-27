@@ -69,13 +69,14 @@ export default {
     }
   },
   methods: {
+    // 데이터 이름 들어감
     getDatas(datas, length){
       this.chartCount = datas.length;
       this.chart.chartId.push(`chart${length}`);
-      console.log(this.chart.chartId);
       import(`../../../TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
       .then(res => {
         let inChart = res;
+        console.log(inChart); // inChart 안에 전체 데이터(모듈)들이 들어가 있다.
         // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
         for(let i = 1; i < res.number_of_sets + 1; i++){
             this.chart.data.setsCount.push(`${i}세트`);
@@ -96,7 +97,6 @@ export default {
     fillData(data, length){
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.
       let setsData = [];
-      console.log(data);
 
       let result = [];
       for(let i = 0; i < data.number_of_sets; i++){
@@ -145,6 +145,7 @@ export default {
     selectChart(i){
       // 클릭하면 선택한 차트 파일명 가져오기(부탁하기).
       const chart = document.querySelectorAll('.chart');
+      console.log('데이터 이름들 ㅎㅎ', this.emgDatas[i]);
       console.log(chart[i]);
       /* 
         1. 파일명을 가져오면 다시 write에 mitt사용해서 write 컴포넌트에 보내기.
