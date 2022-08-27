@@ -4,7 +4,7 @@
       <p class="exerciseName">{{chart.data.exerciseName}}</p>
       <div class="chartStyle">
         <p>{{emgDatas[i]}}</p>
-        <canvas @click="selectChart(i)" class="chart" :id="chart.chartId[i]" width="80vw" height="200"></canvas>
+        <canvas @click="$emit('clickedChart', selectChart(i))" class="chart" :id="chart.chartId[i]" width="80vw" height="200"></canvas>
       </div>
     </div>
   </div>
@@ -143,16 +143,7 @@ export default {
     },
     // i는 클릭한 차트 위치를 가져옴.
     selectChart(i){
-      // 클릭하면 선택한 차트 파일명 가져오기(부탁하기).
-      const chart = document.querySelectorAll('.chart');
-      console.log('데이터 이름들 ㅎㅎ', this.emgDatas[i]);
-      console.log(chart[i]);
-      /* 
-        1. 파일명을 가져오면 다시 write에 mitt사용해서 write 컴포넌트에 보내기.
-        2. write에서 파일명을 받으면 파일에 넣고 게시글 작성
-        3. 작성하고 올리기 하면 서버에 파일(차트데이터)도 추가적으로 보내주기 (설정 부탁하기)
-        4. PostDetail 컴포넌트(글 상세페이지)에 들어가면 해달 파일(차트) 불러와서 상세 게시글에 표시해주기.
-      */ 
+      return this.emgDatas[i];
     }
   }
 }
