@@ -1,0 +1,81 @@
+<template>
+    <i @click="likeClick()" class="fa fa-heart likeAndShareBtn"></i>
+</template>
+
+<script>
+import axios from 'axios';
+export default {
+    props:{
+        test: Number
+    },
+    data(){
+        return {
+            like: {
+                users: [],
+                count: 0
+            }
+        }
+    },
+    async mounted(){
+        let userInformation = JSON.parse(localStorage.getItem("userInformation"));
+        await axios.get('/api/likePostWho', {
+            params: {post_id: this.$route.params.post}
+        }).then(res => {
+            this.like.count = res.data.length;
+            for(let i = 0; i < res.data.length; i++){
+                this.like.users.push(res.data[i].nickname);
+                if(res.data[i].nickname === userInformation.nickname){
+                    document.querySelector('.likeAndShareBtn').style.backgroundColor = 'lightgrey';
+                    document.querySelector('.likeAndShareBtn').style.color = 'grey';
+                }
+            }
+            console.log(this.like.users);
+        })
+        this.like.users.filter(user => user !== undefined);
+    },
+    methods: {
+        // 좋아요 기능 (undefined count 문제 해결하기)
+        likeClick(){
+            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
+            // 좋아요한 사람들의 배열에 로그인한 닉네임이 포함되어있지 않은 경우 플러스
+            if(!this.like.users.includes(userInformation.nickname)){
+                console.log('plus!');
+                axios.post('/api/likesPlus', {
+                    post_id: this.$route.params.post,
+                    nickname: userInformation.nickname
+                }).then(res => {
+                    // document.querySelector('.likeAndShareBtn').style.backgroundColor = 'red';
+                    // this.$forceUpdate();
+                    console.log(res);
+                })
+            // 반대일 때 마이너스
+            }else{
+                console.log('minus!');
+                axios.delete('/api/likesMinus', {
+                    params: {
+                        post_id: this.$route.params.post,
+                        nickname: userInformation.nickname
+                    }
+                }).then(res => {
+                    console.log(res);
+                })
+            }
+        },
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+    .likeAndShareBtn{
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 23px;
+        color: #C9CCD5;
+        background-color: rgb(238, 237, 237);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 20px;
+        padding: 9px;
+    }
+</style>

@@ -17,10 +17,9 @@
                 </div>
             </div>
         </div>
-         
         <div class="inner">
-            <!-- <button @click="likeClick()" class="likeBtn">❤️</button> -->
-            <i  @click="likeClick()" class="fa fa-heart likeAndShareBtn"></i>
+            <Like :key="likeState" @click="likeStateFunc()"/>
+            <!-- <i  @click="likeClick()" class="fa fa-heart likeAndShareBtn"></i> -->
             <i class="fa fa-share-square likeAndShareBtn" @click="shareState = 1"></i>
             <div class="shares" v-if="shareState === 1">
                 <p class="close" @click="shareState = 0">x</p>
@@ -28,6 +27,7 @@
                 v-for="share, i in btn.shares.length" :key="i">{{btn.shares[i]}}</p>
             </div>
             <p id="preview-click"></p>
+                <GetChart :getChartData="getPostDetailData.chartname" v-if="getChartState === 1"/>
             <hr>
             <div class="commentList">
                 <div class="comments" v-for="data, i in getCommentData.length" :key="i">
@@ -60,13 +60,16 @@
 <script>
 import axios from 'axios'
 import dayjs from 'dayjs';
-// import {decode} from '../../../repeatFunc/textChangeStyle';
+import GetChart from './GetChart.vue';
+import Like from './Like.vue';
 export default {
     components: {
-        // Chart,
+        GetChart,
+        Like
     },
     data(){
         return{
+            likeState: 0,
             getPostDetailData: [],
             getCommentData: [],
             commentInput: '',
@@ -74,14 +77,15 @@ export default {
             chartState: 0,
             commentState: 1,
             dayJS: dayjs,
-            likeState: 0,
             btn: {
                 shares: ['kakao', 'instagram', 'facebook']
             },
             shareState: 0,
+            getChartState: 0,
         }
     },
     async mounted(){
+
         if(!localStorage.userInformation){
             alert('로그인 후 상세보기가 가능합니다!');
             location.replace('/login');
@@ -89,6 +93,11 @@ export default {
         if(this.$route.params.board == 3){
             this.chartState = 1;
         }
+        await axios.post('/api/viewPlus', {
+            post_id: this.$route.params.post
+        }).then(res => {
+            console.log('조회수', res);
+        }).catch(err => {console.log(err)})
         // 자신이 올린 게시물만 수정/삭제 가능.
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
         const setPost = document.querySelector('.setPost');
@@ -99,11 +108,11 @@ export default {
         }
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
         .then(res => {
+            this.getChartState = 1;
             for(let i = 0; i < res.data.length; i++){
                 if(this.$route.params.id === res.data[i].nickname 
                 && this.$route.params.board == res.data[i].board_id 
                 && this.$route.params.post == res.data[i].post_id){
-                    console.log(res.data);
                     this.getPostDetailData = res.data[i];
                     $('#preview-click').html(decode(this.getPostDetailData.comment));
                 }
@@ -124,22 +133,9 @@ export default {
         }).catch(err => {console.log(err)});
     },
     methods: {
-        // 좋아요 기능
-        likeClick(){
-            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            console.log(userInformation.nickname); // 유저 닉네임
-            let routeJoin = [];
-            let getPostRoute;
-            for(getPostRoute in this.$route.params){
-                routeJoin.push(this.$route.params[getPostRoute]);
-            }
-            // 닉네임/카테고리번호/게시글번호
-            getPostRoute = routeJoin.join().replace(/,/gi, '');
-            // 해당 게시글에 좋아요 누른 닉네임 추가
-            // axios.post('/api/좋아요누른 닉네임 추가', {
-            //     postUrl: getPostRoute,
-            //     likeCount: 1
-            // })
+        // 좋아요 버튼 누르면 사이트 전체 재로딩 되지 않고, 해당 Like 컴포넌트만 재로딩 되도록 해주기.
+        likeStateFunc(){
+            this.likeState === 0 ? this.likeState = 1 : this.likeState = 0;
         },
         commentUpdate(){
             // 닉네임

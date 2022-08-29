@@ -208,6 +208,7 @@ export default {
                 console.log('0번째 글');
                 frm.append('nickname', nickName);
                 frm.append('content', comment);
+                frm.append('chartname', this.clickedChartData);
                 axios.post('/api/createPost', frm, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

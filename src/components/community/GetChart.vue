@@ -13,7 +13,6 @@
 
 <script>
 import { Chart, registerables } from 'chart.js';
-import axios from 'axios';
 Chart.register(...registerables);
 export default {
   data(){
@@ -48,40 +47,33 @@ export default {
     };
   },
   props:{
-    // props로 Write페이지에서 보여졌는지, MyPage에서 보여졌는지 구분하는 변수
-    readOrWrite: Number,
     getChartData: String
   },
   async mounted(){
-    let userInformation = JSON.parse(localStorage.getItem('userInformation'));
-    let dataLength;
-    await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
-    .then(res => {
-      // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
-      for(let i = 0; i < res.data.length; i++){
-        this.emgDatas.push(res.data[i].emg_data_path);
-      }
-      dataLength = res.data.length;
-      if(dataLength === 0){
-        alert('데이터가 없습니다.');
-      }
-    })
-    .catch(err => console.log(err))
-    for(let i = 0; i < dataLength; i++){
-      this.getDatas(this.emgDatas, i);
-    }
+      // getChartData(postDetail)에 차트 데이터가 있으면 값 출력해주기
+      await this.chartData().then(res => {
+        this.postChartData = res;
+      }).catch(err => console.log(err))
+      // getChartData(postDetail) 값이 없을 때 전체 post 값 출력해주기
+    this.getDatas(this.postChartData, 1);
+      
   },
   methods: {
+    chartData(){
+      return new Promise((resolve) => {
+        resolve(this.getChartData);
+      })
+    },
     // 데이터 이름 들어감
     getDatas(datas, length){
       this.chartCount = datas.length;
       this.chart.chartId.push(`chart${length}`);
-        import(`../../../TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
+      if(this.postChartData !== null){
+        import(`../../../../TWC-BACKEND-BACKUP/public/emgData/${datas}`)
         .then(res => {
+          this.postDetailChartState = 1;
           let inChart = res;
-          console.log(inChart); // inChart 안에 전체 데이터(모듈)들이 들어가 있다.
-          // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
-          for(let i = 1; i < res.number_of_sets + 1; i++){
+           for(let i = 1; i < res.number_of_sets + 1; i++){
               this.chart.data.setsCount.push(`${i}세트`);
           }
           // 세트 수
@@ -94,8 +86,9 @@ export default {
               this.chart.data.dataValues.push(element)
             });
           }
-          this.fillData(res, length);
-        }).catch(err => console.log(err))
+          this.fillData(res, 1);
+        })
+      }
     },  
     fillData(data, length){
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.
