@@ -1,5 +1,8 @@
 <template>
-    <i @click="likeClick()" class="fa fa-heart likeAndShareBtn"></i>
+    <div>
+        <i @click="likeClick()" class="fa fa-heart likeAndShareBtn"></i>
+        <span class="likeCount">{{like.count}}</span>
+    </div>
 </template>
 
 <script>
@@ -21,7 +24,6 @@ export default {
         await axios.get('/api/likePostWho', {
             params: {post_id: this.$route.params.post}
         }).then(res => {
-            this.like.count = res.data.length;
             for(let i = 0; i < res.data.length; i++){
                 this.like.users.push(res.data[i].nickname);
                 if(res.data[i].nickname === userInformation.nickname){
@@ -29,9 +31,11 @@ export default {
                     document.querySelector('.likeAndShareBtn').style.color = 'grey';
                 }
             }
-            console.log(this.like.users);
+            this.like.users = this.like.users.filter(user => user !== undefined);
+            this.like.count = this.like.users.length;
+        }).catch(err => {
+            console.log(err);
         })
-        this.like.users.filter(user => user !== undefined);
     },
     methods: {
         // 좋아요 기능 (undefined count 문제 해결하기)
@@ -66,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .likeAndShareBtn{
+    .likeAndShareBtn {
         cursor: pointer;
         margin-top: 20px;
         font-size: 23px;
@@ -77,5 +81,11 @@ export default {
         border-radius: 50%;
         margin-left: 20px;
         padding: 9px;
+    }
+    .likeCount {
+        font-size: 14px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        color: #93B5C6;
     }
 </style>

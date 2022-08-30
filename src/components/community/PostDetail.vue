@@ -85,7 +85,6 @@ export default {
         }
     },
     async mounted(){
-
         if(!localStorage.userInformation){
             alert('로그인 후 상세보기가 가능합니다!');
             location.replace('/login');

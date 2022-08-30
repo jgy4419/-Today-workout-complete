@@ -16,13 +16,20 @@
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
                         <div :style="{backgroundImage:`url('http://localhost:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"
                         @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)"/>
-                        <ul class="side" @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
-                            <li class="icon" v-for="icon in sideMenu" :key="icon">{{icon}}</li>
+                        <ul class="sideIcon" @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
+                            <li class="icon" v-for="icon in sideMenu" :key="icon">
+                                {{icon}}
+                            </li>
+                        </ul>
+                        <ul class="sideValue">
+                            <!-- <li class="value" v-for="value, i in sideMenuValues.watch.length" :key="i">{{sideMenuValues.watch[i]}}</li> -->
+                            <li class="value">{{sideMenuValues.watch[i]}}</li>
+                            <li >{{sideMenuValues.like[i]}}</li>
+                            <li class="value">{{sideMenuValues.comment[i]}}</li>
                         </ul>
                         <div @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <div class="bottom">
-                                <!-- <p>{{getData.data[i].post_id}}</p>
-                                <p>댓글 개수 {{}}</p> -->
+                                <!-- <p>{{getData.data[i].post_id}}</p> -->
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                                 <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                                 <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
@@ -56,7 +63,17 @@ export default {
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
     data(){
         return{
-            sideMenu: ['🤓 : 500', '🖤 : 20', '💬 : 5'],
+            sideMenu: {
+                watch: '🤓',
+                like: '🖤',
+                comment: '💬'
+            },
+            // sideMenuValues에 조회수, 좋아요 개수, 댓글 개수 들어감.
+            sideMenuValues: {
+                watch: [],
+                like: [],
+                comment: []
+            },
             searchRes: this.$store.state.Search.searchValue,
             category: ['all', 'category1', 'category2', 'category3'],
             postUrl: '/login',
@@ -143,7 +160,12 @@ export default {
                     this.getData = res;
                     this.postCount = this.getData.data.length;
                     this.dateData.push(res.data.creation_datetime);
-                    console.log(this.dateData)
+                    this.getData.forEach((res) => {
+                        this.sideMenuValues.watch.push(res.views);
+                        axios.get('/api/likePostWho', {
+                            params: {post_id: res.post_id}
+                        }).then(likeRes => this.sideMenuValues.like.push(likeRes.data.length));
+                    })
                 }).catch(err => console.log(err));
             }else{
                 axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
@@ -152,6 +174,15 @@ export default {
                     this.spinnerState = 0;
                     this.getData = res;
                     this.postCount = this.getData.data.length;
+                    // 더 보기 기능 수정해서 더 보기할 때도 값 추가해주기
+                    res.data.forEach(async (res) => {
+                        this.sideMenuValues.watch.push(res.views);
+                        await axios.get('/api/likePostWho', {
+                            params: {post_id: res.post_id}
+                        }).then(likeRes => {
+                            this.sideMenuValues.like.push(likeRes.data.length);
+                        });
+                    })
                 })
                 .catch(err => console.log(err));
             }
@@ -272,17 +303,28 @@ export default {
                     background-color: rgb(184, 184, 184);
                     transition: .3s;
                 }
-                .side{
+                .sideIcon{
                     position: relative;
                     left: 280px;
-                    top: -15vh;
+                    top: -110px;
                     transition: .3s;
                     font-size: 18px;
+                    font-weight: 700;
+                    li{
+                        margin-left: 5px;
+                    }
+                }
+                .sideValue{
+                    position: relative;
+                    left: 280px;
+                    top: -200px;
+                    transition: .3s;
+                    font-size: 16px;
                     font-weight: 700;
                 }
                 .bottom{
                     position: relative;
-                    bottom: 75px;
+                    bottom: 130px;
                     transition: .3s;
                     width: 90%;
                     margin: auto;
@@ -307,11 +349,14 @@ export default {
                 transition: .3s;
                 filter:brightness(90%);
             }
-            .side{
+            .sideIcon{
                 left: 180px;
             }
+            .sideValue{
+                left: 220px;
+            }
             .bottom{
-                bottom: 60px;
+                // bottom: 140px;
             }
         }
 
