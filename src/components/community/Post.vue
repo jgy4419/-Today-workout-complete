@@ -154,15 +154,13 @@ export default {
                 console.log('내가 올린 게시물');
                 await axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
                 .then(res => {
-                    console.log(res);
                     this.spinnerState = 0;
                     this.getData = [];
                     this.getData = res;
                     this.postCount = this.getData.data.length;
-                    this.dateData.push(res.data.creation_datetime);
-                    this.getData.forEach((res) => {
+                    res.data.forEach(async (res) => {
                         this.sideMenuValues.watch.push(res.views);
-                        axios.get('/api/likePostWho', {
+                        await axios.get('/api/likePostWho', {
                             params: {post_id: res.post_id}
                         }).then(likeRes => this.sideMenuValues.like.push(likeRes.data.length));
                     })
