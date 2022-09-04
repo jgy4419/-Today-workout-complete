@@ -204,6 +204,13 @@ export default {
             margin-top: 25px;
         }
     }
+    @media screen and (max-height: 500px){
+        .contain{
+                            margin-top: 50px;   
+            .inner{
+            }
+        }
+    }
     @media screen and (max-width: 1200px){
         .inner{
             .noticeHead{

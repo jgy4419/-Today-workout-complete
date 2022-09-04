@@ -1,5 +1,9 @@
 <template>
     <div class="contain">
+        <div class="section-images">
+            <div class="section-image" v-for="image, i in image" :key="i"
+            :style="{backgroundImage: `url(${image})`}"/>
+        </div>
         <div class="inner">
             <p class="title">
                 <span v-for="text in textLine" :key="text" class="textLine">
@@ -11,20 +15,25 @@
                 <button @click="loginOrCommunity()" class="btn">오운완이란?</button>
             </router-link>
         </div>
-        <div class="halfBackground"/>
+        <!-- <div class="halfBackground"/> -->
     </div>    
 </template>
 
 <script>
+import image1 from '../../image/mainImg/main1-1.jpeg'
+import image2 from '../../image/mainImg/main1-2.jpeg'
+import image3 from '../../image/mainImg/main1-3.jpeg'
 export default {
     data(){
         return{
             textLine: ['운동을', '과학적으로', '효율적으로'],
-            startBtn: '/about'
+            startBtn: '/about',
+            image: [image2, image1, image3],
         }
     },
     mounted(){
         this.loding();
+        console.log(this.image);
     },
     methods: {
         loding(){
@@ -42,26 +51,43 @@ export default {
 
 <style lang="scss" scoped>
 /*
-text 그라데이션
-color: transparent;
-background: linear-gradient(to right top, #861657, #ffa69e);
--webkit-background-clip: text;
+    text 그라데이션
+    color: transparent;
+    background: linear-gradient(to right top, #861657, #ffa69e);
+    -webkit-background-clip: text;
  */
 .contain{
     position: relative;
-    margin-top: 1.5%;
+    // margin-top: 1.5%;
     height: 100vh;
     // margin-top: 100px;
+    .section-images{
+        position: absolute;
+        top: 0;
+        display: flex;
+        .section-image{
+            width: 33.5vw;
+            height: 90vh;
+            // object-fit: cover;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .section-image:nth-child(2){
+            background-attachment: fixed;
+            // background-size: contain;
+        }
+    }
     .inner{
         position: relative;
-        top: 10%;
+        top: 20%;
         z-index: 10;
         width: 80%;
         margin: auto;
         .title{
             color: rgb(226, 226, 226);
-            font-size: 70px;
+            font-size: 50px;
             font-weight: 700;
+            text-align: center;
             z-index: 10;
             line-height: 150%;
             .textLine{
@@ -85,10 +111,14 @@ background: linear-gradient(to right top, #861657, #ffa69e);
             }
         }
         .btn{
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
             background-color: transparent;
             font-size: 18px;
             font-weight: 700;
-            background-color: #93B5C6;
+            background-color: #35a8e2;
             color: #fff;
             width: 150px;
             height: 60px;
@@ -96,7 +126,7 @@ background: linear-gradient(to right top, #861657, #ffa69e);
             border-radius: 30px;
             transition: .5s;
             cursor: pointer;
-            margin-top: 6%;
+            margin-top: 3%;
         }
         .btn:hover{
             background-color: transparent;
@@ -109,22 +139,22 @@ background: linear-gradient(to right top, #861657, #ffa69e);
             z-index: 1;
         }
     }
-    .halfBackground{
-        position: absolute;
-        z-index: 1;
-        top: -10%;
-        // bottom: -60%;
-        width: 100vw;
-        height: 100%;
-        // height: 800px;
-        // box-shadow:  inset 10px 10px 10px #fff;
-        filter: blur(2px);
-        background-image: url('https://tgzzmmgvheix1905536.cdn.ntruss.com/2020/12/0415c4378a98400fbd96d00de64e8112');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: left;
+}
+@media screen and (max-height: 500px){
+    .contain{
+        height: 0;
+        .section-images{
+            .section-image{
+                height: 500px;
+            }
+        }
+        .inner{
+            height: 0px;
+        }
     }
-    @media screen and (max-width: 768px){
+}
+@media screen and (max-width: 768px){
+    .contain{
         .inner{
             .title{
                 padding-top: 20%;
@@ -146,10 +176,12 @@ background: linear-gradient(to right top, #861657, #ffa69e);
             width: 100%;
         }
     }
-    @media screen and (max-width: 575px){
+}
+@media screen and (max-width: 575px){
+    .contain{
         .inner{
             width: 100%;
-            height: 600px;
+            // height: 600px;
             .title{
                 font-size: 40px;
             }
