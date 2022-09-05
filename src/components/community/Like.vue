@@ -21,23 +21,50 @@ export default {
     },
     async mounted(){
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-        await axios.get('/api/likePostWho', {
-            params: {post_id: this.$route.params.post}
-        }).then(res => {
-            for(let i = 0; i < res.data.length; i++){
-                this.like.users.push(res.data[i].nickname);
-                if(res.data[i].nickname === userInformation.nickname){
-                    document.querySelector('.likeAndShareBtn').style.backgroundColor = 'lightgrey';
-                    document.querySelector('.likeAndShareBtn').style.color = 'grey';
+        console.log(this.like.users);
+            await axios.get('/api/likePostWho', {
+                params: {post_id: this.$route.params.post}
+            }).then(res => {
+                console.log(res.data);
+                if(res.data === 'failure'){
+                    this.like.count = 0;
+                }else{
+                    for(let i = 0; i < res.data.length; i++){
+                        this.like.users.push(res.data[i].nickname);
+                        if(res.data[i].nickname === userInformation.nickname){
+                            document.querySelector('.likeAndShareBtn').style.backgroundColor = 'lightgrey';
+                            document.querySelector('.likeAndShareBtn').style.color = 'grey';
+                        }
+                    }
+                    console.log('who', this.like.users);
+                    // this.like.users = this.like.users.filter(user => user !== undefined);
+                    this.like.count = this.like.users.length;
                 }
-            }
-            this.like.users = this.like.users.filter(user => user !== undefined);
-            this.like.count = this.like.users.length;
-        }).catch(err => {
-            console.log(err);
-        })
+            }).catch(err => {
+                console.log(err);
+            })
     },
     methods: {
+        likeWho(){
+            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
+            axios.get('/api/likePostWho', {
+                params: {post_id: this.$route.params.post}
+            }).then(res => {
+                console.log(res);
+                for(let i = 0; i < res.data.length; i++){
+                    this.like.users.push(res.data[i].nickname);
+                    if(res.data[i].nickname === userInformation.nickname){
+                        document.querySelector('.likeAndShareBtn').style.backgroundColor = 'lightgrey';
+                        document.querySelector('.likeAndShareBtn').style.color = 'grey';
+                    }
+                }
+                console.log('who', this.like.users);
+                this.like.users = this.like.users.filter(user => user !== undefined);
+                this.like.count = this.like.users.length;
+            }).catch(err => {
+                console.log(err);
+            })
+        },
         // 좋아요 기능 (undefined count 문제 해결하기)
         likeClick(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));

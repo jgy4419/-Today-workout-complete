@@ -178,7 +178,10 @@ export default {
                         await axios.get('/api/likePostWho', {
                             params: {post_id: res.post_id}
                         }).then(likeRes => {
-                            this.sideMenuValues.like.push(likeRes.data.length);
+                            console.log(likeRes.data);
+                            likeRes.data == 'failure' 
+                            ? this.sideMenuValues.like.push(0)
+                            : this.sideMenuValues.like.push(likeRes.data.length)
                         });
                     })
                 })
