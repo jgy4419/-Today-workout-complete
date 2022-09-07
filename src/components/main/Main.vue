@@ -2,7 +2,6 @@
     <div class="main">
         <div class="section">
             <Section1/>
-            <!-- <Slide class="slide"/> -->
             <MainNotice class="mainNotice"/>
             <Section2 class="section2"/>
             <Section3/>

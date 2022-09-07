@@ -436,6 +436,7 @@ input, textarea{
 @media screen and (max-width: 900px){
     .contain{
         .inner{
+            width: 80%;
             .writeHeader{
                 padding-top: 10px;
                 display: block;
@@ -445,7 +446,7 @@ input, textarea{
                         display: none;
                     }
                     .categoryChoice{
-                        width: 100%;
+                        width: 90%;
                         font-size: 12px;
                     }
                 }
@@ -455,6 +456,15 @@ input, textarea{
             }
             .editor-page{
                 font-size: 12px;
+            }
+            .btnBox{
+                width: 80%;
+                bottom: 30px;
+                .btn{
+                    width: 100px;
+                    height: 40px;
+                    font-size: 15px;
+                }
             }
         }
     }

@@ -103,14 +103,17 @@
     }
     @media screen and (max-width: 400px){
         .head{
+            height: 200px;
             .headerInner{
-                width: 400px;
+                width: 100%;
+                height: 100px;
                 .mainText{
                     font-size: 20px;
                 }
             }
         }
         .section{
+            height: 400px;
             .sectionInner{
                 width: 250px;
                 .introductionTitle{

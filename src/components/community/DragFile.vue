@@ -61,10 +61,24 @@ export default {
         p{
             color: #333;
             font-weight: 600;
-            font-size: 20px;
+            font-size: 18px;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 55px;
         }
+    }
+}
+@media screen and (max-width: 900px){
+    .drag_container{
+        width: 80vw;
+        height: 100px;
+        .drag_inner{
+            border: 2px dashed rgb(131, 131, 188);
+            p{
+                margin-top: 10px;
+                padding: 20px;
+                font-size: 12px;
+            }
+        }       
     }
 }
 </style>

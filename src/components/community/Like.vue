@@ -115,4 +115,11 @@ export default {
         margin-bottom: 10px;
         color: #93B5C6;
     }
+    @media screen and (max-width: 800px){
+        .likeAndShareBtn{
+            font-size: 18px;
+            width: 35px;
+            height: 35px;
+        }
+    }
 </style>

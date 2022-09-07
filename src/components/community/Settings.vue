@@ -355,7 +355,7 @@ export default {
     .contain{
         .inner{
             padding: 10%;
-            width: 500px;
+            width: 100%;
             .set{
                 .imgSet{
                     img{

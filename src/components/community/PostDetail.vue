@@ -431,6 +431,13 @@ export default {
         }
     }
     @media screen and (max-width: 700px){
+        .inner{
+            .likeAndShareBtn{
+                font-size: 18px;
+                width: 35px;
+                height: 35px;
+            }
+        }
         .detail{
             .postHeader{
                 .postImg{

@@ -306,7 +306,7 @@ export default {
                 }
                 .sideIcon{
                     position: relative;
-                    left: 280px;
+                    left: 100%;
                     top: -110px;
                     transition: .3s;
                     font-size: 18px;
@@ -317,7 +317,7 @@ export default {
                 }
                 .sideValue{
                     position: relative;
-                    left: 280px;
+                    left: 100%;
                     top: -200px;
                     transition: .3s;
                     font-size: 16px;

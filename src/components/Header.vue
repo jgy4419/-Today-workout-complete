@@ -31,8 +31,8 @@
       </div>
       <nav class="mobileMenu">
         <div class="backColor"/>
-          <ul v-for="list, i in mobile.login.length" :key="i">
-            <router-link :to="mobile.url[i]">
+          <ul>
+            <router-link :to="mobile.url[i]" v-for="list, i in mobile.login.length" :key="i">
               <li class="mobileMenuList">
                   {{mobile.login[i]}}
               </li>
@@ -95,7 +95,7 @@ export default {
       this.url.push('/about', '/community', '/store');
 
       this.mobile.url.push('/mypage', '/settings', '/store', '/');
-      this.mobile.login.push('MyPage', 'settings', 'store', 'logout')
+      this.mobile.login.push('MyPage', 'settings', 'store', 'logout');
       myBoxli[2].addEventListener('click', function(){
         console.log('logout!');
         localStorage.removeItem('userInformation');
@@ -124,13 +124,12 @@ export default {
     hamburger(){
       let line = document.querySelectorAll('.line');
       let mobileMenu = document.querySelector('.mobileMenu');
-      let body = document.querySelector('.body');
+      // let body = document.querySelector('.body');
       for(var i = 0; i < line.length; i++){
           line[i].classList.toggle('event');
       }
       // 햄버거 누르면 옆에 메뉴 생성해주기. + 배경 어둡게 해주기.
-      mobileMenu.classList.add('event');
-      body.classList.add('event');
+      mobileMenu.classList.toggle('event');
     },
   }
 }
@@ -191,7 +190,6 @@ export default {
           position: relative;
           background-size: cover;
           left: 10px;
-          // top: 10px;
           width: 35px;
           height: 35px;
           background-color: rgb(233, 233, 233);
@@ -314,7 +312,7 @@ export default {
   .mobileMenu{
     position: fixed;
     width: 100%;
-    height: 800px;
+    height: 100vh;
     display: none;
     transform: translateX(700px);
     overflow-y: scroll;
@@ -325,19 +323,24 @@ export default {
       z-index: 1;
       right: 0;
       width: 50%;
-      height: 100vh;
+      height: 100%;
       max-height: 1500px;
     }
     ul{
       position: relative;
       z-index: 2;
+      width: 100px;
+      margin: 0 50px 0px auto;
       margin-top: 5%;
       .mobileMenuList{
-        font-size: 25px;
+        width: 150px;
+        margin-top: 30px;
+        margin-left: -80px;
+        font-size: 20px;
         font-weight: 700;
         color: #fff;
         text-align: right;
-        padding: 4% 20%;
+        // padding: 4% 20%;
       }
     }
   }
@@ -345,7 +348,6 @@ export default {
     z-index: 10;
     opacity: 1;
     width: 100%;
-    height: 100vh;
     background: rgba(51, 51, 51, 0.7);
     transform: translateX(0px);
     transition: .5s;
@@ -360,11 +362,14 @@ export default {
     }
   }
 }
-@media screen and (max-width: 768px){
+@media screen and (max-width: 850px){
   .header {
     .header_inner{
       background-color: transparent;
       nav{
+        .logo{
+          font-size: 20px;
+        }
         .webMenu{
             display: none;
             width: 75px;
@@ -377,18 +382,29 @@ export default {
       }
     }
     .menuListIcon{
-        display: block;
-        transform: translateX(0px);
-        opacity: 1;
-      }
-    .mobileMenu{
       display: block;
-      ul{
-        top: 50px;
-        .mobileMenuList{
-          font-size: 20px;
+      transform: translateX(0px);
+      opacity: 1;
+      @media screen and (max-width: 500px){
+        .line{
+          border: 2px solid #333;
+        }
+        .line.event{
+          border: 0px solid #fff;
         }
       }
+    }
+    .mobileMenu{
+      display: block;
+        ul{
+          top: 50px;
+          @media screen and (max-width: 500px){
+            .mobileMenuList{
+              font-size: 15px;
+            } 
+          }
+        }
+      // }
     }
   }
 }

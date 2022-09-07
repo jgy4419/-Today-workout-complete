@@ -94,7 +94,7 @@ export default {
     }
     @media screen and (max-width: 400px){
         .inner{
-            width: 200px;
+            width: 100%;
             p{
                 text-align: center;
                 font-size: 20px;
