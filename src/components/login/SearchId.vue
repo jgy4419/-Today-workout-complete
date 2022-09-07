@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="contain">
             <div class="inner">
                 <!-- <form action="/api/findId" method="post" class="login">  -->
                 <div class="login">
@@ -59,17 +59,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container{
+a{
+    text-decoration: none;
+}
+a:hover{
+    color: grey;
+}
+.contain{
     position: absolute;
+    width: 100vw;
     margin: auto;
     top: 30%;
     left: 0;
     right: 0;
-    width: 40vw;
     // border: 2px solid #333;
     border-radius: 10px;
     padding-bottom: 3%;
     .inner{
+        margin: auto;
+        width: 50%;
         color: #636363;
         p{
             font-size: 20px;
@@ -96,17 +104,33 @@ export default {
                 cursor: pointer;
             }
             .loginBtn:hover{
-                // box-sizing: border-box;
-                // border: 2px solid #FFE3E3;
                 background-color: #6d84c9;
                 color: #fff;
             }
         }
         .loginList{
+            font-size: 15px;
             margin-top: 30px;
             display: flex;
             justify-content: space-between;
             cursor: pointer;
+        }
+    }
+}
+@media screen and (max-width: 750px){
+    .contain{
+        .inner{
+            width: 80%;
+            .login{
+                input, .loginBtn{
+                    width: 250px;
+                    height: 50px;
+                    font-size: 12px;
+                }
+            }
+            .loginList{
+                font-size: 12px;
+            }
         }
     }
 }

@@ -73,7 +73,7 @@ export default {
                         title[2].classList.add('event');
                         textInner[1].classList.add('event');
                         // 2200
-                    }else if(currentScrollValue > screenHeight / 1.8){
+                    }else if(currentScrollValue > screenHeight / 2.3){
                         img.style.backgroundImage = `url(${img3})`;
                         title[3].classList.add('event');
                         textInner[2].classList.add('event');
@@ -101,7 +101,7 @@ export default {
         position: relative;
         color: #333;
         width: 80vw;
-        height: 3000px;
+        height: 2800px;
         margin: auto;
         display: flex;
         .text{
@@ -135,16 +135,22 @@ export default {
             }   
             // }
         }
-        .img{
-            position: sticky;
-            border-radius: 20px;
-            // background-image: url('https://www.dementianews.co.kr/news/photo/201902/1501_1270_5524.jpg');
-            background-size: cover;
-            transition: .3s;
-            top: 100px;
-            width: 500px;
-            height: 400px;
-            margin-top: 20%;
+        .imgBox {
+            position: relative;
+            right: 12.5%;
+            .img{
+                position: sticky;
+                border-radius: 20px;
+                // background-image: url('https://www.dementianews.co.kr/news/photo/201902/1501_1270_5524.jpg');
+                background-size: cover;
+                background-position: 30%;
+                background-repeat: no-repeat;
+                transition: .3s;
+                top: 10px;
+                width: 50vw;
+                height: 100vh;
+                // margin-top: 20%;
+            }   
         }
     }
     @media screen and (max-width: 1050px){
@@ -159,7 +165,7 @@ export default {
                 }
             }
             .img{
-                width: 40vw;
+                // width: 40vw;
                 height: 50vh;
             }
         }
@@ -167,8 +173,8 @@ export default {
     @media screen and (max-width: 768px){
         .inner{
             .text{
-                padding-top: 130%;
-                width: 80vw;
+                // padding-top: 130%;
+                width: 30vw;
                 .title{
                     font-size: 30px;
                 }
@@ -184,11 +190,18 @@ export default {
     }   
     @media screen and (max-width: 565px){
         .inner{
+            height: 2000px;
+            .text{
+                width: 80vw;
+            }
             .text:nth-child(2){
                 margin-top: 30%;
             }
-            .img{
-                width: 80vw;
+            .imgBox{
+                .img{
+                    width: 100vw;
+                    height: 40vh;
+                }
             }
         }
     }

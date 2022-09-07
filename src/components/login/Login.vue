@@ -94,10 +94,11 @@ a:hover{
     top: 20%;
     left: 0;
     right: 0;
-    width: 40vw;
+    width: 100vw;
     height: 50vh;
     border-radius: 10px;
     .inner{
+        width: 40%;
         margin: auto;
         color: #636363;
         p{
@@ -149,51 +150,50 @@ a:hover{
     }
 }
 @media screen and (max-width: 750px){
-        .contain{
-            margin: auto;
-            .inner{
-                // width: 100%;
-                position: absolute;
-                justify-content: center;
-                p{
-                    margin: auto;
-                    font-size: 18px;
-                }
-                .login{
-                    .inputBox input{
-                        font-size: 12px;
-                        width: 250px;
-                        height: 50px;
-                    }
-                    .loginBtn{
-                        width: 250px;
-                    }
-                }
-                .loginList{
-                    margin-right: 20px;
-                    font-size: 12px;
-                }
-            }
-        }
-    }
-    @media screen and (max-width: 500px){
+    .contain{
         .inner{
+            width: 100%;
+            position: absolute;
+            justify-content: center;
             p{
-                font-size: 15px;
+                margin: auto;
+                font-size: 18px;
             }
             .login{
-                input{
+                .inputBox input{
                     font-size: 12px;
-                    width: 200px;
-                    height: 40px;
+                    width: 250px;
+                    height: 50px;
                 }
                 .loginBtn{
-                    width: 185px;
+                    width: 250px;
                 }
             }
             .loginList{
-                font-size: 8px;
+                margin-right: 20px;
+                font-size: 12px;
             }
         }
     }
+}
+@media screen and (max-width: 500px){
+    .inner{
+        p{
+            font-size: 15px;
+        }
+        .login{
+            input{
+                font-size: 12px;
+                width: 200px;
+                height: 40px;
+            }
+            .loginBtn{
+                width: 185px;
+            }
+        }
+        .loginList{
+            font-size: 8px;
+        }
+    }
+}
 </style>

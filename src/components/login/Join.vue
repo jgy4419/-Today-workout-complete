@@ -116,30 +116,24 @@ export default {
 
 <style lang="scss" scoped>
 .container{
-    position: absolute;
+    position: relative;
     margin: auto;
-    top: 10%;
-    left: 0;
-    right: 0;
-    width: 30vw;
-    // border: 2px solid #333;
+    width: 100vw;
     border-radius: 10px;
     padding-bottom: 3%;
     .inner{
         width: 500px;
+        margin: auto;
         color: #636363;
         p{
             font-size: 20px;
             font-weight: 700;
         }
-        // .login{
             text-align: center;
             .labelName{
-                // width: 100%;
-                // padding-top: 10px;
+                font-size: 13px;
                 margin: 20px 0px 0px 100px;
                 display: flex;
-                // flex-direction: column;
             }
             input{
                 font-size: 15px;
@@ -150,6 +144,9 @@ export default {
                 border: 1px solid rgb(181, 181, 181);
                 // border: 0;
                 padding-left: 10px;
+            }
+            .loginBtn{
+                background-color: lightgrey;
             }
             .loginBtn:hover{
                 background-color: #6d84c9;
@@ -191,8 +188,27 @@ export default {
             }
         // }
         .btn.id, .btn.nickname{
-            margin: 20px 35% 0px 0px;
+            margin: 20px 40% 0px 0px;
+            font-size: 13px;
+            background-color: rgb(235, 235, 235);
+            border-radius: 10px;
             font-weight: 700;
+        }
+    }
+    @media screen and (max-width: 750px){
+        .inner{
+            width: 300px;
+            input{
+                width: 250px;
+                font-size: 12px;
+            }
+            .labelName{
+                margin: 10px 0px 5px 30px;
+            }
+            .btn.id, .btn.nickname{
+                margin: 10px 55% 0px 0px;
+                font-size: 10px;
+            }
         }
     }
 }

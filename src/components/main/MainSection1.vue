@@ -58,16 +58,14 @@ export default {
  */
 .contain{
     position: relative;
-    // margin-top: 1.5%;
     height: 100vh;
-    // margin-top: 100px;
     .section-images{
         position: absolute;
         top: 0;
         display: flex;
         .section-image{
             width: 33.5vw;
-            height: 90vh;
+            height: 95vh;
             // object-fit: cover;
             background-size: cover;
             background-repeat: no-repeat;
@@ -196,14 +194,26 @@ export default {
                 height: 40px;
             }
         }
-        .halfBackground{
-            width: 100%;
+        // .halfBackground{
+        //     width: 100%;
+        // }
+        .section-images{
+            .section-image:nth-child(1), .section-image:nth-child(3){
+                display: none;
+            }
+            .section-image:nth-child(2){
+                width: 100vw;
+                background-position: 30%;
+            }
         }
     }
 }
 @media screen and (max-height: 500px){
     .contain{
         height: 500px;
+        .inner{
+            top: 0;
+        }
         .halfBackground{
             height: 600px;
             background-size: cover;

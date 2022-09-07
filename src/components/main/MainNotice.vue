@@ -122,6 +122,7 @@ export default {
 }
 .contain{
     width: 100vw;
+    height: 400px;
     // background-color: #333;
     .inner{
         width: 80%;
@@ -204,13 +205,6 @@ export default {
             margin-top: 25px;
         }
     }
-    @media screen and (max-height: 500px){
-        .contain{
-                            margin-top: 50px;   
-            .inner{
-            }
-        }
-    }
     @media screen and (max-width: 1200px){
         .inner{
             .noticeHead{
@@ -265,5 +259,12 @@ export default {
         }
     }
 }
+    @media screen and (max-width: 500px){
+        .contain{
+            margin-top: 50px;   
+            height: 700px;
+            .inner{
+            }
+        }
+    }
 </style>
-

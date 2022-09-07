@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="contain">
             <div class="inner">
                 <!-- <form action="/searchid" method="post" class="login">  -->
                 <div class="login">
@@ -58,17 +58,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container{
+.contain{
     position: absolute;
     margin: auto;
     top: 20%;
     left: 0;
     right: 0;
-    width: 40vw;
+    width: 100vw;
     // border: 2px solid #333;
     border-radius: 10px;
     padding-bottom: 3%;
     .inner{
+        width: 50%;
+        margin: auto;
         color: #636363;
         p{
             font-size: 20px;
@@ -89,7 +91,7 @@ export default {
                 background-color: #93B5C6;
                 color: #fcf3f3;
                 font-weight: 900;
-                box-sizing:content-box;
+                box-sizing: content-box;
                 border: 0px;
                 transition: .3s;
                 cursor: pointer;
@@ -103,9 +105,25 @@ export default {
         }
         .loginList{
             margin-top: 30px;
+            font-size: 15px;
             display: flex;
             justify-content: space-between;
             cursor: pointer;
+        }
+    }
+}
+@media screen and (max-width: 750px){
+    .contain{
+        .inner{
+            width: 85%;
+            .login{
+                input, .searchPwBtn{
+                    font-size: 12px;
+                }
+            }
+            .loginList{
+                font-size: 12px;
+            }
         }
     }
 }
