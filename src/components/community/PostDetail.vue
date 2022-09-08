@@ -96,7 +96,7 @@ export default {
             post_id: this.$route.params.post
         }).then(res => {
             console.log('조회수', res);
-        }).catch(err => {console.log(err)})
+        }).catch(err => {console.log(err)});
         // 자신이 올린 게시물만 수정/삭제 가능.
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
         const setPost = document.querySelector('.setPost');
@@ -123,7 +123,6 @@ export default {
             // https://codepen.io/csmccoy/pen/yLNBpyW?editors=1010
             return $("<textarea/>").html(text).text();
         }
-
         await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
         .then(res => {
             console.log(res);
@@ -144,7 +143,6 @@ export default {
                 nickname: userInformation.nickname,
                 content: this.commentInput,
                 parent_comments_id: 0,
-                // date: commentDate
             })
             .then(() => {
                 location.reload();
@@ -440,9 +438,6 @@ export default {
         }
         .detail{
             .postHeader{
-                .postImg{
-                    // height: 200px;
-                }
                 .user{
                     .title{
                         font-size: 40px;

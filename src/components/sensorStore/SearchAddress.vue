@@ -115,5 +115,16 @@ export default {
             }
         }
     }
+    @media screen and (max-width: 500px){
+        .inner{
+            width: 75vw;
+            margin-bottom: 20px;
+            .addressInput{
+                input{
+                    width: 400px;
+                }
+            }
+        }
+    }
 }
 </style>

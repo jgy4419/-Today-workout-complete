@@ -65,6 +65,19 @@ export default {
                 text-align: center;
             }
         }
+        @media screen and (max-width: 500px){
+            .menuSelects{
+                padding: 10px 0;
+                .menuSelect{
+                    font-size: 12px;
+                }
+            }    
+            .saleInformation{
+                p{
+                    font-size: 20px;
+                }
+            }
+        }
     }
 }
 </style>

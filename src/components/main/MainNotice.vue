@@ -122,7 +122,7 @@ export default {
 }
 .contain{
     width: 100vw;
-    height: 400px;
+    height: 600px;
     // background-color: #333;
     .inner{
         width: 80%;
@@ -214,26 +214,6 @@ export default {
             } 
         }
     }
-    @media screen and (max-width: 1000px){
-        .inner{
-            .noticeHead{
-                .noticeTitle{
-                    font-size: 20px;
-                }
-                .noticeList li{
-                    font-size: 14px;
-                }
-            } 
-            .noticeSectionBox{
-                display: block;
-                .noticeSection{
-                    width: 100%;
-                    height: 150px;
-                    margin-top: 30px;
-                }
-            }
-        }
-    }
     @media screen and (max-width: 800px){
         .inner{
             .noticeHead{
@@ -259,12 +239,36 @@ export default {
         }
     }
 }
-    @media screen and (max-width: 500px){
-        .contain{
-            margin-top: 50px;   
-            height: 700px;
-            .inner{
+@media screen and (max-width: 500px){
+    .contain{
+        margin-top: 50px;   
+        height: 700px;
+        .inner{
+        }
+    }
+}
+@media screen and (max-width: 1000px){
+    .contain{
+        margin-top: 20px;
+        height: 650px;
+        .inner{
+            .noticeHead{
+                .noticeTitle{
+                    font-size: 20px;
+                }
+                .noticeList li{
+                    font-size: 14px;
+                }
+            } 
+            .noticeSectionBox{
+                display: block;
+                .noticeSection{
+                    width: 100%;
+                    height: 150px;
+                    margin-top: 30px;
+                }
             }
         }
     }
+}
 </style>

@@ -117,7 +117,7 @@ export default {
 
 <style lang="scss" scoped>
 input{
-    width: 300px;
+    width: 30%;
     height: 40px;
     padding: 10px;
     margin: 10px 10px;
@@ -147,8 +147,6 @@ input{
                 font-size: 18px;
                 margin-right: 20px;
             }
-            .requestMessage{
-            }
         }
         .orderProduct{
             .productImg{
@@ -167,7 +165,7 @@ input{
         }
         .payment{
             position: relative;
-            width: 400px;
+            width: 60%;
             .paymentBtns{
                 .paymentBtn{
                     width: 150px;
@@ -218,6 +216,73 @@ input{
         }
         .orderBtn:active{
             background-color: #93B5C6;
+        }
+    }
+}
+@media screen and (max-width: 800px){
+    input{
+        width: 70%;
+        height: 40px;
+    }
+    .orderContain{
+        .inner{
+            .orderProduct{
+                .productImg{
+                    width: 50%;
+                }
+            }
+            .payment{
+                width: 100%;
+                .paymentCheck{
+                    input{
+                        margin-top: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 500px){
+    input{
+        width: 100%;
+    }
+    .orderContain{
+        .inner{
+            width: 70vw;
+            .orderProduct{
+                .productImg{
+                    width: 50%;
+                    margin: auto;
+                }
+                .product{
+                    display: block;
+                    .productInfo{
+                        margin: auto;
+                    }
+                }
+            }
+            .payment{
+                .paymentBtns{
+                    .paymentBtn{
+                        width: 100%;
+                        margin-top: 10px;
+                    }
+                }
+            }
+            .finalPayment{
+                text-align: center;
+                span:nth-child(1){
+                    font-size: 18px;
+                }
+                span:nth-child(2){
+                    font-size: 23px;
+                }
+            }
+            .orderBtn{
+                width: 100%;
+                height: 40px;
+                font-size: 16px;
+            }
         }
     }
 }

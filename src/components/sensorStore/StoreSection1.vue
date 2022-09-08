@@ -13,13 +13,15 @@
                                 <div class="sale-left">
                                     <h3>근육 측정기</h3>
                                     <div class="count">
-                                        <button @click="minusCount()">-</button><p>{{count}}</p><button @click="addCount()">+</button>
+                                        <button @click="minusCount()">-</button>
+                                        <p>{{count}}</p>
+                                        <button @click="addCount()">+</button>
                                     </div>
                                 </div>
                                 <p class="resPrice">{{price[1] * count}}원</p>
                             </div>
                         </div>
-                            <button class="cartBtn" @click="cartIn()">장바구니에 담기</button>
+                        <button class="cartBtn" @click="cartIn()">장바구니에 담기</button>
                         <router-link :to="order">
                             <button class="buyBtn" @click="loginAuth()">Buy now!</button>
                         </router-link>
@@ -98,8 +100,8 @@ export default {
             display: flex;
             justify-content: space-around;
             .productImg{
-                width: 400px;
-                height: 400px;
+                width: 40%;
+                height: 40%;
             }
             .information{
                 color: #333;
@@ -182,6 +184,66 @@ export default {
                     }
                     .buyBtn:active{
                         background-color: #93B5C6;
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 800px){
+        .inner{
+            .content{
+                .productImg{
+                    width: 50%;
+                }
+                .information{
+                    .title{
+                        font-size: 18px;
+                    }
+                    .sale{
+                        width: 35vw;
+                        height: 230px;
+                        .sale-section{
+                            .sale-flex{
+                                .resPrice{
+                                    font-size: 20px;
+                                }
+                                .sale-left{
+                                    h3{
+                                        font-size: 15px;
+                                    }
+                                    .count{
+                                        p{
+                                            width: 30px;
+                                            height: 25px;
+                                        }
+                                        button{
+                                            font-size: 15px;
+                                            width: 20px;
+                                            height: 25px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .cartBtn, .buyBtn{
+                            height: 40px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 500px){
+        .inner{
+            height: 750px;
+            .content{
+                display: block;
+                .productImg{
+                    width: 100%;
+                }
+                .information{
+                    .sale{
+                        width: 100%;
                     }
                 }
             }

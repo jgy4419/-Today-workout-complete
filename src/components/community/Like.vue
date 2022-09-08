@@ -21,36 +21,13 @@ export default {
     },
     async mounted(){
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-        console.log(this.like.users);
-            await axios.get('/api/likePostWho', {
-                params: {post_id: this.$route.params.post}
-            }).then(res => {
-                console.log(res.data);
-                if(res.data === 'failure'){
-                    this.like.count = 0;
-                }else{
-                    for(let i = 0; i < res.data.length; i++){
-                        this.like.users.push(res.data[i].nickname);
-                        if(res.data[i].nickname === userInformation.nickname){
-                            document.querySelector('.likeAndShareBtn').style.backgroundColor = 'lightgrey';
-                            document.querySelector('.likeAndShareBtn').style.color = 'grey';
-                        }
-                    }
-                    console.log('who', this.like.users);
-                    // this.like.users = this.like.users.filter(user => user !== undefined);
-                    this.like.count = this.like.users.length;
-                }
-            }).catch(err => {
-                console.log(err);
-            })
-    },
-    methods: {
-        likeWho(){
-            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            axios.get('/api/likePostWho', {
-                params: {post_id: this.$route.params.post}
-            }).then(res => {
-                console.log(res);
+        await axios.get('/api/likePostWho', {
+            params: {post_id: this.$route.params.post}
+        }).then(res => {
+            console.log(res.data);
+            if(res.data === 'failure'){
+                this.like.count = 0;
+            }else{
                 for(let i = 0; i < res.data.length; i++){
                     this.like.users.push(res.data[i].nickname);
                     if(res.data[i].nickname === userInformation.nickname){
@@ -58,7 +35,26 @@ export default {
                         document.querySelector('.likeAndShareBtn').style.color = 'grey';
                     }
                 }
-                console.log('who', this.like.users);
+                // this.like.users = this.like.users.filter(user => user !== undefined);
+                this.like.count = this.like.users.length;
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    },
+    methods: {
+        likeWho(){
+            let userInformation = JSON.parse(localStorage.getItem("userInformation"));
+            axios.get('/api/likePostWho', {
+                params: {post_id: this.$route.params.post}
+            }).then(res => {
+                for(let i = 0; i < res.data.length; i++){
+                    this.like.users.push(res.data[i].nickname);
+                    if(res.data[i].nickname === userInformation.nickname){
+                        document.querySelector('.likeAndShareBtn').style.backgroundColor = 'lightgrey';
+                        document.querySelector('.likeAndShareBtn').style.color = 'grey';
+                    }
+                }
                 this.like.users = this.like.users.filter(user => user !== undefined);
                 this.like.count = this.like.users.length;
             }).catch(err => {
@@ -75,8 +71,6 @@ export default {
                     post_id: this.$route.params.post,
                     nickname: userInformation.nickname
                 }).then(res => {
-                    // document.querySelector('.likeAndShareBtn').style.backgroundColor = 'red';
-                    // this.$forceUpdate();
                     console.log(res);
                 })
             // 반대일 때 마이너스

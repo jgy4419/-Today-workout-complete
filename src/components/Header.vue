@@ -312,7 +312,7 @@ export default {
   .mobileMenu{
     position: fixed;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: none;
     transform: translateX(700px);
     overflow-y: scroll;
@@ -320,11 +320,10 @@ export default {
     .backColor {
       background-color: #93B5C6;
       position: fixed;
-      z-index: 1;
+      // z-index: 1;
       right: 0;
       width: 50%;
-      height: 100%;
-      max-height: 1500px;
+      height: 110%;
     }
     ul{
       position: relative;
