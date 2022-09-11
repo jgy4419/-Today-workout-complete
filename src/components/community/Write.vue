@@ -35,7 +35,7 @@
                 <Chart @clickedChart="clickedChart" :readOrWrite = 1 />
             </div>
         </div>
-        <span v-if="closeState === true" @click="closeChart()" class="close">X</span>
+        <span v-if="closeState === true" @click="sensorWatch = false, closeState = false" class="close">X</span>
     </div>
 </template>
 
@@ -133,9 +133,9 @@ export default {
     methods: {
         // 클릭한 chart 데이터를 emit으로 가져오기. (this.clickedChartData에 담겨져 있음)
         clickedChart(event){
-            alert('차트가 선택되었습니다!')
+            alert('차트가 선택되었습니다!');
             this.clickedChartData = event;
-            console.log(event);
+            this.sensorWatch = false;
         },
         postUpload(){
             let writeState = this.$route.params.edit;

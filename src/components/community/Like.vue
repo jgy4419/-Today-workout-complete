@@ -8,9 +8,6 @@
 <script>
 import axios from 'axios';
 export default {
-    props:{
-        test: Number
-    },
     data(){
         return {
             like: {
@@ -35,7 +32,6 @@ export default {
                         document.querySelector('.likeAndShareBtn').style.color = 'grey';
                     }
                 }
-                // this.like.users = this.like.users.filter(user => user !== undefined);
                 this.like.count = this.like.users.length;
             }
         }).catch(err => {
@@ -61,12 +57,10 @@ export default {
                 console.log(err);
             })
         },
-        // 좋아요 기능 (undefined count 문제 해결하기)
         likeClick(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             // 좋아요한 사람들의 배열에 로그인한 닉네임이 포함되어있지 않은 경우 플러스
             if(!this.like.users.includes(userInformation.nickname)){
-                console.log('plus!');
                 axios.post('/api/likesPlus', {
                     post_id: this.$route.params.post,
                     nickname: userInformation.nickname
@@ -75,7 +69,6 @@ export default {
                 })
             // 반대일 때 마이너스
             }else{
-                console.log('minus!');
                 axios.delete('/api/likesMinus', {
                     params: {
                         post_id: this.$route.params.post,
@@ -85,7 +78,7 @@ export default {
                     console.log(res);
                 })
             }
-        },
+        }
     }
 }
 </script>
