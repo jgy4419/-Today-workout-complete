@@ -219,21 +219,20 @@ export default {
                     this.getData.data = array;
                     this.postCount += 9;
                 }).catch(err => {
-                    // this.postCount = this.post.post_id;
                     console.log(err)
                 });
             }else{
-                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
+                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: 9}})
                 .then(res => {
                     this.spinnerState = 0;
                     let array = [];
                     array.push(...this.getData.data, ...res.data)
                     this.getData.data = array;
-                    this.postCount += 9 ;
+                    this.postCount += 9;
                     console.log(this.postCount);
-                    console.log(res.data);
+                    console.log('새로 부른 데이터 : ', res.data);
+                    console.log('기존 데이터 : ', this.getData.data);
                 }).catch(err => {
-                    // this.postCount = this.post.post_id;
                     console.log(err)
                 })
             }

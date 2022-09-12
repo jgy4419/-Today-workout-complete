@@ -74,7 +74,7 @@ export default {
         .drag_inner{
             border: 2px dashed rgb(131, 131, 188);
             p{
-                margin-top: 10px;
+                margin-top: 20px;
                 padding: 20px;
                 font-size: 12px;
             }

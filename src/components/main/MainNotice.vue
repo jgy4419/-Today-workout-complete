@@ -116,6 +116,9 @@ export default {
 
 <style lang="scss" scoped>
 // router-link 스타일 없애주기.
+p{
+    font-size: 14px;
+}
 .link{
     text-decoration: none;
     color: #333;
@@ -215,6 +218,9 @@ export default {
         }
     }
     @media screen and (max-width: 800px){
+        p{
+            font-size: 12px;
+        }
         .inner{
             .noticeHead{
                 .line{

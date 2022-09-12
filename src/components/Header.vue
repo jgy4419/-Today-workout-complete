@@ -67,10 +67,12 @@ export default {
     }
   },
   watch: {
+    // url이 바뀌면 열려있던 메뉴들 제거해주기.
     '$route' (){
         let mobileMenu = document.querySelector('.mobileMenu');
         let line = document.querySelectorAll('.line');
         mobileMenu.classList.remove('event');
+        document.querySelector('.myInformationBox').classList.remove('event');
         for(var i = 0; i < line.length; i++){
           line[i].classList.remove('event');
         }
@@ -142,6 +144,9 @@ export default {
     font-weight: normal;
     font-style: normal;
 }
+a{
+  text-decoration: none;
+}
 .header{
   position: relative;
   width: 100vw;
@@ -209,7 +214,7 @@ export default {
         cursor: pointer;
       }
       button:hover{
-        border: 1px solid #fff;
+        // border: 1px solid #fff;
         background-color: #C9CCD5;
         color: #fff;
       }
