@@ -21,8 +21,15 @@ import About from '../components/about/About';
 import SensorStore from '../components/sensorStore/StoreMain';
 import Order from '../components/sensorStore/Order';
 
-
+// test
+import Test from '../components/Test';
 const routes = [
+  // test
+  {
+    path: "/test",
+    name: Test,
+    component: Test
+  },
     // 메인페이지
     {
       path: "/",
