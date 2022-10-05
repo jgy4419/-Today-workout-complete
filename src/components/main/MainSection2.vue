@@ -73,7 +73,7 @@ export default {
                         title[2].classList.add('event');
                         textInner[1].classList.add('event');
                         // 2200
-                    }else if(currentScrollValue > screenHeight / 2.7){
+                    }else if(currentScrollValue > screenHeight / 2.6){
                         img.style.backgroundImage = `url(${img3})`;
                         title[3].classList.add('event');
                         textInner[2].classList.add('event');
