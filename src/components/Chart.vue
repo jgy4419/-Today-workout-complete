@@ -51,7 +51,7 @@ export default {
     // props로 Write페이지에서 보여졌는지, MyPage에서 보여졌는지 구분하는 변수
     readOrWrite: Number,
     getChartData: String
-  },
+  },  
   async mounted(){
     let userInformation = JSON.parse(localStorage.getItem('userInformation'));
     let dataLength;
@@ -67,17 +67,23 @@ export default {
       }
     })
     .catch(err => console.log(err))
-    for(let i = 0; i < dataLength; i++){
+    for (let i = 0; i < dataLength; i++){
+      // 차트가 하나도 없을 때 에러처리 (수정 필요)
+      if (this.emgData === undefined) {
+        alert('차트가 없습니다.');
+        return;
+      }
       this.getDatas(this.emgDatas, i);
     }
   },
   methods: {
     // 데이터 이름 들어감
-    getDatas(datas, length){
+    getDatas(datas, length) {
       this.chartCount = datas.length;
       this.chart.chartId.push(`chart${length}`);
         import(`../../../TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
         .then(res => {
+          console.log(res);
           let inChart = res;
           console.log(inChart); // inChart 안에 전체 데이터(모듈)들이 들어가 있다.
           // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
@@ -95,7 +101,9 @@ export default {
             });
           }
           this.fillData(res, length);
-        }).catch(err => console.log(err))
+        }).catch(err => {
+          console.log(err)
+        })
     },  
     fillData(data, length){
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.

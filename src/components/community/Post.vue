@@ -14,7 +14,7 @@
             <div class="post" v-for="data, i in postCount" :key="i">
                     <!-- 시간날 때 수정하기 urlChange 1번 만 쓰기 -->
                     <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
-                        <div :style="{backgroundImage:`url('http://localhost:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"
+                        <div :style="{backgroundImage:`url('http://118.67.132.81:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"
                         @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)"/>
                         <ul class="sideIcon" @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
                             <li class="icon" v-for="icon in sideMenu" :key="icon">
@@ -75,7 +75,6 @@ export default {
                 comment: []
             },
             searchRes: this.$store.state.Search.searchValue,
-            category: ['all', 'category1', 'category2', 'category3'],
             postUrl: '/login',
             option: {
                 value: ['최신순', '오래된순'],
@@ -130,8 +129,6 @@ export default {
         this.postCount = 0;
         this.urlChange();
         this.getPost();
-        this.commentCount();
-        // this.changePost();
     },
     methods: {
         sortPost(){
@@ -153,17 +150,24 @@ export default {
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 await axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
-                .then(res => {
-                    this.spinnerState = 0;
-                    this.getData = [];
-                    this.getData = res;
-                    this.postCount = this.getData.data.length;
-                    res.data.forEach(async (res) => {
-                        this.sideMenuValues.watch.push(res.views);
-                        await axios.get('/api/likePostWho', {
-                            params: {post_id: res.post_id}
-                        }).then(likeRes => this.sideMenuValues.like.push(likeRes.data.length));
-                    })
+                    .then(res => {
+                        console.log(res.data);
+                        this.spinnerState = 0;
+                        this.getData = [];
+                        this.getData = res;
+                        this.postCount = this.getData.data.length;
+                        // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
+                        if (res.data === 'failure') {
+                            this.getData = [];
+                            this.postCount = 0;
+                            return;
+                        }
+                        res.data.forEach(async (res) => {
+                            this.sideMenuValues.watch.push(res.views);
+                            await axios.get('/api/likePostWho', {
+                                params: {post_id: res.post_id}
+                            }).then(likeRes => this.sideMenuValues.like.push(likeRes.data.length));
+                        })
                 }).catch(err => console.log(err));
             }else{
                 axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
@@ -179,9 +183,9 @@ export default {
                             params: {post_id: res.post_id}
                         }).then(likeRes => {
                             console.log(likeRes.data);
-                            likeRes.data == 'failure' 
-                            ? this.sideMenuValues.like.push(0)
-                            : this.sideMenuValues.like.push(likeRes.data.length)
+                            likeRes.data == 'failure'
+                                ? this.sideMenuValues.like.push(0)
+                                : this.sideMenuValues.like.push(likeRes.data.length);
                         });
                     })
                 })
@@ -192,8 +196,13 @@ export default {
         changePost(boardID){
             axios.get('/api/showAnotherBoard', {params: {board_id: boardID}})
             .then(res => {
+                console.log(res);
                 this.getData = res;
                 this.postCount = this.getData.data.length;
+                if (res.data === 'failure') {
+                    this.postCount = 0;
+                    this.getData = [];
+                }
             }).catch(err => {console.log(err)});
         },
         async urlChange(userId, boardId, postId){

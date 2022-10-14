@@ -2,7 +2,7 @@
     <div class="contain">
         <div class="detail">
             <div class="postHeader">
-                <div class="postImg" :style="{backgroundImage:`url('http://localhost:3000/img/postPhoto/${getPostDetailData.photographic_path}')`}"/>
+                <div class="postImg" :style="{backgroundImage:`url('http://118.67.132.81:3000/img/postPhoto/${getPostDetailData.photographic_path}')`}"/>
                 <div class="user">
                     <p class="title">{{getPostDetailData.title}}</p>
                     <br/>

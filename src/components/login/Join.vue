@@ -72,10 +72,11 @@ export default {
             }else if(inputs[0].value == "" || inputs[1].value == "" || inputs[3].value == "" || inputs[4].value == "" || inputs[5].value == "" || inputs[7].value == ""){
                 // 필수 input에 빈칸 유무
                 alert('(필수) 부분이 비어있습니다!');
-            }else{
+            } else {
+                // axios.k
                 // 회원 가입을 성공하면, 입력된 정보들을 DB에 저장시켜주기.
-                alert('환영합니다 오운완 입니다!');
-                location.href = '/';
+                alert('환영합니다 오운완 입니다!!!');
+                // location.href = '/';
             }
         },
         idOverlap(){

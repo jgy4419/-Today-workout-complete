@@ -78,7 +78,7 @@ export default {
         }
     }
   },
-  mounted(){
+  async mounted(){
     console.log(this.$route.path)
 
     let userInformation = JSON.parse(localStorage.getItem("userInformation"));
@@ -98,13 +98,22 @@ export default {
 
       this.mobile.url.push('/mypage', '/settings', '/store', '/');
       this.mobile.login.push('MyPage', 'settings', 'store', 'logout');
-      myBoxli[2].addEventListener('click', function(){
+      myBoxli[2].addEventListener('click', function () {
         console.log('logout!');
         localStorage.removeItem('userInformation');
         // 쿠키를 전 시간으로 돌려서 로그아웃 시켜줌.
         document.cookie = 'user=; expires=Thu, 18 Dec 2013 12:00:00 GMT'
         location.replace('/');
-      })
+      });
+      window.onload = function () {
+        document.querySelectorAll('.mobileMenuList')[5].addEventListener('click', function(){
+          console.log('logout!');
+          localStorage.removeItem('userInformation');
+          // 쿠키를 전 시간으로 돌려서 로그아웃 시켜줌.
+          document.cookie = 'user=; expires=Thu, 18 Dec 2013 12:00:00 GMT'
+          location.replace('/');
+        })  
+      }
     }else if(!localStorage.userInformation){
       this.login = []; this.url = [];
       this.mobile.url = []; this.mobile.login = [];
@@ -114,7 +123,7 @@ export default {
       this.login.push('오운완?', 'community', 'store', 'login', 'join');
       this.url.push('/about', '/community', '/store', '/login', '/login/join');
 
-      this.mobile.url.push('/about', '/community', '/store', '/login', '/join');
+      this.mobile.url.push('/about', '/community', '/store', '/login', '/login/join');
       this.mobile.login.push('오운완', 'community', 'store', 'login', 'join');
     }
   },

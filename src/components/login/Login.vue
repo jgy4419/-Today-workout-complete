@@ -63,7 +63,7 @@ export default {
                         address: res.data.result[0].address,
                         sex: res.data.result[0].sex,
                         nickname: res.data.result[0].nickname,
-                        profile_img_path: `http://localhost:3000/img/userProfile/${res.data.result[0].profile_img_path}`,
+                        profile_img_path: `http://118.67.132.81:3000/img/userProfile/${res.data.result[0].profile_img_path}`,
                     }
                     
                     const user = userInformation;

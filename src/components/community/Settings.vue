@@ -265,7 +265,7 @@ export default {
                     border-radius: 10px;
                     font-size: 18px;
                     font-weight: 500;
-                    width: 300px;
+                    width: 100%;
                     height: 40px;
                     padding: 10px;
                     margin-top: 10px;
@@ -315,7 +315,7 @@ export default {
                 position: absolute;
                 background-color: #fff;
                 border-radius: 10px;
-                width: 500px;
+                width: 40%;
                 height: 70vh;
                 left: 0;
                 right: 0;
@@ -343,6 +343,16 @@ export default {
                         margin-right: 4%;
                         color: #333;
                     }
+                }
+            }
+            @media screen and (max-width: 750px){
+                .modalInner{
+                    width: 70%;
+                }
+            }
+            @media screen and (max-width: 500px){
+                .modalInner{
+                    width: 90%;
                 }
             }
         }
