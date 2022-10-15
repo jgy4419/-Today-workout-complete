@@ -49,10 +49,10 @@ export default {
         return{
             set: {
                 imgSet: [ '이미지 제거'],
-                intro: ['이름', '자기소개'],
+                intro: [JSON.parse(localStorage.getItem("userInformation")).nickname, JSON.parse(localStorage.getItem("userInformation")).introduction],
             },
             changeData: {
-                intro: ['이름', '자기소개'],
+                intro: [JSON.parse(localStorage.getItem("userInformation")).nickname, JSON.parse(localStorage.getItem("userInformation")).introduction],
             },
             changeImg: '',
             password: {
