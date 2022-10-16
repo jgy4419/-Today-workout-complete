@@ -11,12 +11,11 @@
             <div class="inner" v-if="spinnerState === 1">
                 <Skeleton class="post" v-for="i in 9" :key="i"/>
             </div>
+            <p class="not_data_text" v-if="data_state === 1">{{'아직 게시글이 없습니다!'}}</p>
             <div class="post" v-for="data, i in postCount" :key="i">
-                    <!-- 시간날 때 수정하기 urlChange 1번 만 쓰기 -->
-                    <router-link style="text-decoration: none; color: #333" class="postUrl" :to="postUrl">
-                        <div :style="{backgroundImage:`url('http://118.67.132.81:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"
-                        @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)"/>
-                        <ul class="sideIcon" @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
+                    <router-link style="text-decoration: none; color: #333" class="postUrl" :to="`/${getData.data[i].nickname}/${getData.data[i].board_id}/${getData.data[i].post_id}`">
+                        <div :style="{backgroundImage:`url('http://118.67.132.81:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"/>
+                        <ul class="sideIcon">
                             <li class="icon" v-for="icon in sideMenu" :key="icon">
                                 {{icon}}
                             </li>
@@ -27,7 +26,7 @@
                             <li >{{sideMenuValues.like[i]}}</li>
                             <li class="value">{{sideMenuValues.comment[i]}}</li>
                         </ul>
-                        <div @click="urlChange(getData.data[i].nickname, getData.data[i].board_id, getData.data[i].post_id)">
+                        <div>
                             <div class="bottom">
                                 <!-- <p>{{getData.data[i].post_id}}</p> -->
                                 <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
@@ -47,7 +46,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import axios from 'axios'; 
 import {mapState} from 'vuex';
@@ -62,7 +60,8 @@ export default {
     // 데이터가 추가적으로 저장이 되면 
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
     data(){
-        return{
+        return {
+            data_state: 0,
             sideMenu: {
                 watch: '🤓',
                 like: '🖤',
@@ -127,7 +126,6 @@ export default {
     },
     async mounted(){
         this.postCount = 0;
-        this.urlChange();
         this.getPost();
     },
     methods: {
@@ -159,6 +157,7 @@ export default {
                         // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
                         if (res.data === 'failure') {
                             this.getData = [];
+                            this.data_state = 1;
                             this.postCount = 0;
                             return;
                         }
@@ -172,10 +171,17 @@ export default {
             }else{
                 axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
                 .then(res => {
-                    console.log(res);
+                    console.log(res.data.length);
                     this.spinnerState = 0;
                     this.getData = res;
                     this.postCount = this.getData.data.length;
+                    // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
+                    if (res.data === 'failure') {
+                        this.getData = [];
+                        this.data_state = 1;
+                        this.postCount = 0;
+                        return;
+                    }
                     // 더 보기 기능 수정해서 더 보기할 때도 값 추가해주기
                     res.data.forEach(async (res) => {
                         this.sideMenuValues.watch.push(res.views);
@@ -204,11 +210,6 @@ export default {
                     this.getData = [];
                 }
             }).catch(err => {console.log(err)});
-        },
-        async urlChange(userId, boardId, postId){
-            if(localStorage.userInformation){
-                this.postUrl = `/${userId}/${boardId}/${postId}`;
-            }
         },
         // 데이터 더 보기 버튼 기능.
         moreData(){
@@ -290,6 +291,14 @@ export default {
             bottom: 0;
             margin: auto;
         }
+        .not_data_text{
+            margin-top: 50px;
+            width: 100%;
+            color: #93B5C6;
+            font-size: 25px;
+            font-weight: 700;
+            text-align: center;;
+        }
         .post{
             width: 300px;
             height: 300px;
@@ -364,9 +373,6 @@ export default {
             .sideValue{
                 left: 220px;
             }
-            .bottom{
-                // bottom: 140px;
-            }
         }
 
         .btnBox{
@@ -421,13 +427,16 @@ export default {
     }
     @media screen and (max-width: 768px){
         .inner{
+            .not_data_text{
+                font-size: 20px;
+            }
             .post{
                 width: 100%;
-                .postUrl:hover{
-                    .side{
-                        left: 280px;
-                    }
-                }
+                // .postUrl:hover{
+                //     .side{
+                //         left: 280px;
+                //     }
+                // }
             }
         }
     }

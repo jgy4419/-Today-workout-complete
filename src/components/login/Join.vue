@@ -55,44 +55,63 @@ export default {
     },
     methods: {
         // profileImg(input){
-            /* 
+            /*
                 1. id(email)가 DB에 있는 것과 동일해야 됨.
                 2. 비밀번호가 동일해야 됨.
                 3. 필수부분이 다 채워져야 됨.f
             */
-        loginCondition(){
+        loginCondition() {
             const inputs = document.querySelectorAll('.input');
-            if(inputs[1].value !== inputs[2].value){
-                alert('비밀번호가 다릅니다!');
-                // (필수 부분이 비어있으면)
-            // }else if(this.checkId === false || this.checkNickname === false){
-            }else if(this.checkId === false || this.checkNickname === false){
-                // id 유효성 검사가 되지 않으면
-                alert('id나 닉네임 중복 검사를 다시 해주세요.');
-            }else if(inputs[0].value == "" || inputs[1].value == "" || inputs[3].value == "" || inputs[4].value == "" || inputs[5].value == "" || inputs[7].value == ""){
-                // 필수 input에 빈칸 유무
-                alert('(필수) 부분이 비어있습니다!');
-            } else {
-                // axios.k
-                // 회원 가입을 성공하면, 입력된 정보들을 DB에 저장시켜주기.
-                alert('환영합니다 오운완 입니다!!!');
-                // location.href = '/';
-            }
-        },
-        idOverlap(){
-            axios.post('/api/checkid', {mail: this.idInput})
-            .then(res => {
-                console.log(res.data.checkid);
-                this.checkId = res.data.checkid; // true / false 유무
-                if(this.checkId === false){
-                    alert('아이디 비밀번호가 겹칩니다.');
-                    this.checkId = false;
-                }else if(this.checkId === true){
-                    console.log("aa", this.checkId);
-                    alert('사용할 수 있는 아이디입니다.');
-                    this.checkId = true;
+            // 비밀번호 개수 제한
+            if (inputs[1].value.length < 4) {
+                alert('비밀번호는 4자리 이상 넣어주세요.');
+                return;
+            }else {
+                if (inputs[1].value !== inputs[2].value) {
+                    alert('비밀번호가 다릅니다!');
+                    // (필수 부분이 비어있으면)
+                    // }else if(this.checkId === false || this.checkNickname === false){
+                } else if (this.checkId === false || this.checkNickname === false) {
+                    // id 유효성 검사가 되지 않으면
+                    alert('id나 닉네임 중복 검사를 다시 해주세요.');
+                } else if (inputs[0].value == "" || inputs[1].value == "" || inputs[3].value == "" || inputs[4].value == "" || inputs[5].value == "" || inputs[7].value == "") {
+                    // 필수 input에 빈칸 유무
+                    alert('(필수) 부분이 비어있습니다!');
+                } else {
+                    // axios.k
+                    // 회원 가입을 성공하면, 입력된 정보들을 DB에 저장시켜주기.
+                    alert('환영합니다 오운완 입니다!!!');
+                    location.href = '/';
                 }
-            }).catch(err => console.log(err));
+            }
+            // 전화번호 개수 제한
+            if (inputs[4].value.length < 10) {
+                console.log(inputs[4].value)
+                alert('전화번호는 최소 10자 이상 입력해주세요.');
+                return;
+            } 
+        },
+        idOverlap() {
+            console.log(this.idInput.includes('@'));
+            if (!this.idInput.includes('@')) {
+                alert('이메일 형식에 맞지 않습니다.');
+                return;
+            }
+            else {
+                axios.post('/api/checkid', {mail: this.idInput})
+                .then(res => {
+                    console.log(res.data.checkid);
+                    this.checkId = res.data.checkid; // true / false 유무
+                    if(this.checkId === false){
+                        alert('아이디 비밀번호가 겹칩니다.');
+                        this.checkId = false;
+                    }else if(this.checkId === true){
+                        console.log("aa", this.checkId);
+                        alert('사용할 수 있는 아이디입니다.');
+                        this.checkId = true;
+                    }
+                }).catch(err => console.log(err));   
+            }
         },
         nicknameOverlap(){
             let inputValue = document.querySelectorAll('.input');

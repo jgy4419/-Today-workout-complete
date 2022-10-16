@@ -1,5 +1,6 @@
 <template>
     <div class="contain">
+        <Spinner class="spinner" v-if="spinnerState === 1"/>
         <div class="inner">
             <div class="writeHeader">
                 <input v-model="postDetail.title" type="text" class="title" placeholder="제목을 입력하세요">
@@ -42,6 +43,7 @@
 <script>
 import axios from 'axios';
 import DOMPurify from 'dompurify';
+import Spinner from '../Spinner.vue';
 import Chart from '../Chart.vue';
 import DragFile from './DragFile.vue';
 export default {
@@ -50,12 +52,14 @@ export default {
             this.getImgData();
         }
     },
-    components:{
+    components: {
+        Spinner,
         Chart,
         DragFile,
     },
     data(){
-        return{
+        return {
+            spinnerState: 0,
             // testMultiEvent: [this.test1(), this.test2()],
             btn: {
                 class: ['btn back', 'btn submit'],
@@ -137,7 +141,8 @@ export default {
             this.clickedChartData = event;
             this.sensorWatch = false;
         },
-        postUpload(){
+        postUpload() {
+            this.spinnerState = 1;
             let writeState = this.$route.params.edit;
             // 라우트 변수들
             let route = {
@@ -200,6 +205,7 @@ export default {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(() => {
+                    this.spinnerState = 0;
                     location.href = '/community';
                 }).catch(err => {
                     console.log(err);
@@ -214,6 +220,7 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
                 }).then(() => {
+                    this.spinnerState = 0;
                     location.href = '/community';
                 })
                 .catch(err => console.log(err))
@@ -285,6 +292,15 @@ input, textarea{
     outline-style: none;
 }
 .contain{
+    .spinner{
+        position: fixed;
+        margin: auto;
+        z-index: 100;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
     .inner{
         width: 70%;
         margin: 2% auto;

@@ -48,6 +48,15 @@
                             <button @click="categoryAdd()">카테고리 추가</button>
                         </div>
                     </aside>
+                    <ul class="categoryList_mobile_box">
+                        <li class="categoryList_mobile" @click="$store.dispatch('Community/categoryChange', {
+                            categoryValue: $store.state.Community.categorys[i],
+                            count: i
+                        })"
+                            v-for="a, i in categoryCount - 1" :key="i">
+                            {{$store.state.Community.categorys[i]}}
+                        </li>
+                    </ul>
                     <div class="post">
                         <Post 
                         :propsRes="propsRes"/>
@@ -60,7 +69,7 @@
 
 <script>
 import Post from './Post.vue';
-import {mapState, mapActions} from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import axios from 'axios';
 export default {
     components: {
@@ -163,6 +172,7 @@ export default {
     header{
         position: relative;
         width: 100%;
+        margin-top: 20px;
         .several{
             position: absolute;
             display: flex;
@@ -309,7 +319,26 @@ export default {
                         color: rgb(185, 185, 185);
                     }
                 }
+                .categoryList_mobile_box{
+                    position: absolute;
+                    top: -8%;
+                    display: none;
+                    .categoryList_mobile{
+                        width: 80px;
+                        height: 30px;
+                        color: #fff;
+                        padding-top: 6px;
+                        margin-left: 20px;
+                        text-align: center;
+                        border-radius: 20px;
+                        list-style: none;
+                        font-size: 12px;
+                        font-weight: 600;
+                        background-color: #93B5C6;
+                    }
+                }
                 .post{
+                    margin-top: 10px;
                     margin-left: 100px;
                 }
             }
@@ -353,6 +382,9 @@ export default {
                     }
                 }
                 .section{
+                    .categoryList_mobile_box{
+                        display: flex;
+                    }
                     .post{
                         margin-left: 0px;
                         // width: 20vw;

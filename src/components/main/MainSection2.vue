@@ -3,21 +3,21 @@
         <div class="inner">
             <div class="text">
                 <p class="title"><span class="importantText">오</span>늘 <span class="importantText">운</span>동 <span class="importantText">완</span>료했니?</p>
+                <br/>
                 <span class="textInner">
                     <!-- 저희 '오늘 운동 완료했니'는 하루동안  -->
                     혼자 운동하기 무섭거나 어려운 사람들은 같이 운동할 사람들을 
                     구할 수 있고,  <br/><br/>운동하는 방법이나, 노하우를 
                     다른 사람들이 작성한 것들을 참고해서 효과적인 운동이 가능합니다.
                 </span>
-                <p class="title">오늘 운동 제대로했네!</p>
+                <p class="title">오늘 운동 제대로했네!</p> <br/>
                 <span class="textInner">
                     운동 기록 작성 시 센서를 통한 데이터로 추가적인 설명이 가능합니다.<br/>
                     <br/>당일 운동 했던 부위를 조금 더 자세하게 설명해보세요.
                 </span>
-                <p class="title">운동 끝나고 보충제 한 잔?</p>
+                <p class="title">나의 운동루틴 확인하기</p><br/>
                 <span class="textInner">
-                    운동할 때 필요한 영양제들을 우리가 먹어도 되는지..?<br/>
-                    설문을 통해 알아 볼 수 있는 시간을 가져요!
+                    모바일 앱을 통해서 원하는 날짜의 나의 운동 루틴과, 운동 데이터를 확인해보세요.
                 </span>
                 <!-- <div v-for="title, i in titles.length" :key="i">
                     <p class="title">{{titles[i]}}</p>
@@ -141,7 +141,6 @@ export default {
             .img{
                 position: sticky;
                 border-radius: 20px;
-                // background-image: url('https://www.dementianews.co.kr/news/photo/201902/1501_1270_5524.jpg');
                 background-size: cover;
                 background-position: 30%;
                 background-repeat: no-repeat;
@@ -149,7 +148,7 @@ export default {
                 top: 10px;
                 width: 50vw;
                 height: 100vh;
-                // margin-top: 20%;
+                box-shadow: 5px 10px 20px rgb(241, 241, 241);
             }   
         }
     }

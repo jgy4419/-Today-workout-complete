@@ -18,7 +18,7 @@
                                         <button @click="addCount()">+</button>
                                     </div>
                                 </div>
-                                <p class="resPrice">{{price[1] * count}}원</p>
+                                <p class="resPrice">{{(price[1] * count).toLocaleString()}}원</p>
                             </div>
                         </div>
                         <button class="cartBtn" @click="cartIn()">장바구니에 담기</button>
