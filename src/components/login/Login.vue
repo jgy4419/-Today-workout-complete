@@ -41,6 +41,9 @@ export default {
             }
         }
     },
+    created(){
+        if (localStorage.getItem('userInformation') != null) location.replace('/');
+    },
     methods: {
         async login(){
             // /api/login으로 값을 아이디, 비밀번호를 보냄 -> 백엔드는 DB에서 아이디, 비밀번호가 일치한게 있으면 가져와서 보내줌.(토큰) => 둥일한게 없으면 boolean 값이 false인 것을 넣어줌.
@@ -68,6 +71,7 @@ export default {
                     
                     const user = userInformation;
                     const expire = Date.now() + 86400000;
+                    console.log("nickname:" + user.nickname);
 
                     localStorage.setItem('userInformation', JSON.stringify(user));
                     localStorage.setItem('expire', JSON.stringify(expire));

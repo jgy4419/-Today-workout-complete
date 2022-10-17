@@ -34,6 +34,9 @@
 <script>
 import axios from 'axios';
 export default {
+    created(){
+        if (localStorage.getItem('userInformation') != null) location.replace('/');
+    },
     mounted(){
         // this.grant = Number(this.grant);
         // console.log(typeof this.grant);
@@ -90,6 +93,8 @@ export default {
                     // axios.k
                     // 회원 가입을 성공하면, 입력된 정보들을 DB에 저장시켜주기.
                     alert('환영합니다 오운완 입니다!!!');
+                    let inputValue = document.querySelectorAll('.input');
+                    console.log("nickname:" + inputValue[7].value);
                     location.href = '/';
                 }
             }
