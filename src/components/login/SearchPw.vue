@@ -84,22 +84,6 @@ export default {
                 console.log(res);
                 this.auth.authRes = res.data;
             }).catch(err => console.log(err));
-            // const input = document.querySelectorAll('.inputValue');
-            // console.log(input[0].value);
-            // console.log(input[1].value);
-            // console.log(input[2].value);
-            // axios.get('/api/findPassword', {
-            //     params: {
-            //         mail: input[0].value,
-            //         uesr_name: input[1].value,
-            //         phonenumber: input[2].value
-            //     }}, {withCredentials: true}
-            // ).then(res => {
-            //     alert('비밀번호는' + res.data[0].password + '입니다!');
-            // }).catch(err => {
-            //     alert('정보가 잘 못 되었습니다.');
-            //     console.log(err);
-            // })
         },
         put_auth() {
             if (this.auth.authRes === this.auth.auth_input) {
@@ -107,10 +91,6 @@ export default {
             } else {
                 alert('인증번호가 다릅니다!');
             }
-            // axios.get('/api/authRes')
-            //     .then(res => {
-            //     console.log(res);
-            // }).catch(err => console.log(err));
         },
         modalClose() {
             this.password_change_modal_state = false;

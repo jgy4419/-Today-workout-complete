@@ -106,7 +106,8 @@ export default {
             setPost.style.display = 'none';
         }
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
-        .then(res => {
+            .then(res => {
+            console.log(res.data);
             this.getChartState = 1;
             for(let i = 0; i < res.data.length; i++){
                 if(this.$route.params.id === res.data[i].nickname 

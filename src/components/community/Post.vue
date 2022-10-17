@@ -13,33 +13,33 @@
             </div>
             <p class="not_data_text" v-if="data_state === 1">{{'아직 게시글이 없습니다!'}}</p>
             <div class="post" v-for="data, i in postCount" :key="i">
-                    <router-link style="text-decoration: none; color: #333" class="postUrl" :to="`/${getData.data[i].nickname}/${getData.data[i].board_id}/${getData.data[i].post_id}`">
-                        <div :style="{backgroundImage:`url('http://118.67.132.81:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"/>
-                        <ul class="sideIcon">
-                            <li class="icon" v-for="icon in sideMenu" :key="icon">
-                                {{icon}}
-                            </li>
-                        </ul>
-                        <ul class="sideValue">
-                            <!-- <li class="value" v-for="value, i in sideMenuValues.watch.length" :key="i">{{sideMenuValues.watch[i]}}</li> -->
-                            <li class="value">{{sideMenuValues.watch[i]}}</li>
-                            <li >{{sideMenuValues.like[i]}}</li>
-                            <li class="value">{{sideMenuValues.comment[i]}}</li>
-                        </ul>
-                        <div>
-                            <div class="bottom">
-                                <!-- <p>{{getData.data[i].post_id}}</p> -->
-                                <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
-                                <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
-                                <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
-                                <!-- 게시날짜 표시 (년 - 월 - 일) -->
-                                <p>날짜: {{dayJS(getData.data[i].creation_datetime).format("YYYY-MM-DD")}}</p>
-                                {{searchRes}}
-                                <p>{{$store.state.Search.searchValue}}</p>
-                            </div>
+                <router-link style="text-decoration: none; color: #333" class="postUrl" :to="`/${getData.data[i].nickname}/${getData.data[i].board_id}/${getData.data[i].post_id}`">
+                    <div :style="{backgroundImage:`url('http://118.67.132.81:3000/img/postPhoto/${getData.data[i].photographic_path}')`}" class="titleImg"/>
+                    <ul class="sideIcon">
+                        <li class="icon" v-for="icon in sideMenu" :key="icon">
+                            {{icon}}
+                        </li>
+                    </ul>
+                    <ul class="sideValue">
+                        <!-- <li class="value" v-for="value, i in sideMenuValues.watch.length" :key="i">{{sideMenuValues.watch[i]}}</li> -->
+                        <li class="value">{{sideMenuValues.watch[i]}}</li>
+                        <li >{{sideMenuValues.like[i]}}</li>
+                        <li class="value">{{sideMenuValues.comment[i]}}</li>
+                    </ul>
+                    <div>
+                        <div class="bottom">
+                            <!-- <p>{{getData.data[i].post_id}}</p> -->
+                            <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
+                            <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
+                            <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
+                            <!-- 게시날짜 표시 (년 - 월 - 일) -->
+                            <p>날짜: {{dayJS(getData.data[i].creation_datetime).format("YYYY-MM-DD")}}</p>
+                            {{searchRes}}
+                            <p>{{$store.state.Search.searchValue}}</p>
                         </div>
-                    </router-link>
-                </div>
+                    </div>
+                </router-link>
+            </div>
             <div class="btnBox">
                 <button @click="moreData" class="moreBtn">더 보기</button>
             </div>
@@ -165,7 +165,13 @@ export default {
                             this.sideMenuValues.watch.push(res.views);
                             await axios.get('/api/likePostWho', {
                                 params: {post_id: res.post_id}
-                            }).then(likeRes => this.sideMenuValues.like.push(likeRes.data.length));
+                            }).then(likeRes => {
+                                console.log(likeRes);
+                                if (likeRes.data === 'failure') {
+                                    likeRes.data = '';
+                                }
+                                this.sideMenuValues.like.push(likeRes.data.length)
+                            });
                         })
                 }).catch(err => console.log(err));
             }else{
@@ -212,7 +218,7 @@ export default {
             }).catch(err => {console.log(err)});
         },
         // 데이터 더 보기 버튼 기능.
-        moreData(){
+        async moreData(){
             this.spinnerState = 1;
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             console.log('더 보기', this.postCount);
@@ -220,28 +226,71 @@ export default {
             console.log(this.$route.name);
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
-                console.log(this.post.count);
-                axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: this.postCount}})
+                axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 9}})
                 .then(res => {
+                    if (res.data === 'failure') {
+                        alert('더 이상 가져올 게시글이 없습니다.');
+                        this.spinnerState = 0;
+                        return;
+                    }
+                    // max게시글 아이디랑, 
+
+                    // 더 보기에서 가져올 글이 9개 이하면 결과 개수만큼 추가로 가져오기
+                    if (res.data.length < 9) {
+                        this.postCount += res.data.length;
+                    } else {
+                        this.postCount += 9;
+                    }
                     this.spinnerState = 0;
                     let array = [];
                     array.push(...this.getData.data, ...res.data)
                     this.getData.data = array;
-                    this.postCount += 9;
                 }).catch(err => {
                     console.log(err)
                 });
-            }else{
-                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: 9}})
-                .then(res => {
-                    this.spinnerState = 0;
-                    let array = [];
-                    array.push(...this.getData.data, ...res.data)
-                    this.getData.data = array;
-                    this.postCount += 9;
-                    console.log(this.postCount);
-                    console.log('새로 부른 데이터 : ', res.data);
-                    console.log('기존 데이터 : ', this.getData.data);
+            } else {
+                let array = [];
+                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
+                    .then(res => {
+                        for (let i = 0; i < this.getData.data.length; i++){
+                            if (res.data[0].post_id === this.getData.data[i].post_id) {
+                                console.log(res.data);
+                                array.push(...this.getData.data, ...res.data);
+                                this.getData.data = array;
+                                this.postCount += res.data.length;
+                                alert('더 이상 가져올 게시글이 없습니다2.');
+                                this.spinnerState = 0;
+                                return;                                
+                            }
+                        }
+                        console.log(res.data);
+                        if (res.data === 'failure') {
+                            alert('더 이상 가져올 게시글이 없습니다.');
+                            this.spinnerState = 0;
+                            return;
+                        }
+                        if (res.data.length < 9) {
+                            this.postCount += res.data.length;
+                        } else {
+                            this.postCount += 9;
+                        }
+                        this.spinnerState = 0;
+                        array.push(...this.getData.data, ...res.data);
+                        this.getData.data = array;
+                        res.data.forEach(async (res) => {
+                        this.sideMenuValues.watch.push(res.views);
+                        await axios.get('/api/likePostWho', {
+                            params: {post_id: res.post_id}
+                        }).then(likeRes => {
+                            console.log(likeRes.data);
+                            likeRes.data == 'failure'
+                                ? this.sideMenuValues.like.push(0)
+                                : this.sideMenuValues.like.push(likeRes.data.length);
+                            });
+                        })
+                        console.log(this.postCount);
+                        console.log('새로 부른 데이터 : ', res.data);
+                        console.log('기존 데이터 : ', this.getData.data);
                 }).catch(err => {
                     console.log(err)
                 })
@@ -272,7 +321,7 @@ export default {
     #categoryName{
         font-size: 30px;
         font-weight: 700;
-        margin-top: -20px;
+        // margin-top: -20px;
     }
     .inner{
         position: absolute;

@@ -81,29 +81,29 @@ export default {
     getDatas(datas, length) {
       this.chartCount = datas.length;
       this.chart.chartId.push(`chart${length}`);
-        import(`../../../TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
-        .then(res => {
-          console.log(res);
-          let inChart = res;
-          console.log(inChart); // inChart 안에 전체 데이터(모듈)들이 들어가 있다.
-          // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
-          for(let i = 1; i < res.number_of_sets + 1; i++){
-              this.chart.data.setsCount.push(`${i}세트`);
-          }
-          // 세트 수
-          this.chart.data.setCount = res.number_of_sets;
-          // 운동 이름
-          this.chart.data.exerciseName = res.workout_name;
-          // 운동 전체 세트의 데이터가 들어감
-          for(let i = 0; i < this.chart.data.setCount; i++){
-            JSON.parse(inChart.sets[i].emg_data).forEach(element => {
-              this.chart.data.dataValues.push(element)
-            });
-          }
-          this.fillData(res, length);
-        }).catch(err => {
-          console.log(err)
-        })
+        // import(`/root/TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
+        // .then(res => {
+        //   console.log(res);
+        //   let inChart = res;
+        //   console.log(inChart); // inChart 안에 전체 데이터(모듈)들이 들어가 있다.
+        //   // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
+        //   for(let i = 1; i < res.number_of_sets + 1; i++){
+        //       this.chart.data.setsCount.push(`${i}세트`);
+        //   }
+        //   // 세트 수
+        //   this.chart.data.setCount = res.number_of_sets;
+        //   // 운동 이름
+        //   this.chart.data.exerciseName = res.workout_name;
+        //   // 운동 전체 세트의 데이터가 들어감
+        //   for(let i = 0; i < this.chart.data.setCount; i++){
+        //     JSON.parse(inChart.sets[i].emg_data).forEach(element => {
+        //       this.chart.data.dataValues.push(element)
+        //     });
+        //   }
+        //   this.fillData(res, length);
+        // }).catch(err => {
+        //   console.log(err)
+        // })
     },  
     fillData(data, length){
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.

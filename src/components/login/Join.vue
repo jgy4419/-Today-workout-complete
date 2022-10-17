@@ -62,6 +62,12 @@ export default {
             */
         loginCondition() {
             const inputs = document.querySelectorAll('.input');
+            // 전화번호 개수 제한
+            if (inputs[4].value.length <= 10 || inputs[4].value.length > 12) {
+                console.log(inputs[4].value)
+                alert('전화번호는 최소 10자 이상 11자 이하 입력해주세요.');
+                return;
+            } 
             // 비밀번호 개수 제한
             if (inputs[1].value.length < 4) {
                 alert('비밀번호는 4자리 이상 넣어주세요.');
@@ -69,14 +75,17 @@ export default {
             }else {
                 if (inputs[1].value !== inputs[2].value) {
                     alert('비밀번호가 다릅니다!');
+                    return;
                     // (필수 부분이 비어있으면)
                     // }else if(this.checkId === false || this.checkNickname === false){
                 } else if (this.checkId === false || this.checkNickname === false) {
                     // id 유효성 검사가 되지 않으면
                     alert('id나 닉네임 중복 검사를 다시 해주세요.');
+                    return;
                 } else if (inputs[0].value == "" || inputs[1].value == "" || inputs[3].value == "" || inputs[4].value == "" || inputs[5].value == "" || inputs[7].value == "") {
                     // 필수 input에 빈칸 유무
                     alert('(필수) 부분이 비어있습니다!');
+                    return;
                 } else {
                     // axios.k
                     // 회원 가입을 성공하면, 입력된 정보들을 DB에 저장시켜주기.
@@ -84,12 +93,6 @@ export default {
                     location.href = '/';
                 }
             }
-            // 전화번호 개수 제한
-            if (inputs[4].value.length < 10) {
-                console.log(inputs[4].value)
-                alert('전화번호는 최소 10자 이상 입력해주세요.');
-                return;
-            } 
         },
         idOverlap() {
             console.log(this.idInput.includes('@'));
