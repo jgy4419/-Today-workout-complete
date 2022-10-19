@@ -61,6 +61,8 @@ export default {
     // test 서버 불러오기 => npx json-server ./exerciseData.json --watch --port 8800
     data(){
         return {
+            // 최신순 일 때는 0 오래된 순일 때는 1
+            sortState: 0,
             data_state: 0,
             sideMenu: {
                 watch: '🤓',
@@ -123,28 +125,119 @@ export default {
                 }
             }).catch(err => console.log(err));
         },
+        $route: function () {
+            this.sortState = 0;
+        }
     },
     async mounted(){
         this.postCount = 0;
         this.getPost();
     },
     methods: {
-        sortPost(){
-            // let sortPost = document.querySelectorAll('.sortPost');
-            let sort = document.querySelector('.sort');
-            console.log(sort.value);
-            if(sort.value === '오래된순'){
-                axios.get('/api/showPostAsc', {params: {board_id: 1, limit: 0}})
-                .then(res => {
+        async sortPost(){
+            this.sortState === 0 ? this.sortState = 1 : this.sortState = 0;
+            let apiUrl = '';
+            if (this.sortState === 0) {
+                apiUrl = 'showPostDesc';
+            } else {
+                apiUrl = 'showPostAsc';
+            }
+            await axios.get(`/api/${apiUrl}`, {params: {board_id: 1, limit: 0}})
+            .then(res => {
                 this.getData = res;
                 this.postCount = this.getData.data.length;
+                this.sideMenuValues.like = [];
+                this.sideMenuValues.comment = [];
+                res.data.forEach(async (res) => {
+                    this.sideMenuValues.watch.push(res.views);
+                    await axios.get('/api/countComments', {
+                    params: {post_id: res.post_id}})
+                        .then(res => {
+                            console.log(res);
+                        // console.log(res.data[0].);
+                        this.sideMenuValues.comment.push(res.data[0].comments_count);
+                        // console.log(this.sideMenuValues.comment)
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                    await axios.get('/api/likePostWho', {
+                        params: {post_id: res.post_id}
+                    }).then(likeRes => {
+                        console.log(likeRes.data);
+                        likeRes.data == 'failure'
+                            ? this.sideMenuValues.like.push(0)
+                            : this.sideMenuValues.like.push(likeRes.data.length);
+                    });
+                })
             }).catch(err => console.log(err));
-            }else if(sort.value === '최신순'){
-                this.getPost();
-            }
         },
         async getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
+
+            // let apiUrl = ''; let paramsKey = ''; let paramsValue = '';
+            // console.log(paramsKey);
+            // if (this.$route.name === 'MyPage') {
+            //     apiUrl = 'myPagePost';
+            //     paramsKey = 'nickname';
+            //     paramsValue = userInformation.nickname;
+            // } else {
+            //     apiUrl = 'showPostDesc';
+            //     paramsKey = 'border_id';
+            //     paramsValue = 1;
+            // }
+            // await axios.get(`/api/${apiUrl}`, {params: {paramsKey: '구영', limit: 0}})
+            //     .then(res => {
+            //         console.log(userInformation.nickname);
+            //         console.log(res);
+            //         this.spinnerState = 0;
+            //         this.getData = [];
+            //         this.getData = res;
+            //         this.postCount = this.getData.data.length;
+            //         // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
+            //         if (res.data === 'failure') {
+            //             this.getData = [];
+            //             this.data_state = 1;
+            //             this.postCount = 0;
+            //             return;
+            //         }
+            //         res.data.forEach(async (res) => {
+            //             this.sideMenuValues.watch.push(res.views);
+            //             // let commentRes = 'count(comments_id)';
+            //             // console.log(commentRes);
+            //             await axios.get('/api/countComments', {
+            //             params: {post_id: res.post_id}})
+            //                 .then(res => {
+            //                     console.log(res);
+            //                 // console.log(res.data[0].);
+            //                 this.sideMenuValues.comment.push(res.data[0]);
+            //                 // console.log(this.sideMenuValues.comment)
+            //             }).catch(err => {
+            //                 console.log(err);
+            //             })
+
+            //             await axios.get('/api/likePostWho', {
+            //                 params: {post_id: res.post_id}
+            //             }).then(likeRes => {
+            //                 console.log(likeRes);
+            //                 if (likeRes.data === 'failure') {
+            //                     likeRes.data = '';
+            //                 }
+            //                 this.sideMenuValues.like.push(likeRes.data.length)
+            //             });
+            //         })
+            //     }).catch(err => console.log(err));
+            //     let apiUrl = '';
+            // let paramsKey = '';
+            // let paramsValue = '';
+            // if (this.$route.name === 'MyPage') {
+            //     apiUrl = 'myPagePost';
+            //     paramsKey = 'nickname';
+            //     paramsValue = userInformation;
+            // } else {
+            //     apiUrl = 'showPostDesc';
+            //     paramsKey = 'border_id';
+            //     paramsValue = 1;
+            // }
             if(this.$route.name === 'MyPage'){
                 console.log('내가 올린 게시물');
                 await axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
@@ -163,6 +256,16 @@ export default {
                         }
                         res.data.forEach(async (res) => {
                             this.sideMenuValues.watch.push(res.views);
+                            await axios.get('/api/countComments', {
+                            params: {post_id: res.post_id}})
+                                .then(res => {
+                                    console.log(res);
+                                // console.log(res.data[0].);
+                                this.sideMenuValues.comment.push(res.data[0].comments_count);
+                                // console.log(this.sideMenuValues.comment)
+                            }).catch(err => {
+                                console.log(err);
+                            })
                             await axios.get('/api/likePostWho', {
                                 params: {post_id: res.post_id}
                             }).then(likeRes => {
@@ -191,6 +294,16 @@ export default {
                     // 더 보기 기능 수정해서 더 보기할 때도 값 추가해주기
                     res.data.forEach(async (res) => {
                         this.sideMenuValues.watch.push(res.views);
+                        await axios.get('/api/countComments', {
+                        params: {post_id: res.post_id}})
+                            .then(res => {
+                                console.log(res);
+                            // console.log(res.data[0].);
+                            this.sideMenuValues.comment.push(res.data[0].comments_count);
+                            // console.log(this.sideMenuValues.comment)
+                        }).catch(err => {
+                            console.log(err);
+                        })
                         await axios.get('/api/likePostWho', {
                             params: {post_id: res.post_id}
                         }).then(likeRes => {
@@ -218,86 +331,80 @@ export default {
             }).catch(err => {console.log(err)});
         },
         // 데이터 더 보기 버튼 기능.
-        async moreData(){
+        async moreData() {
             this.spinnerState = 1;
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-            console.log('더 보기', this.postCount);
-            // ex) 9개 post를 추가적으로 더 가져오기.
-            console.log(this.$route.name);
-            if(this.$route.name === 'MyPage'){
-                console.log('내가 올린 게시물');
-                axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 9}})
+            let array = [];
+
+            let apiUrl = ''; let paramsKey = ''; let paramsValue = '';
+
+            if (this.$route.name === 'MyPage') {
+                apiUrl = 'myPagePost';
+                paramsKey = 'nickname';
+                paramsValue = userInformation;
+            } else {
+                paramsKey = 'border_id';
+                paramsValue = 1;
+                if (this.sortState === 1) {
+                    apiUrl = 'showPostAsc';
+                } else {
+                    apiUrl = 'showPostDesc';
+                }
+            }
+            console.log(paramsKey);
+            axios.get(`/api/${apiUrl}`, {params: {paramsKey: paramsValue, limit: this.postCount}})
                 .then(res => {
+                    for (let i = 0; i < this.getData.data.length; i++){
+                        if (res.data[0].post_id === this.getData.data[i].post_id) {
+                            console.log(res.data);
+                            array.push(...this.getData.data, ...res.data);
+                            this.getData.data = array;
+                            this.postCount += res.data.length;
+                            alert('더 이상 가져올 게시글이 없습니다2.');
+                            this.spinnerState = 0;
+                            return;                                
+                        }
+                    }
+                    console.log(res.data);
                     if (res.data === 'failure') {
                         alert('더 이상 가져올 게시글이 없습니다.');
                         this.spinnerState = 0;
                         return;
                     }
-                    // max게시글 아이디랑, 
-
-                    // 더 보기에서 가져올 글이 9개 이하면 결과 개수만큼 추가로 가져오기
                     if (res.data.length < 9) {
                         this.postCount += res.data.length;
                     } else {
                         this.postCount += 9;
                     }
                     this.spinnerState = 0;
-                    let array = [];
-                    array.push(...this.getData.data, ...res.data)
+                    array.push(...this.getData.data, ...res.data);
                     this.getData.data = array;
-                }).catch(err => {
-                    console.log(err)
-                });
-            } else {
-                let array = [];
-                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: this.postCount}})
-                    .then(res => {
-                        for (let i = 0; i < this.getData.data.length; i++){
-                            if (res.data[0].post_id === this.getData.data[i].post_id) {
-                                console.log(res.data);
-                                array.push(...this.getData.data, ...res.data);
-                                this.getData.data = array;
-                                this.postCount += res.data.length;
-                                alert('더 이상 가져올 게시글이 없습니다2.');
-                                this.spinnerState = 0;
-                                return;                                
-                            }
-                        }
-                        console.log(res.data);
-                        if (res.data === 'failure') {
-                            alert('더 이상 가져올 게시글이 없습니다.');
-                            this.spinnerState = 0;
-                            return;
-                        }
-                        if (res.data.length < 9) {
-                            this.postCount += res.data.length;
-                        } else {
-                            this.postCount += 9;
-                        }
-                        this.spinnerState = 0;
-                        array.push(...this.getData.data, ...res.data);
-                        this.getData.data = array;
-                        res.data.forEach(async (res) => {
-                        this.sideMenuValues.watch.push(res.views);
-                        await axios.get('/api/likePostWho', {
-                            params: {post_id: res.post_id}
-                        }).then(likeRes => {
-                            console.log(likeRes.data);
-                            likeRes.data == 'failure'
-                                ? this.sideMenuValues.like.push(0)
-                                : this.sideMenuValues.like.push(likeRes.data.length);
-                            });
+                    res.data.forEach(async (res) => {
+                    this.sideMenuValues.watch.push(res.views);
+                    
+                    await axios.get('/api/countComments', {
+                        params: {post_id: res.post_id}})
+                        .then(res => {
+                            this.sideMenuValues.comment.push(res.data[0].comments_count);
+                            console.log(res);
+                        }).catch(err => {
+                            console.log(err);
                         })
-                        console.log(this.postCount);
-                        console.log('새로 부른 데이터 : ', res.data);
-                        console.log('기존 데이터 : ', this.getData.data);
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
+                            
+                    await axios.get('/api/likePostWho', {
+                        params: {post_id: res.post_id}
+                    }).then(likeRes => {
+                        console.log(likeRes.data);
+                        likeRes.data == 'failure'
+                            ? this.sideMenuValues.like.push(0)
+                            : this.sideMenuValues.like.push(likeRes.data.length);
+                        });
+                    })
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
-
 }
 </script>
 <style lang="scss" scoped>
@@ -391,7 +498,7 @@ export default {
                 }
                 .bottom{
                     position: relative;
-                    bottom: 130px;
+                    bottom: 150px;
                     transition: .3s;
                     width: 90%;
                     margin: auto;
