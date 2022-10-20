@@ -28,7 +28,7 @@
                     </ul>
                     <div>
                         <div class="bottom">
-                            <!-- <p>{{getData.data[i].post_id}}</p> -->
+                            <p>{{getData.data[i].post_id}}</p>
                             <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                             <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                             <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
@@ -174,114 +174,25 @@ export default {
         async getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
 
-            // let apiUrl = ''; let paramsKey = ''; let paramsValue = '';
-            // console.log(paramsKey);
-            // if (this.$route.name === 'MyPage') {
-            //     apiUrl = 'myPagePost';
-            //     paramsKey = 'nickname';
-            //     paramsValue = userInformation.nickname;
-            // } else {
-            //     apiUrl = 'showPostDesc';
-            //     paramsKey = 'border_id';
-            //     paramsValue = 1;
-            // }
-            // await axios.get(`/api/${apiUrl}`, {params: {paramsKey: '구영', limit: 0}})
-            //     .then(res => {
-            //         console.log(userInformation.nickname);
-            //         console.log(res);
-            //         this.spinnerState = 0;
-            //         this.getData = [];
-            //         this.getData = res;
-            //         this.postCount = this.getData.data.length;
-            //         // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
-            //         if (res.data === 'failure') {
-            //             this.getData = [];
-            //             this.data_state = 1;
-            //             this.postCount = 0;
-            //             return;
-            //         }
-            //         res.data.forEach(async (res) => {
-            //             this.sideMenuValues.watch.push(res.views);
-            //             // let commentRes = 'count(comments_id)';
-            //             // console.log(commentRes);
-            //             await axios.get('/api/countComments', {
-            //             params: {post_id: res.post_id}})
-            //                 .then(res => {
-            //                     console.log(res);
-            //                 // console.log(res.data[0].);
-            //                 this.sideMenuValues.comment.push(res.data[0]);
-            //                 // console.log(this.sideMenuValues.comment)
-            //             }).catch(err => {
-            //                 console.log(err);
-            //             })
-
-            //             await axios.get('/api/likePostWho', {
-            //                 params: {post_id: res.post_id}
-            //             }).then(likeRes => {
-            //                 console.log(likeRes);
-            //                 if (likeRes.data === 'failure') {
-            //                     likeRes.data = '';
-            //                 }
-            //                 this.sideMenuValues.like.push(likeRes.data.length)
-            //             });
-            //         })
-            //     }).catch(err => console.log(err));
-            //     let apiUrl = '';
-            // let paramsKey = '';
-            // let paramsValue = '';
-            // if (this.$route.name === 'MyPage') {
-            //     apiUrl = 'myPagePost';
-            //     paramsKey = 'nickname';
-            //     paramsValue = userInformation;
-            // } else {
-            //     apiUrl = 'showPostDesc';
-            //     paramsKey = 'border_id';
-            //     paramsValue = 1;
-            // }
-            if(this.$route.name === 'MyPage'){
-                console.log('내가 올린 게시물');
-                await axios.get('/api/myPagePost', {params: {nickname: userInformation.nickname, limit: 0}})
-                    .then(res => {
-                        console.log(res.data);
-                        this.spinnerState = 0;
-                        this.getData = [];
-                        this.getData = res;
-                        this.postCount = this.getData.data.length;
-                        // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
-                        if (res.data === 'failure') {
-                            this.getData = [];
-                            this.data_state = 1;
-                            this.postCount = 0;
-                            return;
-                        }
-                        res.data.forEach(async (res) => {
-                            this.sideMenuValues.watch.push(res.views);
-                            await axios.get('/api/countComments', {
-                            params: {post_id: res.post_id}})
-                                .then(res => {
-                                    console.log(res);
-                                // console.log(res.data[0].);
-                                this.sideMenuValues.comment.push(res.data[0].comments_count);
-                                // console.log(this.sideMenuValues.comment)
-                            }).catch(err => {
-                                console.log(err);
-                            })
-                            await axios.get('/api/likePostWho', {
-                                params: {post_id: res.post_id}
-                            }).then(likeRes => {
-                                console.log(likeRes);
-                                if (likeRes.data === 'failure') {
-                                    likeRes.data = '';
-                                }
-                                this.sideMenuValues.like.push(likeRes.data.length)
-                            });
-                        })
-                }).catch(err => console.log(err));
-            }else{
-                axios.get('/api/showPostDesc',{params: {board_id: 1, limit: 0}})
+            let apiUrl = ''; let paramsKey = ''; let paramsValue = '';
+            console.log(paramsKey);
+            console.log(this.$route.name);
+            if (this.$route.name === 'MyPage') {
+                apiUrl = 'myPagePost';
+                paramsKey = 'nickname';
+                paramsValue = userInformation.nickname;
+            } else if(this.$route.name === 'Community'){
+                apiUrl = 'showPostDesc';
+                paramsKey = 'border_id';
+                paramsValue = 1;
+            }
+            console.log(paramsValue, paramsKey);
+            await axios.get(`/api/${apiUrl}`, { params: { [paramsKey]: paramsValue, limit: this.postCount}})
                 .then(res => {
-                    console.log(res.data.length);
+                    console.log(userInformation.nickname);
+                    console.log(res);
                     this.spinnerState = 0;
+                    this.getData = [];
                     this.getData = res;
                     this.postCount = this.getData.data.length;
                     // 데이터가 하나도 없을 때 빈 데이터 넣어주기 (화면에 안뜨도록 설정)
@@ -291,31 +202,30 @@ export default {
                         this.postCount = 0;
                         return;
                     }
-                    // 더 보기 기능 수정해서 더 보기할 때도 값 추가해주기
                     res.data.forEach(async (res) => {
                         this.sideMenuValues.watch.push(res.views);
                         await axios.get('/api/countComments', {
-                        params: {post_id: res.post_id}})
-                            .then(res => {
-                                console.log(res);
-                            // console.log(res.data[0].);
+                            params: { post_id: res.post_id }
+                        })
+                        .then(res => {
+                            // console.log(res);
                             this.sideMenuValues.comment.push(res.data[0].comments_count);
                             // console.log(this.sideMenuValues.comment)
                         }).catch(err => {
                             console.log(err);
                         })
+
                         await axios.get('/api/likePostWho', {
                             params: {post_id: res.post_id}
                         }).then(likeRes => {
-                            console.log(likeRes.data);
-                            likeRes.data == 'failure'
-                                ? this.sideMenuValues.like.push(0)
-                                : this.sideMenuValues.like.push(likeRes.data.length);
+                            // console.log(likeRes);
+                            if (likeRes.data === 'failure') {
+                                likeRes.data = '';
+                            }
+                            this.sideMenuValues.like.push(likeRes.data.length)
                         });
                     })
-                })
-                .catch(err => console.log(err));
-            }
+                }).catch(err => console.log(err));
         },
         // 카테고리가 변경되면 나타나는 게시물들
         changePost(boardID){
@@ -328,6 +238,29 @@ export default {
                     this.postCount = 0;
                     this.getData = [];
                 }
+                res.data.forEach(async (res) => {
+                        this.sideMenuValues.watch.push(res.views);
+                        await axios.get('/api/countComments', {
+                            params: { post_id: res.post_id }
+                        })
+                        .then(res => {
+                            // console.log(res);
+                            this.sideMenuValues.comment.push(res.data[0].comments_count);
+                            // console.log(this.sideMenuValues.comment)
+                        }).catch(err => {
+                            console.log(err);
+                        })
+
+                        await axios.get('/api/likePostWho', {
+                            params: {post_id: res.post_id}
+                        }).then(likeRes => {
+                            // console.log(likeRes);
+                            if (likeRes.data === 'failure') {
+                                likeRes.data = '';
+                            }
+                            this.sideMenuValues.like.push(likeRes.data.length)
+                        });
+                    })
             }).catch(err => {console.log(err)});
         },
         // 데이터 더 보기 버튼 기능.
@@ -352,11 +285,11 @@ export default {
                 }
             }
             console.log(paramsKey);
-            axios.get(`/api/${apiUrl}`, {params: {paramsKey: paramsValue, limit: this.postCount}})
+            axios.get(`/api/${apiUrl}`, {params: {[paramsKey]: paramsValue, limit: this.postCount}})
                 .then(res => {
+                    console.log(res);
                     for (let i = 0; i < this.getData.data.length; i++){
                         if (res.data[0].post_id === this.getData.data[i].post_id) {
-                            console.log(res.data);
                             array.push(...this.getData.data, ...res.data);
                             this.getData.data = array;
                             this.postCount += res.data.length;

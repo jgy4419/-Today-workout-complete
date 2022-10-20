@@ -1,8 +1,10 @@
 <template>
   <div class="contain">
+    <h1 class="done_chart_text" v-if="chartCount === 0">{{'차트가 없습니다.'}}</h1>
     <p v-if="postDetailChartState === 1"></p>
     <div class="inner" v-for="a, i in this.chart.chartId.length" :key="i">
-      <p class="exerciseName">{{chart.data.exerciseName}}</p>
+      <p class="exerciseName">{{chart.data.exerciseName[i]}}</p>
+      <p class="date">{{chart.data.date[i]}}</p>
       <div class="chartStyle">
         <p>{{emgDatas[i]}}</p>
         <canvas @click="$emit('clickedChart', selectChart(i))" class="chart" :id="chart.chartId[i]" width="80vw" height="200"></canvas>
@@ -24,9 +26,10 @@ export default {
       chart: {
         chartId: [],
         data: {
+          date: [],
           nickname: '',
           // 운동 이름
-          exerciseName: '',
+          exerciseName: [],
           maximun_value_of_sets: 0,
           minimum_value_of_sets: 0,
           setsTime: '',
@@ -45,31 +48,40 @@ export default {
       dataSets: [],
       emgDatas: [],
       postChartData: [],
+      dataState: 0,
+      filterChartArr: [],
     };
   },
   props:{
     // props로 Write페이지에서 보여졌는지, MyPage에서 보여졌는지 구분하는 변수
     readOrWrite: Number,
-    getChartData: String
-  },  
-  async mounted(){
-    let userInformation = JSON.parse(localStorage.getItem('userInformation'));
+    getChartData: String,
+    dateValue: String,
+    dateState: Number
+  },
+  async mounted() {
+    // let userInformation = JSON.parse(localStorage.getItem('userInformation'));
     let dataLength;
-    await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
+    // await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
+    await axios.get('/api/sensorData', {params: {nickname: '얍'}})
     .then(res => {
       // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
       for(let i = 0; i < res.data.length; i++){
-        this.emgDatas.push(res.data[i].emg_data_path);
+        if (!res.data[i].emg_data_path.includes(this.dateValue)) {
+          continue;
+        }
+        console.log('??');
+        this.emgDatas.push(res.data[i].emg_data_path);        
       }
       dataLength = res.data.length;
       if(dataLength === 0){
         alert('데이터가 없습니다.');
       }
     })
-    .catch(err => console.log(err))
-    for (let i = 0; i < dataLength; i++){
+      .catch(err => console.log(err))
+    for (let i = 0; i < dataLength + 1; i++){
       // 차트가 하나도 없을 때 에러처리 (수정 필요)
-      if (this.emgData === undefined) {
+      if (this.emgDatas === undefined) {
         alert('차트가 없습니다.');
         return;
       }
@@ -80,35 +92,35 @@ export default {
     // 데이터 이름 들어감
     getDatas(datas, length) {
       this.chartCount = datas.length;
+      console.log(this.chartCount);
       this.chart.chartId.push(`chart${length}`);
-        // import(`/root/TWC-BACKEND-BACKUP/public/emgData/${datas[length]}`)
-        // .then(res => {
-        //   console.log(res);
-        //   let inChart = res;
-        //   console.log(inChart); // inChart 안에 전체 데이터(모듈)들이 들어가 있다.
-        //   // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
-        //   for(let i = 1; i < res.number_of_sets + 1; i++){
-        //       this.chart.data.setsCount.push(`${i}세트`);
-        //   }
-        //   // 세트 수
-        //   this.chart.data.setCount = res.number_of_sets;
-        //   // 운동 이름
-        //   this.chart.data.exerciseName = res.workout_name;
-        //   // 운동 전체 세트의 데이터가 들어감
-        //   for(let i = 0; i < this.chart.data.setCount; i++){
-        //     JSON.parse(inChart.sets[i].emg_data).forEach(element => {
-        //       this.chart.data.dataValues.push(element)
-        //     });
-        //   }
-        //   this.fillData(res, length);
-        // }).catch(err => {
-        //   console.log(err)
-        // })
+      import(`/root/TWC-BACKEND-BACKUP/public/emgData/${datas[length - 1]}`)
+      .then(res => {
+        let inChart = res;
+        // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
+        for(let i = 0; i < res.number_of_sets; i++){
+            this.chart.data.setsCount.push(`${i + 1}세트`);
+        }
+        // 세트 수
+        this.chart.data.setCount = res.number_of_sets;
+        // 운동 이름
+        this.chart.data.exerciseName.push(res.workout_name);
+        // 운동한 날짜
+        this.chart.data.date.push(res.starting_time.substr(0, 8));
+        // 운동 전체 세트의 데이터가 들어감
+        for(let i = 0; i < this.chart.data.setCount; i++){
+          JSON.parse(inChart.sets[i].emg_data).forEach(element => {
+            this.chart.data.dataValues.push(element)
+          }); 
+        }
+        this.fillData(res, length);
+      }).catch(err => {
+        console.log(err)
+      })
     },  
-    fillData(data, length){
+    fillData(data, length) {
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.
       let setsData = [];
-
       let result = [];
       for(let i = 0; i < data.number_of_sets; i++){
         // setData에는 전체 세트의 emg 데이터 값 넣어줌
@@ -121,36 +133,37 @@ export default {
       }
       let dataLists = [];
       let datasets = this.chart.data.dataValues;
-      for(let j = 0; j < this.chart.data.setCount; j++){
+      for (let j = 0; j < this.chart.data.setCount; j++){
+        // console.log(result[j]);
         datasets = {
           label: this.chart.data.setsCount[j],
           // 반복할 때 마다 0번째 부터 불러온 한 파일당 불러온 데이터 수 만큼 자름.
-          data: result[j].slice(0, result[j].length),
+          data: result[j],
           borderColor: this.chart.data.chartColor,
           fill: false 
         }
         dataLists.push(datasets);
       }
-      const ctx = document.getElementById(`chart${length}`).getContext('2d');
+      console.log(this.dataState);
+      const ctx = document.getElementById(`chart${length}`).getContext('2d'); 
       this.myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000],
-            datasets: dataLists
+        type: 'line',
+        data: {
+          labels: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000],
+          datasets: dataLists
+        },
+        options: {
+          title: {
+            display: true,
+            responsive: false,
+            text: 'World population per region (in millions)'
           },
-          options: {
-            title: {
-              display: true,
-              responsive: false,
-              text: 'World population per region (in millions)'
-            },
-            animation: {
-              animateScale: true,
-              animateRotate: true,
-            }
-          },
-        }
-      );
+          animation: {
+            animateScale: true,
+            animateRotate: true,
+          }
+        },
+      });
     },
     // i는 클릭한 차트 위치를 가져옴.
     selectChart(i){
@@ -163,12 +176,23 @@ export default {
 <style lang="scss" scoped>
 .contain{
   color: rgba(219, 252, 171, 0.2);
+  .done_chart_text{
+      margin-top: 20%;
+      text-align: center;
+      font-weight: 700;
+      font-size: 30px;
+      color: #93B5C6;
+  }
   .inner{
     height: 400px;
-    .exerciseName{
+    .exerciseName, .date{
+      margin-top: 10%;
       font-weight: 700;
       font-size: 20px;
       color: #333;
+    }
+    .date{
+      margin-top: 0;
     }
     .chartStyle{
       position: relative;
@@ -186,12 +210,21 @@ export default {
     display: none;
   }
   @media screen and (max-width: 768px){
-    .chartStyle{
-      // width: 80vw;
-      // height: 400px;
-      #chart{
-        width: 80vw;
-        height: 400px;
+    .done_chart_text{
+      font-size: 20px;
+      margin-top: 50%;
+    }
+    .inner{
+      .exerciseName{
+        margin-top: 35%;
+      }
+      .chartStyle{
+        // width: 80vw;
+        // height: 400px;
+        #chart{
+          width: 80vw;
+          height: 400px;
+        }
       }
     }
   }

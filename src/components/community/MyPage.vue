@@ -68,7 +68,7 @@ export default {
             .profileImg{
                 width: 120px;
                 height: 120px;
-                // border: 3px solid rgb(224, 224, 224);
+                border: 2px solid rgb(224, 224, 224);
                 border: 0;
                 border-radius: 50%;
                 margin-right: 10%;
