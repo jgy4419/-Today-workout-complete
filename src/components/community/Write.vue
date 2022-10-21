@@ -31,9 +31,10 @@
                 </button>
             </div>
         </div>
-        <div v-if="sensorWatch === true" @click="watchChart()" class="watchChart">
+        <div v-if="sensorWatch === true" class="watchChart">
             <div class="inner">
-                <Chart @clickedChart="clickedChart" :readOrWrite = 1 />
+                <!-- <Chart @clickedChart="clickedChart" :readOrWrite = 1 /> -->
+                <Sensors @clickChart="clickedChart"/>
             </div>
         </div>
         <span v-if="closeState === true" @click="sensorWatch = false, closeState = false" class="close">X</span>
@@ -44,7 +45,8 @@
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import Spinner from '../Spinner.vue';
-import Chart from '../Chart.vue';
+// import Chart from '../Chart.vue';
+import Sensors from './Sensors.vue';
 import DragFile from './DragFile.vue';
 export default {
     watch: {
@@ -53,10 +55,11 @@ export default {
         }
     },
     components: {
-        Spinner,
-        Chart,
-        DragFile,
-    },
+    Spinner,
+    // Chart,
+    DragFile,
+    Sensors
+},
     data(){
         return {
             spinnerState: 0,
@@ -83,6 +86,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.$route.name);
         let writeState = this.$route.params.edit;
         // 만약 url에서 edit 설정 부분이 1이면 
         if(writeState == 1){
@@ -136,10 +140,11 @@ export default {
     },
     methods: {
         // 클릭한 chart 데이터를 emit으로 가져오기. (this.clickedChartData에 담겨져 있음)
-        clickedChart(event){
-            alert('차트가 선택되었습니다!');
+        clickedChart(event) {
+            console.log('클릭된 차트 데이터', event);
             this.clickedChartData = event;
             this.sensorWatch = false;
+            this.closeState = false;
         },
         postUpload() {
             this.spinnerState = 1;
@@ -155,8 +160,8 @@ export default {
             let board = 1; // 기본 카테고리 번호 (전체 게시물)
             let categoryChoice = document.querySelector('.categoryChoice');
 
-            if(categoryChoice.value === '자유게시판') board = 2;
-            else if(categoryChoice.value === '운동게시판') board = 3;
+            if(categoryChoice.value === '자유게시판') board = 1;
+            else if(categoryChoice.value === '운동게시판') board = 2;
             else board = 1;
 
             var enteredText, decoded, sanitized = null;
@@ -194,10 +199,12 @@ export default {
             // frm.append('photographic_path', photographic_path.files[0]);
             frm.append('photographic_path', dragBackImg);
             frm.append('availabilty_comments', 1);
+            // frm.append('board_id', this.postDetail.postCount);
             frm.append('board_id', board);
             if(writeState == 1){ // writeState가 1일 때 수정
                 // frm.append('nickname', route.nickname);
                 frm.append('post_id', parseInt(route.post_id));
+                frm.append('nickname', nickName);
                 frm.append('comment', comment);
                 // frm.append('board_id', this.$route.params.board);
                 axios.patch('/api/updatePost', frm, {
@@ -212,9 +219,9 @@ export default {
                 })
             }else if(writeState == 0){
                 console.log('0번째 글');
+                frm.append('chartname', this.clickedChartData);
                 frm.append('nickname', nickName);
                 frm.append('content', comment);
-                frm.append('chartname', this.clickedChartData);
                 axios.post('/api/createPost', frm, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -253,6 +260,7 @@ export default {
             }else{
                 this.postDetail.postCount = 1;
             }
+            console.log(this.postDetail.postCount);
         },
         thickness(){
             let content = document.getElementById('content');
@@ -426,19 +434,20 @@ input, textarea{
         }
     }
     .watchChart{
-        // display: none;
         position: absolute;
         z-index: 100;
         top: 0;
         width: 100vw;
         height: 100vh;
         background: rgba(0, 0, 0, 0.8);
-        overflow-y: scroll;
         .inner{
+            height: 80%;
             background-color: #fff;
             border-radius: 20px;
             padding: 30px;
+            padding-top: 5%;
             box-sizing: content-box;
+            overflow-y: scroll;
         }
     }
     .close{

@@ -21,14 +21,13 @@
                         </li>
                     </ul>
                     <ul class="sideValue">
-                        <!-- <li class="value" v-for="value, i in sideMenuValues.watch.length" :key="i">{{sideMenuValues.watch[i]}}</li> -->
                         <li class="value">{{sideMenuValues.watch[i]}}</li>
                         <li >{{sideMenuValues.like[i]}}</li>
                         <li class="value">{{sideMenuValues.comment[i]}}</li>
                     </ul>
                     <div>
                         <div class="bottom">
-                            <p>{{getData.data[i].post_id}}</p>
+                            <!-- <p>{{getData.data[i].post_id}}</p> -->
                             <p style="display: none">글 ID: {{getData.data[i].post_id}}</p>
                             <h3 class="postTitle"><strong>글 제목 : {{getData.data[i].title}}</strong></h3>
                             <p>닉네임 / 아이디 : {{getData.data[i].nickname}}</p>
@@ -102,9 +101,9 @@ export default {
             if(after === '전체'){
                 this.getPost();
             }else if(after === '자유게시판'){
-                this.changePost(2);
+                this.changePost(1);
             }else if(after === '운동게시판'){
-                this.changePost(3);
+                this.changePost(2);
             }
         },
         // 검색창이 변경될 때마다 
@@ -155,7 +154,7 @@ export default {
                         .then(res => {
                             console.log(res);
                         // console.log(res.data[0].);
-                        this.sideMenuValues.comment.push(res.data[0].comments_count);
+                         this.sideMenuValues.comment.push(res.data[0].comments_count);
                         // console.log(this.sideMenuValues.comment)
                     }).catch(err => {
                         console.log(err);
@@ -173,23 +172,23 @@ export default {
         },
         async getPost(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
-
-            let apiUrl = ''; let paramsKey = ''; let paramsValue = '';
-            console.log(paramsKey);
+            let params = {}
+            let apiUrl = '';
             console.log(this.$route.name);
             if (this.$route.name === 'MyPage') {
                 apiUrl = 'myPagePost';
-                paramsKey = 'nickname';
-                paramsValue = userInformation.nickname;
+                // paramsKey = 'nickname';
+                params.nickname = userInformation.nickname;
+                params.limit = this.postCount;
             } else if(this.$route.name === 'Community'){
                 apiUrl = 'showPostDesc';
-                paramsKey = 'border_id';
-                paramsValue = 1;
+                // paramsKey = 'border_id';
+                params.border_id = 1;
+                params.limit = this.postCount;
             }
-            console.log(paramsValue, paramsKey);
-            await axios.get(`/api/${apiUrl}`, { params: { [paramsKey]: paramsValue, limit: this.postCount}})
+            console.log(params);
+            await axios.get(`/api/${apiUrl}`, { params })
                 .then(res => {
-                    console.log(userInformation.nickname);
                     console.log(res);
                     this.spinnerState = 0;
                     this.getData = [];
@@ -269,23 +268,21 @@ export default {
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             let array = [];
 
-            let apiUrl = ''; let paramsKey = ''; let paramsValue = '';
-
+            let apiUrl = '';
+            let params = {};
+            params.limit = this.postCount;
             if (this.$route.name === 'MyPage') {
                 apiUrl = 'myPagePost';
-                paramsKey = 'nickname';
-                paramsValue = userInformation;
+                params.nickname = userInformation.nickname;
             } else {
-                paramsKey = 'border_id';
-                paramsValue = 1;
+                params.border_id = 1;
                 if (this.sortState === 1) {
                     apiUrl = 'showPostAsc';
                 } else {
                     apiUrl = 'showPostDesc';
                 }
             }
-            console.log(paramsKey);
-            axios.get(`/api/${apiUrl}`, {params: {[paramsKey]: paramsValue, limit: this.postCount}})
+            axios.get(`/api/${apiUrl}`, {params})
                 .then(res => {
                     console.log(res);
                     for (let i = 0; i < this.getData.data.length; i++){

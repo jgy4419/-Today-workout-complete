@@ -2,7 +2,7 @@
   <div class="contain">
     <h1 class="done_chart_text" v-if="chartCount === 0">{{'차트가 없습니다.'}}</h1>
     <p v-if="postDetailChartState === 1"></p>
-    <div class="inner" v-for="a, i in this.chart.chartId.length" :key="i">
+    <div class="inner" v-for="a, i in this.chart.chartId.length + 1" :key="i">
       <p class="exerciseName">{{chart.data.exerciseName[i]}}</p>
       <p class="date">{{chart.data.date[i]}}</p>
       <div class="chartStyle">
@@ -107,6 +107,7 @@ export default {
         this.chart.data.exerciseName.push(res.workout_name);
         // 운동한 날짜
         this.chart.data.date.push(res.starting_time.substr(0, 8));
+        // console.log(this.chart.data.date);
         // 운동 전체 세트의 데이터가 들어감
         for(let i = 0; i < this.chart.data.setCount; i++){
           JSON.parse(inChart.sets[i].emg_data).forEach(element => {
@@ -144,7 +145,7 @@ export default {
         }
         dataLists.push(datasets);
       }
-      console.log(this.dataState);
+      // console.log(this.dataState);
       const ctx = document.getElementById(`chart${length}`).getContext('2d'); 
       this.myChart = new Chart(ctx, {
         type: 'line',

@@ -65,31 +65,32 @@ export default {
       })
     },
     // 데이터 이름 들어감
-    // getDatas(datas, length){
-    getDatas(){
-      // this.chartCount = datas.length;
-      // this.chart.chartId.push(`chart${length}`);
-      // if(this.postChartData !== null){
-      //   import(`../../../../TWC-BACKEND-BACKUP/public/emgData/${datas}`)
-      //   .then(res => {
-      //     this.postDetailChartState = 1;
-      //     let inChart = res;
-      //      for(let i = 1; i < res.number_of_sets + 1; i++){
-      //         this.chart.data.setsCount.push(`${i}세트`);
-      //     }
-      //     // 세트 수
-      //     this.chart.data.setCount = res.number_of_sets;
-      //     // 운동 이름
-      //     this.chart.data.exerciseName = res.workout_name;
-      //     // 운동 전체 세트의 데이터가 들어감
-      //     for(let i = 0; i < this.chart.data.setCount; i++){
-      //       JSON.parse(inChart.sets[i].emg_data).forEach(element => {
-      //         this.chart.data.dataValues.push(element)
-      //       });
-      //     }
-      //     this.fillData(res, 1);
-      //   })
-      // }
+    getDatas(datas, length){
+    // getDatas(){
+      console.log(datas);
+      this.chartCount = datas.length;
+      this.chart.chartId.push(`chart${length}`);
+      if(this.postChartData !== null){
+        import(`../../../../TWC-BACKEND-BACKUP/public/emgData/${datas}`)
+        .then(res => {
+          this.postDetailChartState = 1;
+          let inChart = res;
+           for(let i = 1; i < res.number_of_sets + 1; i++){
+              this.chart.data.setsCount.push(`${i}세트`);
+          }
+          // 세트 수
+          this.chart.data.setCount = res.number_of_sets;
+          // 운동 이름
+          this.chart.data.exerciseName = res.workout_name;
+          // 운동 전체 세트의 데이터가 들어감
+          for(let i = 0; i < this.chart.data.setCount; i++){
+            JSON.parse(inChart.sets[i].emg_data).forEach(element => {
+              this.chart.data.dataValues.push(element)
+            });
+          }
+          this.fillData(res, 1);
+        })
+      }
     },  
     fillData(data, length){
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.

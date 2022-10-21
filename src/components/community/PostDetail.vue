@@ -31,7 +31,7 @@
             <hr>
             <div class="commentList">
                 <div class="comments" v-for="data, i in getCommentData.length" :key="i">
-                    <div v-if="commentState === 1" class="commentSetBox">
+                    <div v-if="commentsEditState[i] === 1" class="commentSetBox">
                         <p @click="commentEdit(i)">수정</p>
                         <p @click="commentDelete(i)">삭제</p>
                     </div>
@@ -72,6 +72,7 @@ export default {
             likeState: 0,
             getPostDetailData: [],
             getCommentData: [],
+            commentsEditState: [],
             commentInput: '',
             // 사용자가 차트 데이터를 올렸는지 안 올렸는지 상태. (일단 임시로 1 적용.)
             chartState: 0,
@@ -89,7 +90,7 @@ export default {
             alert('로그인 후 상세보기가 가능합니다!');
             location.replace('/login');
         }
-        if(this.$route.params.board == 3){
+        if(this.$route.params.board == 2){
             this.chartState = 1;
         }
         await axios.post('/api/viewPlus', {
@@ -126,9 +127,13 @@ export default {
         }
         await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
         .then(res => {
-            console.log(res);
             this.getCommentData = res.data;
-            console.log('가져온 데이터', this.getCommentData);
+            // 내가 올린 게시물만 수정 가능하도록 해주기.
+            for (let i = 0; i < res.data.length; i++){
+                res.data[i].nickname === userInformation.nickname
+                    ? this.commentsEditState.push(1)
+                    : this.commentsEditState.push(0);
+            }
         }).catch(err => {console.log(err)});
     },
     methods: {

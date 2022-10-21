@@ -74,7 +74,7 @@ export default {
         getNoticeData(){
             // 전체 게시글 개수만큼 불러오고, notice에 보여주는건 3개로 제한해주기.
             if(this.noticeState === '전체' || this.noticeState === 0){
-                axios.get('/api/showPostDesc', {params: {board_id: 1, limit: 0}})
+                axios.get('/api/showPostDesc', {params: {board_id: 3, limit: 0}})
                 .then(res => {
                     console.log(res);
                     this.spinnerState = 0;
@@ -85,7 +85,7 @@ export default {
                     }
                 }).catch(err => console.log(err));
             }else if(this.noticeState === '자유'){
-                axios.get('/api/showAnotherBoard', {params: {board_id: 2}})
+                axios.get('/api/showAnotherBoard', {params: {board_id: 1}})
                 .then(res => {
                     this.noticeData = [];
                     for(let i = 0; i < 3; i++){
@@ -94,7 +94,7 @@ export default {
                     }
                 }).catch(err => {console.log(err)});
             }else{
-                axios.get('/api/showAnotherBoard', {params: {board_id: 3}})
+                axios.get('/api/showAnotherBoard', {params: {board_id: 2}})
                 .then(res => {
                     this.noticeData = [];
                     for(let i = 0; i < 3; i++){

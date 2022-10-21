@@ -2,7 +2,7 @@ export const Community = {
     namespaced: true,
     state: () => ({
         categoryName: '전체',
-        categoryState: 0,
+        categoryState: 3,
         setPostState: 0, // 글 수정 버튼 누르면 1로 변경.
         changeCategory: 1,
         categorys: ['전체', '자유게시판', '운동게시판'],

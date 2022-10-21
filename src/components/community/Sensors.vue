@@ -5,6 +5,7 @@
         <input v-model="dateValue" @change="changeDateTime()" type="date" class="calendar"/>
         <div class="charts">
             <Chart
+            @clickedChart="clickedChart" :readOrWrite = 1
             :key="dateState"
             :dateValue="propsDataValue"/>
         </div>
@@ -15,10 +16,12 @@ import Chart from '../Chart.vue';
 // import axios from 'axios';
 export default {
     data(){
-        return{
+        return {
             emgDatas: [],
             propsDataValue: '',
             dateState: 0,
+            sensorWatch: false,
+            clickedChartData: '',
         }
     },
     methods: {
@@ -26,6 +29,16 @@ export default {
             // 날짜가 계속 변함으로 calemdar가 변할 때 마다 1씩 증가 시켜주기
             this.dateState++;
             this.propsDataValue = this.dateValue.replace(/-/gi, '');
+        },
+        clickedChart(event) {
+            if (this.$route.name === 'Write' || this.$route.name === 'edit') {
+                alert('차트가 선택되었습니다!');
+                this.$emit('clickChart', event);
+                // console.log(this.clickedChartData);
+                // this.sensorWatch = false;   
+            } else {
+                return;
+            }
         },
     },  
     components: {
