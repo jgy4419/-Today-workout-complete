@@ -111,7 +111,7 @@ export default {
             // search 값이 변경되면, 데이터 들을 불러와서 post img, title, id 등에 각각 넣어주기.
             console.log(result);
             axios.get('/api/searchtitle', {
-                params: {title: result}}, 
+                paramds: {title: result}}, 
                 {withCredentials: true})
             .then(res => {
                 if(result === ''){
@@ -183,8 +183,8 @@ export default {
             } else if(this.$route.name === 'Community'){
                 apiUrl = 'showPostDesc';
                 // paramsKey = 'border_id';
-                params.border_id = 1;
-                params.limit = this.postCount;
+                params.border_id = 3;
+                params.limit = 0;
             }
             console.log(params);
             await axios.get(`/api/${apiUrl}`, { params })

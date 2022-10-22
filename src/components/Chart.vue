@@ -1,10 +1,11 @@
 <template>
   <div class="contain">
+    <Spinner v-if="spinnerState === 1" class="spinner"/>
     <h1 class="done_chart_text" v-if="chartCount === 0">{{'차트가 없습니다.'}}</h1>
     <p v-if="postDetailChartState === 1"></p>
-    <div class="inner" v-for="a, i in this.chart.chartId.length + 1" :key="i">
-      <p class="exerciseName">{{chart.data.exerciseName[i]}}</p>
-      <p class="date">{{chart.data.date[i]}}</p>
+    <div class="inner" v-for="a, i in this.chart.chartId.length" :key="i">
+      <p class="exerciseName">{{chart.data.exerciseName[i - 1]}}</p>
+      <p class="date">{{chart.data.date[i - 1]}}</p>
       <div class="chartStyle">
         <p>{{emgDatas[i]}}</p>
         <canvas @click="$emit('clickedChart', selectChart(i))" class="chart" :id="chart.chartId[i]" width="80vw" height="200"></canvas>
@@ -15,11 +16,16 @@
 
 <script>
 import { Chart, registerables } from 'chart.js';
+import Spinner from './Spinner.vue';
 import axios from 'axios';
 Chart.register(...registerables);
 export default {
+  components: { 
+    Spinner
+  },
   data(){
-    return{
+    return {
+      spinnerState: 1,
       myChart: null,
       // 차트개수
       chartCount: 0,
@@ -64,7 +70,8 @@ export default {
     let dataLength;
     // await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
     await axios.get('/api/sensorData', {params: {nickname: '얍'}})
-    .then(res => {
+      .then(res => {
+        this.spinnerState = 0;
       // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
       for(let i = 0; i < res.data.length; i++){
         if (!res.data[i].emg_data_path.includes(this.dateValue)) {
@@ -107,7 +114,7 @@ export default {
         this.chart.data.exerciseName.push(res.workout_name);
         // 운동한 날짜
         this.chart.data.date.push(res.starting_time.substr(0, 8));
-        // console.log(this.chart.data.date);
+        console.log(this.chart.data.date.length);
         // 운동 전체 세트의 데이터가 들어감
         for(let i = 0; i < this.chart.data.setCount; i++){
           JSON.parse(inChart.sets[i].emg_data).forEach(element => {
@@ -177,6 +184,12 @@ export default {
 <style lang="scss" scoped>
 .contain{
   color: rgba(219, 252, 171, 0.2);
+  .spinner{
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
   .done_chart_text{
       margin-top: 20%;
       text-align: center;

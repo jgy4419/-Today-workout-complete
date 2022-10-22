@@ -87,7 +87,7 @@ export default {
             // myPage/여기에 임시로 jgy4419 넣음.
             headerUrl: '/write/0',
             searchValue: '', // searchInput에 입력하고 enter 누르면 값 변경
-            categoryCount: 4,
+            categoryCount: 3,
             searchResult: '', // input 창 누르는 중일 때
             res: '', // input 창 입력 끝났을 때
             // 검색 결과에 반환된 포스트들 넣어주기.

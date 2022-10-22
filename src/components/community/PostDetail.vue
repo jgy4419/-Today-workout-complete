@@ -28,7 +28,7 @@
             </div>
             <p id="preview-click"></p>
                 <GetChart :getChartData="getPostDetailData.chartname" v-if="getChartState === 1"/>
-            <hr>
+            <h2>댓글</h2>
             <div class="commentList">
                 <div class="comments" v-for="data, i in getCommentData.length" :key="i">
                     <div v-if="commentsEditState[i] === 1" class="commentSetBox">
@@ -42,6 +42,7 @@
                         <button @click="setCommentComplete(i)" class="setBtn setcomplete">수정완료</button>
                         <button @click="commentBack(), commentState = 1" class="setBtn notSet">돌아가기</button>
                     </div>
+                    <p class="comment-date">{{dayJS(comment_date[i]).format("YYYY-MM-DD HH:mm:ss")}}</p>
                     <div class="line"/>
                 </div>
             </div>
@@ -68,7 +69,8 @@ export default {
         Like
     },
     data(){
-        return{
+        return {
+            comment_date: [],
             likeState: 0,
             getPostDetailData: [],
             getCommentData: [],
@@ -108,7 +110,7 @@ export default {
         }
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
             .then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             this.getChartState = 1;
             for(let i = 0; i < res.data.length; i++){
                 if(this.$route.params.id === res.data[i].nickname 
@@ -126,14 +128,16 @@ export default {
             return $("<textarea/>").html(text).text();
         }
         await axios.get('/api/showComments', {params: {post_id: this.$route.params.post}})
-        .then(res => {
-            this.getCommentData = res.data;
-            // 내가 올린 게시물만 수정 가능하도록 해주기.
-            for (let i = 0; i < res.data.length; i++){
-                res.data[i].nickname === userInformation.nickname
-                    ? this.commentsEditState.push(1)
-                    : this.commentsEditState.push(0);
-            }
+            .then(res => {
+                console.log(res);
+                this.getCommentData = res.data;
+                // 내가 올린 게시물만 수정 가능하도록 해주기.
+                for (let i = 0; i < res.data.length; i++){
+                    res.data[i].nickname === userInformation.nickname
+                        ? this.commentsEditState.push(1)
+                        : this.commentsEditState.push(0);
+                    this.comment_date.push(res.data[i].creation_datetime);
+                }
         }).catch(err => {console.log(err)});
     },
     methods: {
@@ -337,7 +341,7 @@ export default {
             z-index: 100;
         }
         .commentList{
-            margin-top: 50px;
+            margin-top: 20px;
             padding: 20px;
             border-radius: 10px;
             width: 70vw;
@@ -371,6 +375,10 @@ export default {
                 }
                 .inputSetCommentBox.event{
                     display: block;
+                }
+                .comment-date{
+                    font-weight: 600;
+                    color: rgb(189, 189, 189);
                 }
                 .commentSetBox{
                     position: absolute;
