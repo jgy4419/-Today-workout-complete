@@ -53,7 +53,7 @@
                             categoryValue: $store.state.Community.categorys[i],
                             count: i
                         })"
-                            v-for="a, i in categoryCount - 1" :key="i">
+                            v-for="a, i in categoryCount" :key="i">
                             {{$store.state.Community.categorys[i]}}
                         </li>
                     </ul>

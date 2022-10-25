@@ -8,7 +8,10 @@
       <p class="date">{{chart.data.date[i - 1]}}</p>
       <div class="chartStyle">
         <p>{{emgDatas[i]}}</p>
-        <canvas @click="$emit('clickedChart', selectChart(i))" class="chart" :id="chart.chartId[i]" width="80vw" height="200"></canvas>
+        <!-- <canvas @click="$emit('clickedChart', selectChart(i))" class="chart" :id="chart.chartId[i]" width="80vw" height="200"/> -->
+        <canvas @click="$store.commit('Chart/selectedChart', {
+          chartName: selectChart(i)
+        })" class="chart" :id="chart.chartId[i]" width="80vw" height="200"/>
       </div>
     </div>
   </div>
@@ -65,35 +68,41 @@ export default {
     dateValue: String,
     dateState: Number
   },
+  unmounted() {
+    this.$store.commit('Chart/wishlist_func', {
+        wishlist_state: 1
+    });
+  },
   async mounted() {
-    // let userInformation = JSON.parse(localStorage.getItem('userInformation'));
     let dataLength;
     // await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
-    await axios.get('/api/sensorData', {params: {nickname: '얍'}})
-      .then(res => {
-        this.spinnerState = 0;
-      // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
-      for(let i = 0; i < res.data.length; i++){
-        if (!res.data[i].emg_data_path.includes(this.dateValue)) {
-          continue;
+    // if (this.$store.state.Chart.chart_wishlist_state === 1) {
+      await axios.get('/api/sensorData', {params: {nickname: '얍'}})
+        .then(res => {
+          this.spinnerState = 0;
+        // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
+        for(let i = 0; i < res.data.length; i++){
+          if (!res.data[i].emg_data_path.includes(this.dateValue)) {
+            continue;
+          }
+          console.log('??');
+          this.emgDatas.push(res.data[i].emg_data_path);        
         }
-        console.log('??');
-        this.emgDatas.push(res.data[i].emg_data_path);        
-      }
-      dataLength = res.data.length;
-      if(dataLength === 0){
-        alert('데이터가 없습니다.');
-      }
-    })
-      .catch(err => console.log(err))
-    for (let i = 0; i < dataLength + 1; i++){
-      // 차트가 하나도 없을 때 에러처리 (수정 필요)
-      if (this.emgDatas === undefined) {
-        alert('차트가 없습니다.');
-        return;
-      }
-      this.getDatas(this.emgDatas, i);
-    }
+        dataLength = res.data.length;
+        if(dataLength === 0){
+          alert('데이터가 없습니다.');
+        }
+      })
+        .catch(err => console.log(err))
+      for (let i = 0; i < dataLength + 1; i++){
+        // 차트가 하나도 없을 때 에러처리 (수정 필요)
+        if (this.emgDatas === undefined) {
+          alert('차트가 없습니다.');
+          return;
+        }
+        this.getDatas(this.emgDatas, i);
+      } 
+    // }
   },
   methods: {
     // 데이터 이름 들어감

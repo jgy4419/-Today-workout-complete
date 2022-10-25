@@ -16,7 +16,8 @@ export default {
             }
         }
     },
-    async mounted(){
+    async mounted() {
+        console.log(this.$route.params.board);
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
         await axios.get('/api/likePostWho', {
             params: {post_id: this.$route.params.post}
@@ -60,7 +61,10 @@ export default {
         likeClick(){
             let userInformation = JSON.parse(localStorage.getItem("userInformation"));
             // 좋아요한 사람들의 배열에 로그인한 닉네임이 포함되어있지 않은 경우 플러스
-            if(!this.like.users.includes(userInformation.nickname)){
+            if (!this.like.users.includes(userInformation.nickname)) {
+                // if (this.$route.params.board === 2) {
+                    // 운동 게시판의 게시물이면 다른 api 요청받기
+                // }
                 axios.post('/api/likesPlus', {
                     post_id: this.$route.params.post,
                     nickname: userInformation.nickname
@@ -68,7 +72,10 @@ export default {
                     console.log(res);
                 })
             // 반대일 때 마이너스
-            }else{
+            } else {
+                // if (this.$route.params.board === 2) {
+                    // 운동 게시판의 게시물이면 다른 api 요청받기
+                // }
                 axios.delete('/api/likesMinus', {
                     params: {
                         post_id: this.$route.params.post,

@@ -3,9 +3,10 @@
         <p class="title">센서 데이터</p>
         <br/>
         <input v-model="dateValue" @change="changeDateTime()" type="date" class="calendar"/>
+        <!-- <input v-if="$store.state.Chart.chart_wishlist_state === 1" v-model="dateValue" @change="changeDateTime()" type="date" class="calendar"/> -->
         <div class="charts">
             <Chart
-            @clickedChart="clickedChart" :readOrWrite = 1
+            @clickedChart="clickedChart" :readOrWrite = 1        
             :key="dateState"
             :dateValue="propsDataValue"/>
         </div>

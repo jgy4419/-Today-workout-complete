@@ -17,8 +17,11 @@
             style="display:none" src='https://mblogthumb-phinf.pstatic.net/MjAxODAzMDNfMTc5/MDAxNTIwMDQxNzQwODYx.qQDg_PbRHclce0n3s-2DRePFQggeU6_0bEnxV8OY1yQg.4EZpKfKEOyW_PXOVvy7wloTrIUzb71HP8N2y-YFsBJcg.PNG.osy2201/1_%2835%ED%8D%BC%EC%84%BC%ED%8A%B8_%ED%9A%8C%EC%83%89%29_%ED%9A%8C%EC%83%89_%EB%8B%A8%EC%83%89_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_180303.png?type=w800' alt="프로필">
             <!-- <label class="photographic_path" for="photographic_path">대표 이미지를 선택해주세요.</label><input class="hidden" id="photographic_path" type="file"/>
             <button class="photographic_path" @click="deleteImg()">배경사진 초기화</button> -->
-            <label class="sensor_btn" v-if="postDetail.postCount === 2" for="sensor_btn">센서 데이터 추가</label>
-            <button @click="watchChart()" class="hidden" id="sensor_btn"/>
+            <div v-if="postDetail.postCount === 2">
+                <label class="sensor_btn" for="sensor_btn">센서 데이터 추가</label>
+                <button @click="watchChart()" class="hidden" id="sensor_btn"/>
+                <p class="selected-chart">선택된 차트 : {{$store.state.Chart.selectedChartName}}</p>
+            </div>
             <hr class="line">
             <div class="editor-page">
                 <div :v-model="postDetail.writing" id="summernote">오늘 운동한 내용을 말해주세요~!</div>
@@ -49,11 +52,6 @@ import Spinner from '../Spinner.vue';
 import Sensors from './Sensors.vue';
 import DragFile from './DragFile.vue';
 export default {
-    watch: {
-        fileData: function(){
-            this.getImgData();
-        }
-    },
     components: {
     Spinner,
     // Chart,
@@ -63,6 +61,7 @@ export default {
     data(){
         return {
             spinnerState: 0,
+            selectedChart: '',
             // testMultiEvent: [this.test1(), this.test2()],
             btn: {
                 class: ['btn back', 'btn submit'],
@@ -219,7 +218,8 @@ export default {
                 })
             }else if(writeState == 0){
                 console.log('0번째 글');
-                frm.append('chartname', this.clickedChartData);
+                frm.append('chartname', this.$store.state.Chart.selectedChartName);
+                // frm.append('chartname', this.clickedChartData);
                 frm.append('nickname', nickName);
                 frm.append('content', comment);
                 axios.post('/api/createPost', frm, {
@@ -291,6 +291,24 @@ export default {
             this.sensorWatch = false;
             this.closeState = false;
         }
+    },
+    // 페이지 나가면 선택된 게시물 없애주기
+    unmounted() {
+        this.$store.commit('Chart/selectedChart',({chartName: ''}))
+    },
+    computed: {
+        selectedChartName(){
+            return this.$store.state.Chart.selectedChartName;
+        }
+    },
+    watch: {
+        selectedChartName: function () {
+            this.sensorWatch = false;
+            this.closeState = false;
+        },
+        fileData: function(){
+            this.getImgData();
+        }
     }
 }
 </script>
@@ -345,6 +363,12 @@ input, textarea{
             height: 40px;
             width: 200px;
             cursor: pointer;
+        }
+        .selected-chart{
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgb(116, 116, 116);
         }
         .category{
             position: relative;

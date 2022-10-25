@@ -9,12 +9,13 @@
                 </div>
             </div>
             <div class="myPageModal">
-                <button v-for="modals, i in modal.length" :key="i" @click="modalState = i" class="selectBtn">{{modal[i]}}</button>
+                <button v-for="modals, i in modal.length" :key="i" @click="modalState_func(i)" class="selectBtn">{{modal[i]}}</button>
             </div>
             <br>
             <div class="posts">
                 <Post v-if="modalState === 0"/>
-                <Sensors v-if="modalState === 1"/>
+                <Sensors v-if="modalState === 1"
+                :modalState="modalState"/>
             </div>
         </div>
     </div>
@@ -33,6 +34,14 @@ export default {
             information: {},
             modalState: 0,
             modal: ['게시글', '센서']
+        }
+    },
+    methods: {
+        modalState_func(index) {
+            this.modalState = index;
+            this.$store.commit('Chart/wishlist_func', {
+                wishlist_state: index
+            });
         }
     },
     mounted(){
