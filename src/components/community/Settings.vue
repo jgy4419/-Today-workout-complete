@@ -170,7 +170,7 @@ export default {
                     localStorage.removeItem('userInformation');
                     // 쿠키를 전 시간으로 돌려서 로그아웃 시켜줌.
                     document.cookie = 'user=; expires=Thu, 18 Dec 2013 12:00:00 GMT'
-                    location.replace('/');
+                    // location.replace('/');
                 }).catch(err => {
                     console.log(err);
                 })

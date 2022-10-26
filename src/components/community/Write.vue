@@ -222,6 +222,18 @@ export default {
                 // frm.append('chartname', this.clickedChartData);
                 frm.append('nickname', nickName);
                 frm.append('content', comment);
+                if (this.postDetail.postCount === 2) {
+                    for (let postReqData of frm) {
+                        console.log(postReqData);
+                        if (postReqData[0] === 'chartname' && postReqData[1] === '') {
+                            console.log(postReqData[1]);
+                            alert('차트 데이터가 없습니다!');
+                            this.spinnerState = 0;
+                            return;
+                        }
+                        console.log(postReqData);
+                    }
+                }
                 axios.post('/api/createPost', frm, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

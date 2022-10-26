@@ -61,6 +61,7 @@ export default {
   methods: {
     chartData(){
       return new Promise((resolve) => {
+        console.log(this.getChartData);
         resolve(this.getChartData);
       })
     },

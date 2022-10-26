@@ -27,7 +27,7 @@
                 v-for="share, i in btn.shares.length" :key="i">{{btn.shares[i]}}</p>
             </div>
             <p id="preview-click"></p>
-                <GetChart :getChartData="getPostDetailData.chartname" v-if="getChartState === 1"/>
+                <GetChart :getChartData="getPostDetailData.emg_data_file" v-if="getChartState === 1"/>
             <h2>댓글</h2>
             <div class="commentList">
                 <div class="comments" v-for="data, i in getCommentData.length" :key="i">
@@ -87,7 +87,7 @@ export default {
             getChartState: 0,
         }
     },
-    async mounted(){
+    async mounted() {
         if(!localStorage.userInformation){
             alert('로그인 후 상세보기가 가능합니다!');
             location.replace('/login');
@@ -110,6 +110,7 @@ export default {
         }
         await axios.get('/api/getPostAll', {params: {board_id: this.$route.params.board, limit: 0}})
             .then(res => {
+                console.log(res);
             // console.log(res.data);
             this.getChartState = 1;
             for(let i = 0; i < res.data.length; i++){
@@ -120,6 +121,7 @@ export default {
                     $('#preview-click').html(decode(this.getPostDetailData.comment));
                 }
             }
+            console.log(this.getPostDetailData);
         })
         .catch(err => console.log(err));
         function decode(text) {

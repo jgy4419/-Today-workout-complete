@@ -9,12 +9,17 @@
                 </div>
             </div>
             <div class="myPageModal">
+                <!-- <button v-for="modals, i in modal.length" :key="i" @click="$store.commit('Chart/wishlist_func', {
+                    wishlist_state: i
+                })" class="selectBtn">{{modal[i]}}</button> -->
                 <button v-for="modals, i in modal.length" :key="i" @click="modalState_func(i)" class="selectBtn">{{modal[i]}}</button>
             </div>
             <br>
             <div class="posts">
                 <Post v-if="modalState === 0"/>
                 <Sensors v-if="modalState === 1"
+                :modalState="modalState"/>
+                <Sensors v-if="modalState === 2"
                 :modalState="modalState"/>
             </div>
         </div>
@@ -44,7 +49,8 @@ export default {
             });
         }
     },
-    mounted(){
+    mounted() {
+        console.log(this.$store.state.Chart.chart_wishlist_state);
         // 만약 쿠키가 있으면
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
         console.log(userInformation);

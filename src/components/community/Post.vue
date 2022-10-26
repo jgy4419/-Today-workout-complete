@@ -110,14 +110,15 @@ export default {
         propsRes(result){
             // search 값이 변경되면, 데이터 들을 불러와서 post img, title, id 등에 각각 넣어주기.
             console.log(result);
-            axios.get('/api/searchtitle', {
-                paramds: {title: result}}, 
+            axios.get('/api/searchTitle', {
+                params: {title: result}}, 
                 {withCredentials: true})
-            .then(res => {
+                .then(res => {
                 if(result === ''){
                     this.getPost();
                     console.log(this.getData);
-                }else{
+                } else {
+                    console.log(res);
                     this.postCount = res.data.length;
                     this.getData.data = res.data;
                     console.log(this.getData);
