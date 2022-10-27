@@ -26,7 +26,9 @@
             <div class="editor-page">
                 <div :v-model="postDetail.writing" id="summernote">오늘 운동한 내용을 말해주세요~!</div>
             </div>
-            <DragFile @getImgData="getImgData($event)"/>
+            <div class="dragFile">
+                <DragFile @getImgData="getImgData($event)"/>
+            </div>
             <div class="btnBox">
                 <button @click="i === 0 ? backBtn() : postUpload()" :class="btn.class[i]" v-for="btns, i in btn.btnName" :key="i">
                     <i :class="btn.iClass[i]" ></i>
@@ -37,7 +39,7 @@
         <div v-if="sensorWatch === true" class="watchChart">
             <div class="inner">
                 <!-- <Chart @clickedChart="clickedChart" :readOrWrite = 1 /> -->
-                <Sensors @clickChart="clickedChart"/>
+                <Sensors class="sensors" @clickChart="clickedChart"/>
             </div>
         </div>
         <span v-if="closeState === true" @click="sensorWatch = false, closeState = false" class="close">X</span>
@@ -200,6 +202,7 @@ export default {
             frm.append('availabilty_comments', 1);
             // frm.append('board_id', this.postDetail.postCount);
             frm.append('board_id', board);
+            frm.append('chartname', this.$store.state.Chart.selectedChartName);
             if(writeState == 1){ // writeState가 1일 때 수정
                 // frm.append('nickname', route.nickname);
                 frm.append('post_id', parseInt(route.post_id));
@@ -218,7 +221,6 @@ export default {
                 })
             }else if(writeState == 0){
                 console.log('0번째 글');
-                frm.append('chartname', this.$store.state.Chart.selectedChartName);
                 // frm.append('chartname', this.clickedChartData);
                 frm.append('nickname', nickName);
                 frm.append('content', comment);
@@ -436,7 +438,11 @@ input, textarea{
         .editor-page{
             #summernote{
                 height: 500px;
+
             }
+        }
+        .dragFile{
+            height: 200px;
         }
         .btnBox{
             position: fixed;
@@ -470,14 +476,17 @@ input, textarea{
         }
     }
     .watchChart{
-        position: absolute;
+        position: fixed;
         z-index: 100;
-        top: 0;
-        width: 100vw;
-        height: 100vh;
+        // top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background: rgba(0, 0, 0, 0.8);
         .inner{
-            height: 80%;
+            height: 85%;
             background-color: #fff;
             border-radius: 20px;
             padding: 30px;
@@ -525,6 +534,13 @@ input, textarea{
                     width: 100px;
                     height: 40px;
                     font-size: 15px;
+                }
+            }
+        }
+        .watchChart {
+            .inner{
+                .sensors{
+                    padding-top: 10%;
                 }
             }
         }

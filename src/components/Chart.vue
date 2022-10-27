@@ -10,7 +10,7 @@
         <p>{{emgDatas[i]}}</p>
         <!-- <canvas @click="$emit('clickedChart', selectChart(i))" class="chart" :id="chart.chartId[i]" width="80vw" height="200"/> -->
         <canvas @click="$store.commit('Chart/selectedChart', {
-          chartName: selectChart(i)
+          chartName: selectChart(i - 1)
         })" class="chart" :id="chart.chartId[i]" width="80vw" height="200"/>
       </div>
     </div>
@@ -68,17 +68,13 @@ export default {
     dateValue: String,
     dateState: Number
   },
-  unmounted() {
-    this.$store.commit('Chart/wishlist_func', {
-        wishlist_state: 1
-    });
-  },
   async mounted() {
     let dataLength;
     // await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
     // if (this.$store.state.Chart.chart_wishlist_state === 1) {
       await axios.get('/api/sensorData', {params: {nickname: '얍'}})
         .then(res => {
+          console.log(res);
           this.spinnerState = 0;
         // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
         for(let i = 0; i < res.data.length; i++){
@@ -183,7 +179,7 @@ export default {
       });
     },
     // i는 클릭한 차트 위치를 가져옴.
-    selectChart(i){
+    selectChart(i) {
       return this.emgDatas[i];
     }
   }
@@ -232,6 +228,21 @@ export default {
   .inner:nth-child(1){
     display: none;
   }
+  @media screen and (max-width: 1000px){
+    .inner{
+      .exerciseName{
+        margin-top: 35%;
+      }
+      .chartStyle{
+        // width: 80vw;
+        // height: 400px;
+        #chart{
+          width: 80vw;
+          height: 400px;
+        }
+      }
+    }
+  }
   @media screen and (max-width: 768px){
     .done_chart_text{
       font-size: 20px;
@@ -239,7 +250,7 @@ export default {
     }
     .inner{
       .exerciseName{
-        margin-top: 35%;
+        margin-top: 40%;
       }
       .chartStyle{
         // width: 80vw;

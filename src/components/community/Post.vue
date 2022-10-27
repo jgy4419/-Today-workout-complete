@@ -359,7 +359,7 @@ export default {
     #categoryName{
         font-size: 30px;
         font-weight: 700;
-        // margin-top: -20px;
+        margin-top: -5%;
     }
     .inner{
         position: absolute;
