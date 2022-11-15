@@ -33,10 +33,11 @@
 </template>
 
 <script>
+import product_img from '../../image/store/productImg.jpeg';
 export default {
     data(){
         return{
-            storeImg: 'https://thumbnail6.coupangcdn.com/thumbnails/remote/492x492ex/image/rs_quotation_api/jev6tng0/b74a98afb6b64ee69c8e783cad9ceabb.jpg',
+            storeImg: product_img,
             productSelect: ['소비자가', '판매가'],
             price: ['35000', '30000'],
             changePrice: [],

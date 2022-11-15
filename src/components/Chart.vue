@@ -70,11 +70,11 @@ export default {
   },
   async mounted() {
     let dataLength;
+    const userInformation = localStorage.getItem('userInformation');
     // await axios.get('/api/sensorData', {params: {nickname: userInformation.nickname}})
     // if (this.$store.state.Chart.chart_wishlist_state === 1) {
-      await axios.get('/api/sensorData', {params: {nickname: '얍'}})
+      await axios.get('/api/sensorData', {params: {nickname: JSON.parse(userInformation).nickname}})
         .then(res => {
-          console.log(res);
           this.spinnerState = 0;
         // 로그인 된 닉네임으로 올린 근전도 센서 파일들 불러오기.
         for(let i = 0; i < res.data.length; i++){
@@ -253,8 +253,6 @@ export default {
         margin-top: 40%;
       }
       .chartStyle{
-        // width: 80vw;
-        // height: 400px;
         #chart{
           width: 80vw;
           height: 400px;

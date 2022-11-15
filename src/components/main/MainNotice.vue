@@ -39,10 +39,6 @@ export default {
     data(){
         return{
             noticeList: ['전체', '자유', '운동'],
-            noticeItem: {
-                title: ['놓칠 수 없는 첫 회원 이벤트', '같이 운동 하자!', '운동량 측정 해볼래?'],
-                content: ['첫 회원가입 시 추첨을 통해 선물 지급!', '사람들과 소통하면서 운동 방법을 공유할 수 있는 커뮤니티 생성!', '실제 자신이 운동한 운동량을 측정하고, 사람들한테 공유해보세요.']
-            },
             notice: '전체',
             noticeData: [],
             noticeState: 0,
