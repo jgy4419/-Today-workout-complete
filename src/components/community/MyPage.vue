@@ -29,7 +29,7 @@
 <script>
 import Post from './Post.vue';
 import Sensors from './Sensors.vue';
-import default_image from '/root/TWC-BACKEND-BACKUP/public/img/userProfile/default.png';
+// import default_image from '/root/TWC-BACKEND-BACKUP/public/img/userProfile/default.png';
 export default {
     components: {
         Post,
@@ -56,8 +56,8 @@ export default {
         let userInformation = JSON.parse(localStorage.getItem("userInformation"));
         console.log(userInformation);
         // 백엔드 한테 기본 이미지 잘 보여지게 해달라 하기
-        if (userInformation && userInformation.profile_img_path === "http://118.67.132.81:3000/img/userProfile/default.png") {
-           userInformation.profile_img_path = default_image;
+        if (userInformation && userInformation.profile_img_path === "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9OYcsfy1cf9JFkohunnSiu8eEaIT8WL96BUaqBlEzAg&s") {
+           userInformation.profile_img_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9OYcsfy1cf9JFkohunnSiu8eEaIT8WL96BUaqBlEzAg&s';
         }
         if(localStorage.userInformation){
             this.information = userInformation;

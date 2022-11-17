@@ -106,30 +106,30 @@ export default {
       this.chartCount = datas.length;
       console.log(this.chartCount);
       this.chart.chartId.push(`chart${length}`);
-      import(`/root/TWC-BACKEND-BACKUP/public/emgData/${datas[length - 1]}`)
-      .then(res => {
-        let inChart = res;
-        // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
-        for(let i = 0; i < res.number_of_sets; i++){
-            this.chart.data.setsCount.push(`${i + 1}세트`);
-        }
-        // 세트 수
-        this.chart.data.setCount = res.number_of_sets;
-        // 운동 이름
-        this.chart.data.exerciseName.push(res.workout_name);
-        // 운동한 날짜
-        this.chart.data.date.push(res.starting_time.substr(0, 8));
-        console.log(this.chart.data.date.length);
-        // 운동 전체 세트의 데이터가 들어감
-        for(let i = 0; i < this.chart.data.setCount; i++){
-          JSON.parse(inChart.sets[i].emg_data).forEach(element => {
-            this.chart.data.dataValues.push(element)
-          }); 
-        }
-        this.fillData(res, length);
-      }).catch(err => {
-        console.log(err)
-      })
+      // import(`/root/TWC-BACKEND-BACKUP/public/emgData/${datas[length - 1]}`)
+      // .then(res => {
+      //   let inChart = res;
+      //   // 세트 수 넣어주기 (1세트부터 시작하므로 1부터 시작)
+      //   for(let i = 0; i < res.number_of_sets; i++){
+      //       this.chart.data.setsCount.push(`${i + 1}세트`);
+      //   }
+      //   // 세트 수
+      //   this.chart.data.setCount = res.number_of_sets;
+      //   // 운동 이름
+      //   this.chart.data.exerciseName.push(res.workout_name);
+      //   // 운동한 날짜
+      //   this.chart.data.date.push(res.starting_time.substr(0, 8));
+      //   console.log(this.chart.data.date.length);
+      //   // 운동 전체 세트의 데이터가 들어감
+      //   for(let i = 0; i < this.chart.data.setCount; i++){
+      //     JSON.parse(inChart.sets[i].emg_data).forEach(element => {
+      //       this.chart.data.dataValues.push(element)
+      //     }); 
+      //   }
+      //   this.fillData(res, length);
+      // }).catch(err => {
+      //   console.log(err)
+      // })
     },  
     fillData(data, length) {
       // 전체 개수에서 세트수 만큼 나눈 값 넣어주기.
