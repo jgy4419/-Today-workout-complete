@@ -80,10 +80,12 @@ EMG 데이터를 공유해서 사용자가 혼자서도 올바른 운동을 할 
 <img width="315" alt="image" src="https://user-images.githubusercontent.com/76980526/202127677-c4b4d1c5-29b5-4ff3-98cd-091ae28388ae.png">
 
 - 각 게시물에 마우스를 올리면 게시글 마다 좋아요 개수, 댓글 개수, 조회수 확인이 가능합니다.
-- 카테고리별로 게시글에 나눴습니다.
+- 카테고리별로 게시글을 나눴습니다.
 - 검색기능 최적화
 
 ## 회원가입 URL : '/login/join'
+<img width="304" alt="image" src="https://user-images.githubusercontent.com/76980526/203221366-c52d0b68-b577-40b4-88d3-037a0fb07907.png">
+
 - 유효성 검사
     - 아이디 / 닉네임 중복 검사
     - 비밀번호, 비밀번호 재확인 일치
@@ -92,6 +94,7 @@ EMG 데이터를 공유해서 사용자가 혼자서도 올바른 운동을 할 
     - 비밀번호 최소길이 제한
 
 ## 로그인 URL : '/login'
+<img width="840" alt="image" src="https://user-images.githubusercontent.com/76980526/203221296-5241bbc8-47b6-4aa7-826a-396b48f0b787.png">
 
 ## 비밀번호 찾기 URL : '/login/searchPW'
 - 이메일 입력 후 인증하기를 누르면, 입력한 메일로 인증번호를 전송하도록 구현.
@@ -99,15 +102,19 @@ EMG 데이터를 공유해서 사용자가 혼자서도 올바른 운동을 할 
 - 자신이 바꾸고 싶은 비밀번호를 입력하면, 해당 이메일의 비밀번호가 변경되도록 구현.
 
 ## 아이디 찾기 URL : '/login/searchID'
-- 
+- 회원의 이름, 전화번호를 입력받고 DB에서 일치한 아이디를 보여주도록 구현.
 
 ## 글 작성 페이지 URL : '/write/0' or '/write/edit/1/닉네임/게시글번호/게시판번호'
+![image](https://user-images.githubusercontent.com/76980526/203223349-ab8af25d-347c-4943-ae62-1478350b1523.png)
+
 - url이 `/write`면 글 작성 페이지가 `/write/edit/1/닉네임/게시글번호/게시판번호` 이면 해당 글 수정 페이지로 적용.
 - 게시글 배경으로 적용 할 이미지를 드래그 해서 적용 가능.
 - style(형광팬, 밑줄, 굵기 등)이 적용된 게시글 작성 가능.
 - 마이페이지에 있는 자신이 운동한 차트 데이터를 올릴 수 있도록 구현.
 
 ## 글 상세 페이지 URL : '/닉네임/카테고리/게시글 번호'
+![image](https://user-images.githubusercontent.com/76980526/203223464-92beb8d8-a5c7-403f-b475-739425bc9c01.png)
+
 - 자신이 올린 글이면 수정 / 삭제 가능하도록 구현
 - 좋아요 기능 추가
 - 카카오톡, 페이스북 공유
@@ -115,20 +122,33 @@ EMG 데이터를 공유해서 사용자가 혼자서도 올바른 운동을 할 
 - 사용자가 올린 차트 데이터 보여지도록 하기
 
 ## 마이페이지 URL : '/mypage'
+### 게시글 
+![image](https://user-images.githubusercontent.com/76980526/203223550-0b7c79d7-7a8a-45fa-b7d8-86012941d5be.png)
+
 - 회원의 간단한 정보 보여주기
 - 게시글 모달
     - 회원이 올린 게시글들 표시 
     - 정렬 : 더 보기 기능으로 보고싶은 대로 볼 수 있음.
+
+### 센서
+![image](https://user-images.githubusercontent.com/76980526/203223610-29472b65-744a-48bd-98c5-759a89d9ccc6.png)
+
 - 센서 모달
     - 회원이 측정하고 저장한 차트 데이터들 확인 가능.
     - 차트 데이터가 많을 때는 자신이 운동한 날짜를 선택해서 그 날짜에 측정된 차트데이터들만 볼 수 있다.
 
 ## 세팅페이지 URL : '/settings'
+![image](https://user-images.githubusercontent.com/76980526/203223920-13a820e2-1723-4c90-9266-1a750340bafa.png)
+
 - 이미지 업로드를 클릭해 프로필을 변경하거나 이미지 제거를 통해 기본이미지로 적용 가능.
 - 수정 버튼 클릭 시 닉네임, 자기소개 변경 가능.
 - 비밀번호 변경 버튼을 눌러서 비밀번호 변경 가능.
 - 회원 탈퇴를 누르면 해당 회원이 DB에 삭제 되도록 구현.
 
-## 싱픔핀메 페이지 URL : '/store'
+## 상품판매 페이지 URL : '/store'
+![image](https://user-images.githubusercontent.com/76980526/203223985-774e2ff8-ab72-4ad9-ad11-c3cdc038dd7a.png)
+
+![image](https://user-images.githubusercontent.com/76980526/203224029-3618ae5c-48e9-4cb2-9b59-7c9637a15539.png)
+
 - 회원일 때만 구매 가능하도록 구현
 - 주소 api를 사용해 배송지 주소를 가져오도록 하기
