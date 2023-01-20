@@ -7,6 +7,14 @@
 ### 프로젝트 보고서
 https://gigantic-text-665.notion.site/ea051c304d364d669da1006d848a8f99
 
+
+## 전체 시연 영상
+### 웹 사이트 영상입니다.
+https://user-images.githubusercontent.com/76980526/213697205-0d9ebafe-4756-4080-80ae-437686093b45.mp4
+
+### 앱 / 하드웨어 영상입니다.
+https://user-images.githubusercontent.com/76980526/213696965-92be7c7d-1beb-4c51-b17d-ac1c6a8ceab9.mp4
+
 ## 필요성
 > 웨이트 운동에서 중요한 것은 근육의 수축, 이완과 고립(해당 근육만을 사용하는 것)입니다. 근전도 기기를 활용하면 현재 자신이 운동하고 있는 부위의 근육이 수축/이완했는지 또는 고
 립이 잘 되었는지를 EMG 데이터를 통해 판단할 수 있을 것입니다. 따라서 운동을 처음하는
