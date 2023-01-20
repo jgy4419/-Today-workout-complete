@@ -12,6 +12,8 @@ https://gigantic-text-665.notion.site/ea051c304d364d669da1006d848a8f99
 ### 웹 사이트 영상입니다.
 https://user-images.githubusercontent.com/76980526/213697205-0d9ebafe-4756-4080-80ae-437686093b45.mp4
 
+> 만약 영상이 보이지 않으시다면, Chrome 이 아닌 브라우저에서 확인해주 감사하겠습니다.
+
 ### 앱 / 하드웨어 영상입니다.
 https://user-images.githubusercontent.com/76980526/213696965-92be7c7d-1beb-4c51-b17d-ac1c6a8ceab9.mp4
 
